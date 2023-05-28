@@ -1,4 +1,3 @@
+\.nc$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-\.*.nc$
-

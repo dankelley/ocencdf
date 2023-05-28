@@ -4,7 +4,7 @@
 \alias{oce2ncdf}
 \title{Save an oce-class object as a netcdf file.}
 \usage{
-oce2ncdf(x, varTable, ..., outfile = "output.nc", debug = 0)
+oce2ncdf(x, varTable, ..., ncfile = "output.nc", debug = 0)
 }
 \arguments{
 \item{x}{an oce-class object.}
@@ -25,7 +25,7 @@ is \code{"argo"}.}
 
 \item{\dots}{ignored in this version.}
 
-\item{outfile}{character value naming the output file.}
+\item{ncfile}{character value naming the output file.}
 
 \item{debug}{integer, 0 for quiet action, 1 or more to see processing information.}
 }

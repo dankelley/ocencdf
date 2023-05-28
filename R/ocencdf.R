@@ -1,9 +1,3 @@
-# ocenc.R
-
-#R #oce
-
-library(oce)
-
 dmsg <- function(debug, ...)
     if (debug > 0)
         cat(..., sep="")
@@ -31,11 +25,12 @@ dmsg <- function(debug, ...)
 #'
 #' @param \dots ignored in this version.
 #'
-#' @param outfile character value naming the output file.
+#' @param ncfile character value naming the output file.
 #'
 #' @param debug integer, 0 for quiet action, 1 or more to see processing information.
 #'
 #' @importFrom yaml yaml.load_file
+#' @importFrom ncdf4 nc_create nc_close ncdim_def nc_open ncvar_def ncvar_put
 #'
 #' @examples
 #'\dontrun{
@@ -48,31 +43,15 @@ dmsg <- function(debug, ...)
 #' @author Dan Kelley
 #'
 #' @export
-oce2ncdf <- function(x, varTable, ..., outfile="output.nc", debug=0)
+oce2ncdf <- function(x, varTable, ..., ncfile="output.nc", debug=0)
 {
     if (!inherits(x, "oce"))
         stop("'x' must be an oce object")
     xclass <- as.character(class(x))
     switch(xclass,
-        ctd=ctd2ncdf(x, varTable=if (missing(varTable)) "argo" else varTable, ..., outfile=outfile, debug=debug),
-        stop("ocencdf() cannot handle \"", xclass, "\" objects")
+        ctd=ctd2ncdf(x, varTable=if (missing(varTable)) "argo" else varTable, ..., ncfile=ncfile, debug=debug),
+        stop("oce2ncdf() cannot handle \"", xclass, "\" objects")
     )
-}
-
-ctd2ncdf <- function(x, varTable="argo", ..., outfile="ctd.nc", debug=0)
-{
-    dmsg(debug, "ctd2ncdf() {\n")
-    if (!inherits(x, "ctd"))
-        stop("'x' must be a ctd object")
-    varTable <- readVarTable(varTable)
-    for (name in names(x@data)) {
-        if (name %in% names(varTable)) {
-            dmsg(debug, "  FIXME: write \"", name, "\" as \"", varTable[[name]]$name, "\"\n")
-        } else {
-            dmsg(debug, "  FIXME: write \"", name, "\"\n")
-        }
-    }
-    dmsg(debug, "} # ctd2ncdf\n")
 }
 
 readVarTable <- function(varTable="argo")

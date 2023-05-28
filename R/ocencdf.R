@@ -39,6 +39,7 @@ dmsg <- function(debug, ...)
 #' oce2ncdf(ctd, ncfile="ctd.nc")
 #' d <- read.netcdf('ctd.nc') |> as.ctd()
 #' plot(d, eos="unesco")
+#' unlink("ctd.nc")
 #'
 #' @author Dan Kelley
 #'

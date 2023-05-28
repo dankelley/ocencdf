@@ -42,6 +42,7 @@ ctd2ncdf <- function(x, varTable="argo", ncfile="ctd.nc", debug=0)
         dmsg(debug, "    ", name, "\n")
         ncvar_put(nc=nc, varid=vars[[name]], vals=x@data[[name]])
     }
+    ncatt_put(nc, 0, "metadata", paste(capture.output(str(x@metadata)), collapse="\n"))
     nc_close(nc)
     dmsg(debug, "} # ctd2ncdf\n")
 }

@@ -28,7 +28,7 @@ dmsg <- function(debug, ...)
 #' @param debug integer, 0 for quiet action, 1 or more to see processing information.
 #'
 #' @importFrom yaml yaml.load_file
-#' @importFrom ncdf4 nc_create nc_close ncdim_def nc_open ncvar_def ncvar_put
+#' @importFrom ncdf4 ncatt_put nc_create nc_close ncdim_def nc_open ncvar_def ncvar_put
 #'
 #' @examples
 #'\dontrun{

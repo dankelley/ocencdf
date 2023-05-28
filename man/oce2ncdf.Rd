@@ -4,7 +4,7 @@
 \alias{oce2ncdf}
 \title{Save an oce-class object as a netcdf file.}
 \usage{
-oce2ncdf(x, varTable, ..., ncfile = "output.nc", debug = 0)
+oce2ncdf(x, varTable, ncfile = "output.nc", debug = 0)
 }
 \arguments{
 \item{x}{an oce-class object.}
@@ -23,8 +23,6 @@ then a guess will be made by the function that \code{\link[=oce2ncdf]{oce2ncdf()
 calls to do the work, e.g. for a \code{ctd} object, the default
 is \code{"argo"}.}
 
-\item{\dots}{ignored in this version.}
-
 \item{ncfile}{character value naming the output file.}
 
 \item{debug}{integer, 0 for quiet action, 1 or more to see processing information.}
@@ -38,7 +36,7 @@ and then dispatching to an internal function, as appropriate.
 library(ocencdf)
 library(oce)
 data(ctd, package="oce")
-oce2ncdf(ctd)
+oce2ncdf(ctd, ncfile="ctd.nc")
 }
 
 }

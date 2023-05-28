@@ -1,5 +1,5 @@
 #' @inheritParams oce2ncdf
-ctd2ncdf <- function(x, varTable="argo", ..., ncfile="ctd.nc", debug=0)
+ctd2ncdf <- function(x, varTable="argo", ncfile="ctd.nc", debug=0)
 {
     dmsg(debug, "ctd2ncdf(..., ncfile=\"", ncfile, "\") {\n")
     if (!inherits(x, "ctd"))
@@ -14,9 +14,10 @@ ctd2ncdf <- function(x, varTable="argo", ..., ncfile="ctd.nc", debug=0)
     # create vars, using varmap for known items, and using just names otherwise
     # TO DO: determine whether we ought to examine the units in the oce object
     vars <- list()
+    dmsg(debug, "  defining variable properties\n")
     for (name in names(x@data)) {
         if (name %in% names(varmap)) {
-            dmsg(debug, "  defining properties of \"", name, "\" (to be called ", varmap[[name]]$name, ")\n")
+            dmsg(debug, "    ", name, " (to be called ", varmap[[name]]$name, ")\n")
             vars[[name]] <- ncvar_def(
                 name=varmap[[name]]$name,
                 units=varmap[[name]]$unit,
@@ -25,7 +26,7 @@ ctd2ncdf <- function(x, varTable="argo", ..., ncfile="ctd.nc", debug=0)
                 dim=Ndim,
                 prec="float")
         } else {
-            dmsg(debug, "  defining properties of \"", name, "\"\n")
+            dmsg(debug, "    ", name, "\n")
             vars[[name]] <- ncvar_def(
                 name=name,
                 units="",
@@ -36,8 +37,9 @@ ctd2ncdf <- function(x, varTable="argo", ..., ncfile="ctd.nc", debug=0)
         }
     }
     nc <- nc_create(ncfile, vars)
+    dmsg(debug, "  storing variable data\n")
     for (name in names(x@data)) {
-        dmsg(debug, "  storing \"", name, "\n")
+        dmsg(debug, "    ", name, "\n")
         ncvar_put(nc=nc, varid=vars[[name]], vals=x@data[[name]])
     }
     nc_close(nc)

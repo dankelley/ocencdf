@@ -23,8 +23,6 @@ dmsg <- function(debug, ...)
 #' calls to do the work, e.g. for a `ctd` object, the default
 #' is `"argo"`.
 #'
-#' @param \dots ignored in this version.
-#'
 #' @param ncfile character value naming the output file.
 #'
 #' @param debug integer, 0 for quiet action, 1 or more to see processing information.
@@ -37,19 +35,19 @@ dmsg <- function(debug, ...)
 #' library(ocencdf)
 #' library(oce)
 #' data(ctd, package="oce")
-#' oce2ncdf(ctd)
+#' oce2ncdf(ctd, ncfile="ctd.nc")
 #'}
 #'
 #' @author Dan Kelley
 #'
 #' @export
-oce2ncdf <- function(x, varTable, ..., ncfile="output.nc", debug=0)
+oce2ncdf <- function(x, varTable, ncfile="output.nc", debug=0)
 {
     if (!inherits(x, "oce"))
         stop("'x' must be an oce object")
     xclass <- as.character(class(x))
     switch(xclass,
-        ctd=ctd2ncdf(x, varTable=if (missing(varTable)) "argo" else varTable, ..., ncfile=ncfile, debug=debug),
+        ctd=ctd2ncdf(x, varTable=if (missing(varTable)) "argo" else varTable, ncfile=ncfile, debug=debug),
         stop("oce2ncdf() cannot handle \"", xclass, "\" objects")
     )
 }

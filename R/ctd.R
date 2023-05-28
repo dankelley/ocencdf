@@ -12,6 +12,8 @@ ctd2ncdf <- function(x, varTable="argo", ncfile="ctd.nc", debug=0)
     NLEVEL <- length(x@data[[1]])
     NLEVELdim <- ncdim_def(name="N_LEVEL", units="", vals=seq_len(NLEVEL), create_dimvar=FALSE)
     NPROFILEdim <- ncdim_def(name="N_PROFILE", units="", vals=1L, create_dimvar=FALSE)
+    STRING16dim <- ncdim_def(name="STRING16", units="", vals=seq.int(1, 16), create_dimvar=FALSE)
+    STRING32dim <- ncdim_def(name="STRING32", units="", vals=seq.int(1, 32), create_dimvar=FALSE)
     # create vars, using varmap for known items, and using just names otherwise
     # TO DO: determine whether we ought to examine the units in the oce object
     vars <- list()
@@ -50,6 +52,19 @@ ctd2ncdf <- function(x, varTable="argo", ncfile="ctd.nc", debug=0)
             prec="float")
         dmsg(debug, "    time\n")
     }
+    # Station (which some files have)
+    station <- x[["station"]][1]
+    stationExists <- !is.null(station)
+    if (stationExists) {
+        vars[["station"]] <- ncvar_def(
+            name="station",
+            units="",
+            longname="",
+            missval="",
+            dim=STRING32dim,
+            prec="char")
+        dmsg(debug, "    station\n")
+    }
     # location
     longitude <- x[["longitude"]]
     latitude <- x[["latitude"]]
@@ -81,6 +96,10 @@ ctd2ncdf <- function(x, varTable="argo", ncfile="ctd.nc", debug=0)
     if (timeExists) {
         ncvar_put(nc=nc, varid=vars[["time"]], vals=as.numeric(time[1]))
         dmsg(debug, "    time (", time[1], " i.e. ", oce::numberAsPOSIXct(time[1]), ")\n")
+    }
+    if (stationExists) {
+        ncvar_put(nc=nc, varid=vars[["station"]], vals=sprintf("%-16s", substr(station[1], 1L, 16L)))
+        dmsg(debug, "    station (", station[1], ")\n")
     }
     if (locationExists) {
         ncvar_put(nc=nc, varid=vars[["longitude"]], vals=longitude[1])

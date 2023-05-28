@@ -1,12 +1,12 @@
 Package: ocencdf
 Title: Provide Netcdf Interface For Oce
-Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Version: 0.0.1
+Authors@R: c(
+    person(given="Dan", family="Kelley", email="Dan.Kelley@Dal.Ca", role=c("aut", "cre"), comment=c(ORCID="https://orcid.org/0000-0001-7808-5911")))
+Description: This provides a way to export `oce` objects to `netcdf` format, perhaps for data archiving, or perhaps for secondary analysis outside R.
+Depends: R (>= 2.15)
+Imports: yaml
+License: GPL (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3

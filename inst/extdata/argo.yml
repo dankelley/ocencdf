@@ -1,0 +1,19 @@
+temperature:
+    name: "TEMP"
+    units: "degree_Celcius"
+    long_name: "Sea temperature in-situ ITS-90 scale"
+    standard_name: "sea_water_temperature"
+    missing_value: 99999.0
+salinity:
+    name: "PSAL"
+    units: "psu"
+    long_name: "Practical Salinity"
+    standard_name: "sea_water_salinity"
+    missing_value: 99999.0
+pressure:
+    name: "PRES"
+    units: "decibar"
+    long_name: "Sea water pressure, equals 0 at sea-level"
+    standard_name: "sea_water_pressure"
+    missing_value: 99999.0
+

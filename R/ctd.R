@@ -41,7 +41,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     }
     if (!inherits(x, "ctd"))
         stop("'x' must be a ctd object")
-    varmap <- readVarTable(varTable)
+    varmap <- read.varTable(varTable)
 
     # Set up variable dimensions etc, using an argo file
     # (~/data/argo/D4901788_045.nc) as a pattern.

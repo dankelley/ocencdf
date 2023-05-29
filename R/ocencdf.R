@@ -1,7 +1,3 @@
-dmsg <- function(debug, ...)
-    if (debug > 0)
-        cat(..., sep="")
-
 #' Save an oce-class object as a netcdf file.
 #'
 #' `oce2ncdf()` works by determining the class of its first argument,
@@ -12,13 +8,10 @@ dmsg <- function(debug, ...)
 #' `ctd` class, then [ctd2ncdf()] is called.
 #'
 #' @param varTable character value indicating the variable-naming
-#' scheme to be used. If this ends in `.yml`, then the file of that
-#' name is opened and processed with [yaml::yaml.load_file()]. Otherwise,
-#' the only choice (at the moment) is `"argo"`, which causes the
-#' function to work with
-#' `system.file("extdata","argo.yml",package="ocencdf"))`.
-#' If `varTable` is not supplied, then a guess will be made by the
-#' lower-level function that [oce2ncdf()] calls to do the work.
+#' scheme to be used. This is provided to [read.varTable()], the
+#' documentation of which explains the possibilities for pre-defined
+#' schemes named `"argo"` and `"whp"` and user-supplied files of
+#' similar format.
 #'
 #' @param ncfile character value naming the output file.  Use NULL
 #' for a file name to be created automatically (e.g. `ctd.nc` for
@@ -43,17 +36,8 @@ oce2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         stop("'x' must be an oce object")
     xclass <- as.character(class(x))
     switch(xclass,
-        #ctd=ctd2ncdf(x, varTable=if (missing(varTable)) "argo" else varTable, ncfile=ncfile, debug=debug),
         ctd=ctd2ncdf(x, varTable=varTable, ncfile=ncfile, debug=debug),
         stop("oce2ncdf() cannot handle \"", xclass, "\" objects")
     )
 }
 
-readVarTable <- function(varTable="argo")
-{
-    if (varTable == "argo")
-        varTable <- system.file("extdata", "argo.yml", package="ocencdf")
-    if (!file.exists(varTable))
-        stop("file \"", varTable, "\" does not exist")
-    yaml::yaml.load_file(varTable)
-}

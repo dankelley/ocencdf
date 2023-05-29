@@ -2,6 +2,7 @@
 
 export(ctd2ncdf)
 export(oce2ncdf)
+export(read.varTable)
 importFrom(ncdf4,nc_close)
 importFrom(ncdf4,nc_create)
 importFrom(ncdf4,nc_open)

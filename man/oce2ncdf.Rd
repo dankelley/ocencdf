@@ -12,13 +12,10 @@ which lower-level function \code{\link[=oce2ncdf]{oce2ncdf()}} calls, e.g. if \c
 \code{ctd} class, then \code{\link[=ctd2ncdf]{ctd2ncdf()}} is called.}
 
 \item{varTable}{character value indicating the variable-naming
-scheme to be used. If this ends in \code{.yml}, then the file of that
-name is opened and processed with \code{\link[yaml:yaml.load]{yaml::yaml.load_file()}}. Otherwise,
-the only choice (at the moment) is \code{"argo"}, which causes the
-function to work with
-\verb{system.file("extdata","argo.yml",package="ocencdf"))}.
-If \code{varTable} is not supplied, then a guess will be made by the
-lower-level function that \code{\link[=oce2ncdf]{oce2ncdf()}} calls to do the work.}
+scheme to be used. This is provided to \code{\link[=read.varTable]{read.varTable()}}, the
+documentation of which explains the possibilities for pre-defined
+schemes named \code{"argo"} and \code{"whp"} and user-supplied files of
+similar format.}
 
 \item{ncfile}{character value naming the output file.  Use NULL
 for a file name to be created automatically (e.g. \code{ctd.nc} for

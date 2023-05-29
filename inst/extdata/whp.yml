@@ -1,0 +1,49 @@
+totalAlkalinity:
+  name: "ALKALI"
+CFC-12:
+  name: "CFC12"
+oxygen:
+  name: "CTDOXY"
+pressure:
+  name: "CTDPRS"
+  units: "decibar"
+salinity:
+  name: "CTDSAL"
+  units: "psu"
+temperature:
+  name: "CTDTMP"
+  units: "degree_Celcius"
+fluorescence:
+  name: "FLUOR"
+ammonium:
+  name: "NH4"
+phosphate:
+  name: "PHSPHT"
+pHTotal:
+  name: "PH_TOT"
+pHTemperature:
+  name: "PH_TMP"
+  units: "degree_Celcius"
+nitrate:
+  name: "NITRAT"
+nitrite:
+  name: "NITRIT"
+number:
+  name: "NUMBER"
+  units: ""
+NO2+NO3:
+  name: "nitrite+nitrate"
+oxygenBottle:
+  name: "OXYGEN"
+salinityBottle:
+  name: "SALNTY"
+  units: "psu"
+SF6:
+  name: "SF6"
+silicate:
+  name: "SILCAT"
+totalCarbon:
+  name: "TCARBN"
+transmission:
+  name: "TRANS"
+

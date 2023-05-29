@@ -1,7 +1,9 @@
 #' @inheritParams oce2ncdf
-ctd2ncdf <- function(x, varTable="argo", ncfile="ctd.nc", debug=0)
+ctd2ncdf <- function(x, varTable=NULL, ncfile="ctd.nc", debug=0)
 {
     dmsg(debug, "ctd2ncdf(..., ncfile=\"", ncfile, "\") {\n")
+    if (is.null(varTable))
+        varTable <- "argo"
     if (!inherits(x, "ctd"))
         stop("'x' must be a ctd object")
     varmap <- readVarTable(varTable)
@@ -91,7 +93,23 @@ ctd2ncdf <- function(x, varTable="argo", ncfile="ctd.nc", debug=0)
     dmsg(debug, "  storing variable data\n")
     for (name in names(x@data)) {
         dmsg(debug, "    ", name, " (", NLEVEL, " values)\n")
-        ncvar_put(nc=nc, varid=vars[[name]], vals=x@data[[name]])
+        vals <- x@data[[name]]
+        if (grepl("temperature", name, ignore.case=TRUE)) {
+            scale <- x[[paste0(name, "Unit")]]$scale
+            if (grepl("IPTS-68", scale, ignore.case=TRUE)) {
+                warning("converting \"", name, "\" from IPTS-68 scale to ITS-90 scale")
+                vals <- oce::T90fromT68(vals)
+            } else if (grepl("ITS-48", scale, ignore.case=TRUE)) {
+                warning("converting \"", name, "\" from IPTS-48 scale to ITS-90 scale")
+                vals <- oce::T90fromT48(vals)
+            }
+        } else if (grepl("salinity", name, ignore.case=TRUE)) {
+            scale <- x[[paste0(name, "Unit")]]$scale
+            if (grepl("PSS-68", scale, ignore.case=TRUE)) {
+                warning("cannot convert from PSS-68, so saving it unaltered")
+            }
+        }
+        ncvar_put(nc=nc, varid=vars[[name]], vals=vals)
     }
     if (timeExists) {
         ncvar_put(nc=nc, varid=vars[["time"]], vals=as.numeric(time[1]))

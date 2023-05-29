@@ -4,7 +4,7 @@
 \alias{oce2ncdf}
 \title{Save an oce-class object as a netcdf file.}
 \usage{
-oce2ncdf(x, varTable, ncfile = "output.nc", debug = 0)
+oce2ncdf(x, varTable = NULL, ncfile = "output.nc", debug = 0)
 }
 \arguments{
 \item{x}{an oce-class object.}

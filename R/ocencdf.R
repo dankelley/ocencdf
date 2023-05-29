@@ -30,7 +30,7 @@ dmsg <- function(debug, ...)
 #' @importFrom utils  capture.output str
 #' @importFrom yaml yaml.load_file
 #' @importFrom ncdf4 ncatt_put nc_create nc_close ncdim_def nc_open ncvar_def ncvar_put
-#' @importFrom oce numberAsPOSIXct
+#' @importFrom oce numberAsPOSIXct T90fromT48 T90fromT68
 #'
 #' @examples
 #' library(ocencdf)
@@ -44,13 +44,14 @@ dmsg <- function(debug, ...)
 #' @author Dan Kelley
 #'
 #' @export
-oce2ncdf <- function(x, varTable, ncfile="output.nc", debug=0)
+oce2ncdf <- function(x, varTable=NULL, ncfile="output.nc", debug=0)
 {
     if (!inherits(x, "oce"))
         stop("'x' must be an oce object")
     xclass <- as.character(class(x))
     switch(xclass,
-        ctd=ctd2ncdf(x, varTable=if (missing(varTable)) "argo" else varTable, ncfile=ncfile, debug=debug),
+        #ctd=ctd2ncdf(x, varTable=if (missing(varTable)) "argo" else varTable, ncfile=ncfile, debug=debug),
+        ctd=ctd2ncdf(x, varTable=varTable, ncfile=ncfile, debug=debug),
         stop("oce2ncdf() cannot handle \"", xclass, "\" objects")
     )
 }

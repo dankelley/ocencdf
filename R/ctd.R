@@ -1,9 +1,44 @@
+#' Save a ctd object to a netcdf file
+#'
+#' @param x an oce object of class `ctd`, as created by e.g. [oce::as.ctd()]
+#' or [oce::read.ctd()].
+#'
 #' @inheritParams oce2ncdf
-ctd2ncdf <- function(x, varTable=NULL, ncfile="ctd.nc", debug=0)
+#'
+#' @export
+#'
+#' @examples
+#' library(ocencdf)
+#'
+#' # example 1: a ctd file with no per-variable QC flags
+#' data(ctd) # from 'oce' package
+#' oce2ncdf(ctd, ncfile="ctd1.nc")
+#' d <- read.netcdf('ctd1.nc') |> as.ctd()
+#' plot(d)
+#'
+#' # example 2: a ctd file with per-variable QC flags
+#' data(section) # from 'oce' package
+#' stn <- section[["station", 100]] # 100-th station in section, not station '100'
+#' oce2ncdf(stn, ncfile="ctd2.nc")
+#' d <- read.netcdf('ctd2.nc') |> as.ctd()
+#' plot(d)
+#'
+#' # clean up temporary files (to prevent CRAN test failure)
+#' unlink("ctd1.nc")
+#' unlink("ctd2.nc")
+#'
+#' @author Dan Kelley
+ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
 {
     dmsg(debug, "ctd2ncdf(..., ncfile=\"", ncfile, "\") {\n")
-    if (is.null(varTable))
+    if (is.null(varTable)) {
         varTable <- "argo"
+        message("defaulting varTable to \"", varTable, "\"")
+    }
+    if (is.null(ncfile)) {
+        ncfile <- "ctd.nc"
+        message("Will save ctd object to \"", ncfile, "\".")
+    }
     if (!inherits(x, "ctd"))
         stop("'x' must be a ctd object")
     varmap <- readVarTable(varTable)
@@ -41,6 +76,32 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile="ctd.nc", debug=0)
                 prec="float")
         }
     }
+    dmsg(debug, "  defining flag (QC) properties (if any exist)\n")
+    flagnames <- names(x@metadata$flags)
+    for (flagname in flagnames) {
+        if (flagname %in% names(varmap)) {
+            flagnameNCDF <- paste0(varmap[[flagname]]$name, "_QC")
+            dmsg(debug, "    flags$", flagname, " -> ", flagnameNCDF, " (nb. renamed)\n")
+            vars[[flagnameNCDF]] <- ncvar_def(
+                name=flagnameNCDF,
+                units="",
+                longname=paste("QC for ", flagname),
+                missval=missing_value,
+                dim=NLEVELdim,
+                prec="float")
+        } else {
+            flagnameNCDF <- paste0(flagname, "_QC")
+            dmsg(debug, "    flags$", flagname, " -> ", flagnameNCDF, "\n")
+            vars[[flagnameNCDF]] <- ncvar_def(
+                name=flagnameNCDF,
+                units="",
+                longname=paste("QC for ", flagname),
+                missval=missing_value,
+                dim=NLEVELdim,
+                prec="float")
+        }
+    }
+    dmsg(debug, "  defining variables for selected @metadata items\n")
     # Start time (which some files have)
     time <- x[["time"]][1]
     timeExists <- !is.null(time)
@@ -90,14 +151,14 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile="ctd.nc", debug=0)
         dmsg(debug, "    latitude\n")
     }
     nc <- nc_create(ncfile, vars)
-    dmsg(debug, "  storing variable data\n")
+    dmsg(debug, "  storing variable values\n")
     for (name in names(x@data)) {
         dmsg(debug, "    ", name, " (", NLEVEL, " values)\n")
         vals <- x@data[[name]]
         if (grepl("temperature", name, ignore.case=TRUE)) {
             scale <- x[[paste0(name, "Unit")]]$scale
             if (grepl("IPTS-68", scale, ignore.case=TRUE)) {
-                warning("converting \"", name, "\" from IPTS-68 scale to ITS-90 scale")
+                message("Note: converted \"", name, "\" from the IPTS-68 scale to the ITS-90 scale.")
                 vals <- oce::T90fromT68(vals)
             } else if (grepl("ITS-48", scale, ignore.case=TRUE)) {
                 warning("converting \"", name, "\" from IPTS-48 scale to ITS-90 scale")
@@ -111,9 +172,22 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile="ctd.nc", debug=0)
         }
         ncvar_put(nc=nc, varid=vars[[name]], vals=vals)
     }
+    dmsg(debug, "  storing QC values\n")
+    for (flagname in names(x@metadata$flags)) {
+        varname <- gsub("Flag", "", flagname)
+        vals <- x@metadata$flags[[varname]]
+        if (varname %in% names(varmap)) {
+            flagnameNCDF <- paste0(varmap[[varname]]$name, "_QC")
+        } else {
+            flagnameNCDF <- paste0(varname, "_QC")
+        }
+        dmsg(debug, "    ", flagname, "Flag -> ", flagnameNCDF, "\n")
+        ncvar_put(nc=nc, varid=vars[[flagnameNCDF]], vals=vals)
+    }
+    dmsg(debug, "  storing selected @metadata items\n")
     if (timeExists) {
         ncvar_put(nc=nc, varid=vars[["time"]], vals=as.numeric(time[1]))
-        dmsg(debug, "    time (", time[1], " i.e. ", oce::numberAsPOSIXct(time[1]), ")\n")
+        dmsg(debug, "    time (", time[1], " i.e. ", format(oce::numberAsPOSIXct(time[1])), ")\n")
     }
     if (stationExists) {
         ncvar_put(nc=nc, varid=vars[["station"]], vals=sprintf("%-16s", substr(station[1], 1L, 16L)))

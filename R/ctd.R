@@ -31,6 +31,8 @@
 ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
 {
     dmsg(debug, "ctd2ncdf(..., ncfile=\"", ncfile, "\") {\n")
+    if (!inherits(x, "ctd"))
+        stop("'x' must be a ctd object")
     if (is.null(varTable)) {
         varTable <- "argo"
         message("defaulting varTable to \"", varTable, "\"")
@@ -39,13 +41,10 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         ncfile <- "ctd.nc"
         message("Will save ctd object to \"", ncfile, "\".")
     }
-    if (!inherits(x, "ctd"))
-        stop("'x' must be a ctd object")
-    varmap <- read.varTable(varTable)
+    varTable <- read.varTable(varTable)
 
     # Set up variable dimensions etc, using an argo file
     # (~/data/argo/D4901788_045.nc) as a pattern.
-    missing_value <- 99999.0
     NLEVEL <- length(x@data[[1]])
     NLEVELdim <- ncdim_def(name="N_LEVEL", units="", vals=seq_len(NLEVEL), create_dimvar=FALSE)
     NPROFILEdim <- ncdim_def(name="N_PROFILE", units="", vals=1L, create_dimvar=FALSE)
@@ -56,50 +55,32 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     vars <- list()
     dmsg(debug, "  defining variable properties\n")
     for (name in names(x@data)) {
-        if (name %in% names(varmap)) {
-            dmsg(debug, "    ", name, " (to be called ", varmap[[name]]$name, ")\n")
-            vars[[name]] <- ncvar_def(
-                name=varmap[[name]]$name,
-                units=varmap[[name]]$unit,
-                longname=varmap[[name]]$long_name,
-                missval=varmap[[name]]$missing_value,
-                dim=NLEVELdim,
-                prec="float")
-        } else {
-            dmsg(debug, "    ", name, "\n")
-            vars[[name]] <- ncvar_def(
-                name=name,
-                units="",
-                longname=name,
-                missval=missing_value,
-                dim=NLEVELdim,
-                prec="float")
-        }
+        dmsg(debug, "    ", name, "\n")
+        varInfo <- getVariableInfo(x, name, varTable)
+        vars[[name]] <- ncvar_def(
+            name=varInfo$name,
+            units=varInfo$unit,
+            longname=varInfo$long_name,
+            missval=varTable$values$missing_value,
+            dim=NLEVELdim,
+            prec="float")
     }
     dmsg(debug, "  defining flag (QC) properties (if any exist)\n")
     flagnames <- names(x@metadata$flags)
     for (flagname in flagnames) {
-        if (flagname %in% names(varmap)) {
-            flagnameNCDF <- paste0(varmap[[flagname]]$name, "_QC")
-            dmsg(debug, "    flags$", flagname, " -> ", flagnameNCDF, " (nb. renamed)\n")
-            vars[[flagnameNCDF]] <- ncvar_def(
-                name=flagnameNCDF,
-                units="",
-                longname=paste("QC for ", flagname),
-                missval=missing_value,
-                dim=NLEVELdim,
-                prec="float")
-        } else {
-            flagnameNCDF <- paste0(flagname, "_QC")
-            dmsg(debug, "    flags$", flagname, " -> ", flagnameNCDF, "\n")
-            vars[[flagnameNCDF]] <- ncvar_def(
-                name=flagnameNCDF,
-                units="",
-                longname=paste("QC for ", flagname),
-                missval=missing_value,
-                dim=NLEVELdim,
-                prec="float")
-        }
+        #message(oce::vectorShow(flagname))
+        varInfo <- getVariableInfo(x, flagname, varTable)
+        #print(varInfo)
+        #browser()
+        flagnameNCDF <- paste0(varInfo$name, "_QC")
+        dmsg(debug, "    ", flagname, " -> ", flagnameNCDF, "\n")
+        vars[[flagnameNCDF]] <- ncvar_def(
+            name=flagnameNCDF,
+            units="",
+            longname=paste("QC for ", flagname),
+            missval=varTable$values$missing_value,
+            dim=NLEVELdim,
+            prec="float")
     }
     dmsg(debug, "  defining variables for selected @metadata items\n")
     # Start time (which some files have)
@@ -110,7 +91,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             name="TIME",
             units="seconds since 1970-01-01 UTC",
             longname="",
-            missval=missing_value,
+            missval=varTable$values$missing_value,
             dim=NPROFILEdim,
             prec="float")
         dmsg(debug, "    time\n")
@@ -124,7 +105,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             units="",
             longname="",
             missval="",
-            dim=STRING32dim,
+            dim=STRING16dim,
             prec="char")
         dmsg(debug, "    station\n")
     }
@@ -137,7 +118,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             name="longitude",
             units="degree_east",
             longname="Longitude of the station, best estimate",
-            missval=missing_value,
+            missval=varTable$values$missing_value,
             dim=NPROFILEdim,
             prec="float")
         dmsg(debug, "    longitude\n")
@@ -145,7 +126,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             name="latitude",
             units="degree_north",
             longname="Latitude of the station, best estimate",
-            missval=missing_value,
+            missval=varTable$values$missing_value,
             dim=NPROFILEdim,
             prec="float")
         dmsg(debug, "    latitude\n")
@@ -155,6 +136,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     for (name in names(x@data)) {
         dmsg(debug, "    ", name, " (", NLEVEL, " values)\n")
         vals <- x@data[[name]]
+        vals[is.na(vals)] <- varTable$values$missing_value
         if (grepl("temperature", name, ignore.case=TRUE)) {
             scale <- x[[paste0(name, "Unit")]]$scale
             if (grepl("IPTS-68", scale, ignore.case=TRUE)) {
@@ -174,13 +156,9 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     }
     dmsg(debug, "  storing QC values\n")
     for (flagname in names(x@metadata$flags)) {
-        varname <- gsub("Flag", "", flagname)
-        vals <- x@metadata$flags[[varname]]
-        if (varname %in% names(varmap)) {
-            flagnameNCDF <- paste0(varmap[[varname]]$name, "_QC")
-        } else {
-            flagnameNCDF <- paste0(varname, "_QC")
-        }
+        varInfo <- getVariableInfo(x, flagname, varTable)
+        vals <- x@metadata$flags[[flagname]]
+        flagnameNCDF <- paste0(varInfo$name, "_QC")
         dmsg(debug, "    ", flagname, "Flag -> ", flagnameNCDF, "\n")
         ncvar_put(nc=nc, varid=vars[[flagnameNCDF]], vals=vals)
     }
@@ -201,6 +179,6 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     }
     ncatt_put(nc, 0, "metadata", paste(capture.output(str(x@metadata)), collapse="\n"))
     nc_close(nc)
-    dmsg(debug, "} # ctd2ncdf\n")
+    dmsg(debug, paste0("} # ctd2ncdf created file \"", ncfile, "\"\n"))
 }
 

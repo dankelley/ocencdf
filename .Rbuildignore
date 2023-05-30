@@ -2,4 +2,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^.*\.txt$
+sandbox
+
 

@@ -22,4 +22,6 @@ units:
     name: "decibar"
   "mu * mol/kg":
     name: "micromole/kg"
+  "1/m":
+    name: "m-1"
 

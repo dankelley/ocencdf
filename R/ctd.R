@@ -56,7 +56,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     dmsg(debug, "  defining variable properties\n")
     for (name in names(x@data)) {
         dmsg(debug, "    ", name, "\n")
-        varInfo <- getVariableInfo(x, name, varTable)
+        varInfo <- getVariableInfo(oce=x, name=name, varTable=varTable)
         vars[[name]] <- ncvar_def(
             name=varInfo$name,
             units=varInfo$unit,
@@ -69,7 +69,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     flagnames <- names(x@metadata$flags)
     for (flagname in flagnames) {
         #message(oce::vectorShow(flagname))
-        varInfo <- getVariableInfo(x, flagname, varTable)
+        varInfo <- getVariableInfo(oce=x, name=flagname, varTable=varTable)
         #print(varInfo)
         #browser()
         flagnameNCDF <- paste0(varInfo$name, "_QC")
@@ -115,7 +115,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     locationExists <- is.finite(longitude) && is.finite(latitude)
     if (locationExists) {
         vars[["longitude"]] <- ncvar_def(
-            name="longitude",
+            name=getVariableInfo(name="longitude", varTable=varTable)$name,
             units="degree_east",
             longname="Longitude of the station, best estimate",
             missval=varTable$values$missing_value,
@@ -123,7 +123,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             prec="float")
         dmsg(debug, "    longitude\n")
         vars[["latitude"]] <- ncvar_def(
-            name="latitude",
+            name=getVariableInfo(name="latitude", varTable=varTable)$name,
             units="degree_north",
             longname="Latitude of the station, best estimate",
             missval=varTable$values$missing_value,
@@ -156,7 +156,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     }
     dmsg(debug, "  storing QC values\n")
     for (flagname in names(x@metadata$flags)) {
-        varInfo <- getVariableInfo(x, flagname, varTable)
+        varInfo <- getVariableInfo(oce=x, name=flagname, varTable=varTable)
         vals <- x@metadata$flags[[flagname]]
         flagnameNCDF <- paste0(varInfo$name, "_QC")
         dmsg(debug, "    ", flagname, "Flag -> ", flagnameNCDF, "\n")

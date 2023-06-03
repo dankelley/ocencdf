@@ -58,8 +58,6 @@ read.varTable <- function(varTable="argo")
 #' This is used by e.g. [ctd2ncdf()] to determine how to describe the variable in a
 #' particular flavour of netcdf file, as specified by [read.varTable()].
 #'
-#' @param oce an oce object.
-#'
 #' @param name character value naming the variable.  Note that numeric suffices
 #' are trimmed, so that e.g. `temperature` and `temperature2` yield the
 #' same results.  This is because oce handles e.g. two temperature data streams
@@ -69,23 +67,33 @@ read.varTable <- function(varTable="argo")
 #' or a character string that is to be passed to that function to
 #' create a variable table.
 #'
+#' @param oce (optional) an oce object.  If provided, then an attempt
+#' is made to infer the unit from it.  Otherwise, the returned `unit`
+#' entry is an empty string.
+#'
+#' @return [getVariableInfo()] returns a list containing `name` (the
+#' name as used in argo netcdf files), `long_name` (again, as used in
+#' Argo netcdf files, although the usefulness of this is debatable),
+#' `standard_name` (not used by [ctd2ncdf()] as of now), `FillValue`
+#' (used by [ctd2ncdf()] for missing values) and, if `oce` is provided
+#' and it can be determined, `unit` (a character string specifying
+#' the unit).
+#'
 #' @examples
 #' library(ocencdf)
 #'
 #' # Example
 #' data(ctd)
 #' vt <- read.varTable("argo")
-#' getVariableInfo(ctd, "temperature", vt)
+#' getVariableInfo("temperature", vt, ctd)
 #'
 #' @author Dan Kelley
 #'
 #' @export
-getVariableInfo <- function(oce=NULL, name=NULL, varTable=NULL)
+getVariableInfo <- function(name=NULL, varTable=NULL, oce=NULL)
 {
     # Error checking.
-    if (is.null(oce))
-        stop("must supply oce")
-    if (!inherits(oce, "oce"))
+    if (!is.null(oce) && !inherits(oce, "oce"))
         stop("oce must be an 'oce' object, e.g. made by read.oce()")
     if (is.null(name))
         stop("must supply name")
@@ -119,9 +127,11 @@ getVariableInfo <- function(oce=NULL, name=NULL, varTable=NULL)
     # string for oce objects) to e.g. "psu", which is what argo expects.  I am
     # not willing to change oce to record a unit, in contravention to convention,
     # but we could special-case this in ctd2ncdf().
-    unit <- as.character(oce[[paste0(name, "Unit")]]$unit)
-    if (length(unit) && (unit %in% names(varTable$units)))
-        rval$unit <- varTable$units[[unit]]$name
+    if (!is.null(oce)) {
+        unit <- as.character(oce[[paste0(name, "Unit")]]$unit)
+        if (length(unit) && (unit %in% names(varTable$units)))
+            rval$unit <- varTable$units[[unit]]$name
+    }
     rval
 }
 

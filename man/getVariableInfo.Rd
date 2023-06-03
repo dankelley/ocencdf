@@ -4,11 +4,9 @@
 \alias{getVariableInfo}
 \title{Get the long name of a variable, using varTable}
 \usage{
-getVariableInfo(oce = NULL, name = NULL, varTable = NULL)
+getVariableInfo(name = NULL, varTable = NULL, oce = NULL)
 }
 \arguments{
-\item{oce}{an oce object.}
-
 \item{name}{character value naming the variable.  Note that numeric suffices
 are trimmed, so that e.g. \code{temperature} and \code{temperature2} yield the
 same results.  This is because oce handles e.g. two temperature data streams
@@ -17,6 +15,19 @@ by naming the second \code{temperature2}.}
 \item{varTable}{either a variable table as read by \code{\link[=read.varTable]{read.varTable()}},
 or a character string that is to be passed to that function to
 create a variable table.}
+
+\item{oce}{(optional) an oce object.  If provided, then an attempt
+is made to infer the unit from it.  Otherwise, the returned \code{unit}
+entry is an empty string.}
+}
+\value{
+\code{\link[=getVariableInfo]{getVariableInfo()}} returns a list containing \code{name} (the
+name as used in argo netcdf files), \code{long_name} (again, as used in
+Argo netcdf files, although the usefulness of this is debatable),
+\code{standard_name} (not used by \code{\link[=ctd2ncdf]{ctd2ncdf()}} as of now), \code{FillValue}
+(used by \code{\link[=ctd2ncdf]{ctd2ncdf()}} for missing values) and, if \code{oce} is provided
+and it can be determined, \code{unit} (a character string specifying
+the unit).
 }
 \description{
 This is used by e.g. \code{\link[=ctd2ncdf]{ctd2ncdf()}} to determine how to describe the variable in a
@@ -28,7 +39,7 @@ library(ocencdf)
 # Example
 data(ctd)
 vt <- read.varTable("argo")
-getVariableInfo(ctd, "temperature", vt)
+getVariableInfo("temperature", vt, ctd)
 
 }
 \author{

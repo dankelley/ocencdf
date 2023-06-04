@@ -1,3 +1,6 @@
+type:
+  name: argo
+  version: 1
 units:
   1/m:
     name: m-1
@@ -18,8 +21,10 @@ values:
 variables:
   latitude:
     name: LATITUDE
+    standard_name: latitude
   longitude:
     name: LONGITUDE
+    standard_name: longitude
   pressure:
     name: PRES
     long_name: Sea water pressure, equals 0 at sea-level

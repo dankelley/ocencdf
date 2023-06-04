@@ -1,3 +1,6 @@
+type:
+  name: whp
+  version: 1
 units:
   1/m:
     name: m-1

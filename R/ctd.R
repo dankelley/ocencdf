@@ -12,20 +12,20 @@
 #'
 #' # example 1: a ctd file with no per-variable QC flags
 #' data(ctd) # from 'oce' package
-#' oce2ncdf(ctd, ncfile="ctd1.nc")
-#' d <- read.netcdf('ctd1.nc') |> as.ctd()
-#' plot(d)
+#' oce2ncdf(ctd, ncfile="ctd.nc")
+#' CTD <- as.ctd(ncdf2oce("ctd.nc"))
+#' plot(CTD)
 #'
 #' # example 2: a ctd file with per-variable QC flags
 #' data(section) # from 'oce' package
 #' stn <- section[["station", 100]] # 100-th station in section, not station '100'
-#' oce2ncdf(stn, ncfile="ctd2.nc")
-#' d <- read.netcdf('ctd2.nc') |> as.ctd()
-#' plot(d)
+#' oce2ncdf(stn, ncfile="stn.nc")
+#' STN <- as.ctd(ncdf2oce("stn.nc"))
+#' plot(STN)
 #'
 #' # clean up temporary files (to prevent CRAN test failure)
-#' unlink("ctd1.nc")
-#' unlink("ctd2.nc")
+#' unlink("ctd.nc")
+#' unlink("stn.nc")
 #'
 #' @author Dan Kelley
 ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
@@ -35,7 +35,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         stop("'x' must be a ctd object")
     if (is.null(varTable)) {
         varTable <- "argo"
-        message("defaulting varTable to \"", varTable, "\"")
+        message("Defaulting varTable to \"", varTable, "\".")
     }
     if (is.null(ncfile)) {
         ncfile <- "ctd.nc"
@@ -53,23 +53,30 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     # create vars, using varmap for known items, and using just names otherwise
     # TO DO: determine whether we ought to examine the units in the oce object
     vars <- list()
+    standardNames <- list() # called STANDARD_NAME in argo files
     dmsg(debug, "  defining variable properties\n")
     for (name in names(x@data)) {
         dmsg(debug, "    ", name, "\n")
-        varInfo <- getVariableInfo(oce=x, name=name, varTable=varTable)
+        varInfo <- getVarInfo(oce=x, name=name, varTable=varTable)
+        units <- varInfo$unit
+        # For the "argo" case, use "psu" as a unit for salinity.
+        if (grepl("salinity", name) && varTable$type$name == "argo")
+            units <- "psu"
         vars[[name]] <- ncvar_def(
             name=varInfo$name,
-            units=varInfo$unit,
+            units=units,
             longname=varInfo$long_name,
             missval=varTable$values$missing_value,
             dim=NLEVELdim,
             prec="float")
+        standardNames[[name]] <- varInfo$standard_name
     }
+    #print(standardNames)
     dmsg(debug, "  defining flag (QC) properties (if any exist)\n")
     flagnames <- names(x@metadata$flags)
     for (flagname in flagnames) {
         #message(oce::vectorShow(flagname))
-        varInfo <- getVariableInfo(oce=x, name=flagname, varTable=varTable)
+        varInfo <- getVarInfo(oce=x, name=flagname, varTable=varTable)
         #print(varInfo)
         #browser()
         flagnameNCDF <- paste0(varInfo$name, "_QC")
@@ -90,10 +97,11 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         vars[["time"]] <- ncvar_def(
             name="TIME",
             units="seconds since 1970-01-01 UTC",
-            longname="",
+            longname="time",
             missval=varTable$values$missing_value,
             dim=NPROFILEdim,
             prec="float")
+        standardNames[["time"]] <- "time"
         dmsg(debug, "    time\n")
     }
     # Station (which some files have)
@@ -103,7 +111,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         vars[["station"]] <- ncvar_def(
             name="station",
             units="",
-            longname="",
+            longname="station",
             missval="",
             dim=STRING16dim,
             prec="char")
@@ -115,20 +123,22 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     locationExists <- is.finite(longitude) && is.finite(latitude)
     if (locationExists) {
         vars[["longitude"]] <- ncvar_def(
-            name=getVariableInfo(name="longitude", varTable=varTable)$name,
+            name=getVarInfo(name="longitude", varTable=varTable)$name,
             units="degree_east",
             longname="Longitude of the station, best estimate",
             missval=varTable$values$missing_value,
             dim=NPROFILEdim,
             prec="float")
+        standardNames[["longitude"]] <- "longitude"
         dmsg(debug, "    longitude\n")
         vars[["latitude"]] <- ncvar_def(
-            name=getVariableInfo(name="latitude", varTable=varTable)$name,
+            name=getVarInfo(name="latitude", varTable=varTable)$name,
             units="degree_north",
             longname="Latitude of the station, best estimate",
             missval=varTable$values$missing_value,
             dim=NPROFILEdim,
             prec="float")
+        standardNames[["latitude"]] <- "latitude"
         dmsg(debug, "    latitude\n")
     }
     nc <- nc_create(ncfile, vars)
@@ -140,10 +150,10 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         if (grepl("temperature", name, ignore.case=TRUE)) {
             scale <- x[[paste0(name, "Unit")]]$scale
             if (grepl("IPTS-68", scale, ignore.case=TRUE)) {
-                message("Note: converted \"", name, "\" from the IPTS-68 scale to the ITS-90 scale.")
+                message("Converting temperature from IPTS-68 scale to ITS-90 scale.")
                 vals <- oce::T90fromT68(vals)
             } else if (grepl("ITS-48", scale, ignore.case=TRUE)) {
-                warning("converting \"", name, "\" from IPTS-48 scale to ITS-90 scale")
+                message("Converting temperature from IPTS-48 scale to ITS-90 scale.")
                 vals <- oce::T90fromT48(vals)
             }
         } else if (grepl("salinity", name, ignore.case=TRUE)) {
@@ -153,10 +163,13 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             }
         }
         ncvar_put(nc=nc, varid=vars[[name]], vals=vals)
+        sn <- standardNames[[name]]
+        if (!is.null(sn))
+            ncatt_put(nc=nc, varid=vars[[name]], attname="standard_name", attval=sn)
     }
     dmsg(debug, "  storing QC values\n")
     for (flagname in names(x@metadata$flags)) {
-        varInfo <- getVariableInfo(oce=x, name=flagname, varTable=varTable)
+        varInfo <- getVarInfo(oce=x, name=flagname, varTable=varTable)
         vals <- x@metadata$flags[[flagname]]
         flagnameNCDF <- paste0(varInfo$name, "_QC")
         dmsg(debug, "    ", flagname, "Flag -> ", flagnameNCDF, "\n")
@@ -165,6 +178,9 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     dmsg(debug, "  storing selected @metadata items\n")
     if (timeExists) {
         ncvar_put(nc=nc, varid=vars[["time"]], vals=as.numeric(time[1]))
+        sn <- standardNames[["time"]]
+        if (!is.null(sn))
+            ncatt_put(nc=nc, varid=vars[["time"]], attname="standard_name", attval=sn)
         dmsg(debug, "    time (", time[1], " i.e. ", format(oce::numberAsPOSIXct(time[1])), ")\n")
     }
     if (stationExists) {
@@ -173,10 +189,17 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     }
     if (locationExists) {
         ncvar_put(nc=nc, varid=vars[["longitude"]], vals=longitude[1])
+        sn <- standardNames[["longitude"]]
+        if (!is.null(sn))
+            ncatt_put(nc=nc, varid=vars[["longitude"]], attname="standard_name", attval=sn)
         dmsg(debug, "    longitude (", longitude, ")\n")
         ncvar_put(nc=nc, varid=vars[["latitude"]], vals=latitude[1])
+        sn <- standardNames[["latitude"]]
+        if (!is.null(sn))
+            ncatt_put(nc=nc, varid=vars[["latitude"]], attname="standard_name", attval=sn)
         dmsg(debug, "    latitude (", latitude, ")\n")
     }
+    dmsg(debug, "saving whole ctd@metadata coontents as string attribute 'metadata'")
     ncatt_put(nc, 0, "metadata", paste(capture.output(str(x@metadata)), collapse="\n"))
     nc_close(nc)
     dmsg(debug, paste0("} # ctd2ncdf created file \"", ncfile, "\"\n"))

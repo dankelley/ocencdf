@@ -14,6 +14,8 @@
 #' the two provided files correspond to `varTable` values of `"whp"`
 #' and `"argo"`.
 #'
+#' @template debugTemplate
+#'
 #' @return [read.varTable()] returns a list that specifies some information
 #' to be stored in netcdf files created by e.g. [ctd2ncdf()].
 #'
@@ -24,7 +26,7 @@
 #' @export
 #'
 #' @author Dan Kelley
-read.varTable <- function(varTable="argo")
+read.varTable <- function(varTable="argo", debug=0)
 {
     if (!is.character(varTable))
         stop("varTable must be a character value")
@@ -32,6 +34,7 @@ read.varTable <- function(varTable="argo")
         varTable <- system.file("extdata", paste0(varTable, ".yml"), package="ocencdf")
     if (!file.exists(varTable))
         stop("file \"", varTable, "\" does not exist")
+    dmsg(debug, "read.varTable(\"", varTable, "\") {\n")
     rval <- yaml::yaml.load_file(varTable)
     # Fill in empty units and longnames with defaults that at least permit
     # ctd2ncdf(), etc., to run without error.
@@ -41,6 +44,7 @@ read.varTable <- function(varTable="argo")
     variableNames <- names(rval$variables)
     for (i in seq_along(variableNames)) {
         name <- variableNames[i]
+        dmsg(debug, "  handling \"", name, "\"\n")
         #if (is.null(rval$variables[[i]]$units))
         #    rval$variables[[i]]$units <- ""
         if (is.null(rval$variables[[i]]$long_name))
@@ -50,18 +54,21 @@ read.varTable <- function(varTable="argo")
         if (is.null(rval$variables[[i]]$missing_value))
             rval$variables[[i]]$missing_value <- 99999.0
     }
+    dmsg(debug, "} # read.varTable()\n")
     rval
 }
 
-#' Get the long name of a variable, using varTable
+#' Get information on a variable, using varTable
 #'
 #' This is used by e.g. [ctd2ncdf()] to determine how to describe the variable in a
 #' particular flavour of netcdf file, as specified by [read.varTable()].
 #'
-#' @param name character value naming the variable.  Note that numeric suffices
-#' are trimmed, so that e.g. `temperature` and `temperature2` yield the
-#' same results.  This is because oce handles e.g. two temperature data streams
-#' by naming the second `temperature2`.
+#' @param name character value naming the variable.  If `name` is 
+#' not a chemical species (e.g. `"NO2"`) then trailing numbers are
+#' removed, as a way to handle both e.g. `"temperature"` and `"temperature2"`,
+#' which may both be present for devices with multiple temperature sensors.
+#' The chemical names are recognized by the presence of one of the following
+#' strings: `"CO"`, `"NO"` or `"PO"`.
 #'
 #' @param varTable either a variable table as read by [read.varTable()],
 #' or a character string that is to be passed to that function to
@@ -71,7 +78,9 @@ read.varTable <- function(varTable="argo")
 #' is made to infer the unit from it.  Otherwise, the returned `unit`
 #' entry is an empty string.
 #'
-#' @return [getVariableInfo()] returns a list containing `name` (the
+#' @template debugTemplate
+#'
+#' @return [getVarInfo()] returns a list containing `name` (the
 #' name as used in argo netcdf files), `long_name` (again, as used in
 #' Argo netcdf files, although the usefulness of this is debatable),
 #' `standard_name` (not used by [ctd2ncdf()] as of now), `FillValue`
@@ -85,12 +94,12 @@ read.varTable <- function(varTable="argo")
 #' # Example
 #' data(ctd)
 #' vt <- read.varTable("argo")
-#' getVariableInfo("temperature", vt, ctd)
+#' getVarInfo("temperature", vt, ctd)
 #'
 #' @author Dan Kelley
 #'
 #' @export
-getVariableInfo <- function(name=NULL, varTable=NULL, oce=NULL)
+getVarInfo <- function(name=NULL, varTable=NULL, oce=NULL, debug=0)
 {
     # Error checking.
     if (!is.null(oce) && !inherits(oce, "oce"))
@@ -101,15 +110,19 @@ getVariableInfo <- function(name=NULL, varTable=NULL, oce=NULL)
         stop("name must be a character value")
     if (is.null(varTable))
         stop("must supply varTable")
+    dmsg(debug, "getVarInfo(name=\"", name, "\", varTable=\"", varTable, "\")\n")
     if (is.character(varTable))
         varTable <- read.varTable(varTable)
     if (!is.list(varTable))
         stop("varTable must be a character value, or the output of read.varTable()")
-    # Remove trailing numbers in name, if there are any.
-    name <- gsub("([a-zA-Z_]*)[0-9]+", "\\1", name)
+    # Remove trailing numbers in name (with exceptions), if there are any.
+    if (!grepl("(CO)|(NO)|(PO)", name))
+        name <- gsub("([a-zA-Z_]*)[0-9]+", "\\1", name)
+    dmsg(debug, "  name changed to \"", name, "\"\n")
+
     FillValue <- varTable$values$missing_value
     # Establish a default return value.
-    rval <- list(name=name, long_name=name, standard_name=name, FillValue=FillValue, unit="")
+    rval <- list(name=name, long_name="", FillValue=FillValue, unit="")
     # Fill in variable names and fill value, if they can be determined.
     if (name %in% names(varTable$variables)) {
         tmp <- varTable$variables[[name]]$name
@@ -132,6 +145,7 @@ getVariableInfo <- function(name=NULL, varTable=NULL, oce=NULL)
         if (length(unit) && (unit %in% names(varTable$units)))
             rval$unit <- varTable$units[[unit]]$name
     }
+    dmsg(debug, "} # getVarInfo()\n")
     rval
 }
 

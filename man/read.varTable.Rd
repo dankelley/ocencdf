@@ -4,7 +4,7 @@
 \alias{read.varTable}
 \title{Read a variable-information table}
 \usage{
-read.varTable(varTable = "argo")
+read.varTable(varTable = "argo", debug = 0)
 }
 \arguments{
 \item{varTable}{character value indicating the name of the table.  If this
@@ -14,6 +14,10 @@ given by appending \code{.yml} on the end of \code{varTable}, to be found in the
 \code{inst/ext_data} source directory, as in the example.  At the moment,
 the two provided files correspond to \code{varTable} values of \code{"whp"}
 and \code{"argo"}.}
+
+\item{debug}{integer, 0 (the default) for quiet action apart
+from messages and warnings, or any larger value to see more
+output that describes the processing steps.}
 }
 \value{
 \code{\link[=read.varTable]{read.varTable()}} returns a list that specifies some information

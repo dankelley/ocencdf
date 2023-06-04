@@ -32,20 +32,20 @@ library(ocencdf)
 
 # example 1: a ctd file with no per-variable QC flags
 data(ctd) # from 'oce' package
-oce2ncdf(ctd, ncfile="ctd1.nc")
-d <- read.netcdf('ctd1.nc') |> as.ctd()
-plot(d)
+oce2ncdf(ctd, ncfile="ctd.nc")
+CTD <- as.ctd(ncdf2oce("ctd.nc"))
+plot(CTD)
 
 # example 2: a ctd file with per-variable QC flags
 data(section) # from 'oce' package
 stn <- section[["station", 100]] # 100-th station in section, not station '100'
-oce2ncdf(stn, ncfile="ctd2.nc")
-d <- read.netcdf('ctd2.nc') |> as.ctd()
-plot(d)
+oce2ncdf(stn, ncfile="stn.nc")
+STN <- as.ctd(ncdf2oce("stn.nc"))
+plot(STN)
 
 # clean up temporary files (to prevent CRAN test failure)
-unlink("ctd1.nc")
-unlink("ctd2.nc")
+unlink("ctd.nc")
+unlink("stn.nc")
 
 }
 \author{

@@ -30,10 +30,15 @@ read.varTable <- function(varTable="argo", debug=0)
 {
     if (!is.character(varTable))
         stop("varTable must be a character value")
+    if (!is.numeric(debug))
+        stop("debug must be a numeric value, but is ", debug)
+    varTableOrig <- varTable
     if (!grepl(".yml$", varTable))
         varTable <- system.file("extdata", paste0(varTable, ".yml"), package="ocencdf")
+    if (nchar(varTable) < 1L)
+        stop("file there is no \"", varTableOrig, ".yml\" file in ", system.file(package="ocencdf"))
     if (!file.exists(varTable))
-        stop("file \"", varTable, "\" does not exist")
+        stop("file \"", varTableOrig, "\" does not exist")
     dmsg(debug, "read.varTable(\"", varTable, "\") {\n")
     rval <- yaml::yaml.load_file(varTable)
     # Fill in empty units and longnames with defaults that at least permit
@@ -63,12 +68,12 @@ read.varTable <- function(varTable="argo", debug=0)
 #' This is used by e.g. [ctd2ncdf()] to determine how to describe the variable in a
 #' particular flavour of netcdf file, as specified by [read.varTable()].
 #'
-#' @param name character value naming the variable.  If `name` is 
-#' not a chemical species (e.g. `"NO2"`) then trailing numbers are
-#' removed, as a way to handle both e.g. `"temperature"` and `"temperature2"`,
-#' which may both be present for devices with multiple temperature sensors.
-#' The chemical names are recognized by the presence of one of the following
-#' strings: `"CO"`, `"NO"` or `"PO"`.
+#' @param name character value naming the variable.  If `name` is
+#' not the name of a chemical species, then trailing digits are removed,
+#' as a way to handle instruments that, for example, have multiple
+#' temperature sensors.  Chemical species are recognized by
+#' the presence of any one of the following strings:
+#' `"CO"`, `"NO"`, `"PO" and "O2"`.
 #'
 #' @param varTable either a variable table as read by [read.varTable()],
 #' or a character string that is to be passed to that function to
@@ -115,14 +120,17 @@ getVarInfo <- function(name=NULL, varTable=NULL, oce=NULL, debug=0)
         varTable <- read.varTable(varTable)
     if (!is.list(varTable))
         stop("varTable must be a character value, or the output of read.varTable()")
-    # Remove trailing numbers in name (with exceptions), if there are any.
-    if (!grepl("(CO)|(NO)|(PO)", name))
-        name <- gsub("([a-zA-Z_]*)[0-9]+", "\\1", name)
-    dmsg(debug, "  name changed to \"", name, "\"\n")
-
+    # Remove trailing numbers e.g. temperature2, but not in e.g. NO2.
+    suffix <- ""
+    dmsg(debug, "  name=\"", name, "\"\n")
+    if (!grepl("(CO)|(NO)|(PO)|(O2)", name) && grepl("[0-9]$", name)) {
+        suffix <- gsub("[a-zA-Z_]*([0-9]+)$", "\\1", name)
+        name <- gsub("([a-zA-Z_]*)[0-9]+$", "\\1", name)
+        dmsg(debug, "    after transformation, name=\"", name, "\"; suffix=\"", suffix, "\"\n")
+    }
     FillValue <- varTable$values$missing_value
     # Establish a default return value.
-    rval <- list(name=name, long_name="", FillValue=FillValue, unit="")
+    rval <- list(name=name, long_name=name, FillValue=FillValue, unit="")
     # Fill in variable names and fill value, if they can be determined.
     if (name %in% names(varTable$variables)) {
         tmp <- varTable$variables[[name]]$name
@@ -135,6 +143,7 @@ getVarInfo <- function(name=NULL, varTable=NULL, oce=NULL, debug=0)
         if (!is.null(tmp))
             rval$standard_name <- tmp
     }
+    rval$name <- paste0(rval$name, suffix)
     # Fill in units, if they can be determined.
     # BUG: with this scheme, there is no way to change salinity units (an empty
     # string for oce objects) to e.g. "psu", which is what argo expects.  I am

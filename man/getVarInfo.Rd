@@ -8,11 +8,11 @@ getVarInfo(name = NULL, varTable = NULL, oce = NULL, debug = 0)
 }
 \arguments{
 \item{name}{character value naming the variable.  If \code{name} is
-not a chemical species (e.g. \code{"NO2"}) then trailing numbers are
-removed, as a way to handle both e.g. \code{"temperature"} and \code{"temperature2"},
-which may both be present for devices with multiple temperature sensors.
-The chemical names are recognized by the presence of one of the following
-strings: \code{"CO"}, \code{"NO"} or \code{"PO"}.}
+not the name of a chemical species, then trailing digits are removed,
+as a way to handle instruments that, for example, have multiple
+temperature sensors.  Chemical species are recognized by
+the presence of any one of the following strings:
+\code{"CO"}, \code{"NO"}, \verb{"PO" and "O2"}.}
 
 \item{varTable}{either a variable table as read by \code{\link[=read.varTable]{read.varTable()}},
 or a character string that is to be passed to that function to

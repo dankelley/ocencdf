@@ -1,6 +1,7 @@
 type:
+  date: '2022-06-05'
   name: argo
-  version: 1
+  version: 2
 units:
   1/m:
     name: m-1
@@ -19,12 +20,33 @@ units:
 values:
   missing_value: 99999.0
 variables:
+  backscattering:
+    name: BBMP
+  chlorophyll-A:
+    name: CHLA
+    standard_name: mass_concentration_of_chlorophyll_a_in_sea_water
+  conductivity:
+    name: CNDC
+    standard_name: sea_water_electrical_conductivity
+  downwelling_par:
+    name: DOWNWELLING_PAR
   latitude:
     name: LATITUDE
     standard_name: latitude
   longitude:
     name: LONGITUDE
     standard_name: longitude
+  nitrate:
+    name: NITRATE
+    standard_name: moles_of_nitrate_per_unit_mass_in_sea_water
+  oxygen:
+    name: DOXY
+  oxygenMolar:
+    name: MOLAR_DOXY
+    standard_name: mole_concentration_of_dissolved_molecular_oxygen_in_sea_water
+  pH:
+    name: PH_IN_SITU_TOTAL
+    standard_name: sea_water_ph_reported_on_total_scale
   pressure:
     name: PRES
     long_name: Sea water pressure, equals 0 at sea-level
@@ -37,3 +59,12 @@ variables:
     name: TEMP
     long_name: Sea temperature in-situ ITS-90 scale
     standard_name: sea_water_temperature
+  temperatureOxygen:
+    name: TEMP_DOXY
+    standard_name: temperature_of_sensor_for_oxygen_in_sea_water
+  turbidity:
+    name: TURBIDITY
+    standard_name: sea_water_turbidity
+  up_radiance:
+    name: UP_RADIANCE
+    standard_name: upwelling_radiance_in_sea_water

@@ -30,4 +30,3 @@ test_that("ctd2nc on a section station creates a file with expected variable nam
         #        "station", "LONGITUDE", "LATITUDE"))
         unlink(ncfile)
     })
-

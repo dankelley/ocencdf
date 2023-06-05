@@ -1,4 +1,4 @@
-#' Read a netcdf file and create an oce object
+#' Read a netcdf file and create a general oce object
 #'
 #' This reads a netcdf file, interpreting units but not renaming
 #' variables or placing quality-control information in the `metadata`
@@ -85,3 +85,19 @@ ncdf2oce <- function(ncfile=NULL, debug=0)
     res
 }
 
+#' Read a netcdf file and create a ctd object
+#'
+#' @inheritParams ncdf2oce
+#'
+#' @return [ncdf2ctd()] returns an [ctd-class] object.
+#'
+#' @importFrom oce as.ctd
+#'
+#' @author Dan Kelley
+#'
+#' @export
+ncdf2ctd <- function(ncfile=NULL, debug=0)
+{
+    as.ctd(ncdf2oce(ncfile=ncfile, debug=debug), debug=debug)
+}
+ 

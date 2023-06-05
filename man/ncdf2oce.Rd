@@ -2,7 +2,7 @@
 % Please edit documentation in R/ncdf2oce.R
 \name{ncdf2oce}
 \alias{ncdf2oce}
-\title{Read a netcdf file and create an oce object}
+\title{Read a netcdf file and create a general oce object}
 \usage{
 ncdf2oce(ncfile = NULL, debug = 0)
 }

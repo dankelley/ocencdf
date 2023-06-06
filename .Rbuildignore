@@ -5,5 +5,5 @@
 developer
 sandbox
 man-roxygen
-
+^docs$
 

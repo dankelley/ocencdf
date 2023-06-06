@@ -59,8 +59,21 @@ ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
             res@data[[name]] <- item
         }
     }
-    # Try to get some global attributes.
-    # Inelegantly permit first letter lower-case or upper-case
+    # Try setting some global attributes. (FIXME: coded for ctd. Brittle.)
+    # Original data names (FIXME: what if LONGITUDE,LATITUDE *are* data?)
+    tmp <- ncatt_get(f, 0, "data_names_original")
+    if (tmp$hasatt) {
+        dataNamesOriginal <- strsplit(tmp$value, "\\|")[[1]]
+        n <- names(res@data)
+        dmsg(debug, "  initial names(res@data): ", paste(n, collapse=" "), "\n")
+        n <- n[!grepl("QC$", n)]
+        if (length(n) != length(dataNamesOriginal)) {
+            warning("error in assigning original data names")
+        }
+        dmsg(debug, "  later names(res@data): ", paste(n, collapse=" "), "\n")
+        names(dataNamesOriginal) <- n
+        res@metadata$dataNamesOriginal <- dataNamesOriginal
+    }
     if (ncatt_get(f, 0, "Longitude")$hasatt)
         res@metadata$longitude <- ncatt_get(f, 0, "Longitude")$value
     if (ncatt_get(f, 0, "longitude")$hasatt)

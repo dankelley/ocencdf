@@ -129,19 +129,19 @@ A <- ncdf2oce("stn.nc", varTable="argo")
 summary(A)
 ```
 
-Note that the variable names have been converted from Netcdf names (e.g. `"TEMP"`) to
-oce names (e.g. `"temperature"`).  Units have also been decoded (again, according to
-the `"argo"` varTable).  However, notice that the flags are being displayed as though
-they were data columns (e.g. `temperature_QC`).  This is because `ncdf2oce()` does
-not try to translate these into flags.  To do that, use `as.ctd()`, as follows.
+Note that the variable names have been converted from Netcdf names to oce names
+(e.g. `"CTDPRS"` became `"temperature"`).  Units have also been decoded (again,
+according to the `"argo"` varTable).  However, notice that the flags are being
+displayed as though they were data columns (e.g. `salinity_QC`).  This is
+because `ncdf2oce()` does not try to migrate flags into the `metadata` slot.
+
+To move the flags to `metadata`, either call `ncdf2ctd()` instead of `ncdf2oce()
+`, or use `as.ctd()` to do the work as a second step, as follows.
 
 ```{r}
 B <- as.ctd(A)
 summary(B)
 ```
-
-**Exercise:** Try using `ncdf2ctd()` instead of the two-step procedure used for
-`A` and `B`. Do you get the same results?
 
 ```{r echo=FALSE}
 unlink("stn.nc")

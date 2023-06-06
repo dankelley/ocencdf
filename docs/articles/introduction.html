@@ -238,37 +238,37 @@ following.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">A</span><span class="op">)</span></span>
 <span><span class="co">#&gt; * Data Overview</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;                            Min.    Mean    Max. Dim. NAs</span></span>
-<span><span class="co">#&gt;     pressure [dbar]        11.4  2182.5  4398.3   24   0</span></span>
-<span><span class="co">#&gt;     temperature [°C]     2.2228  7.3822  23.548   24   0</span></span>
-<span><span class="co">#&gt;     salinity             34.883  35.315  36.692   24   0</span></span>
-<span><span class="co">#&gt;     salinityBottle       34.889  35.315  36.702   24   0</span></span>
-<span><span class="co">#&gt;     oxygen [μmol/kg]      144.9  246.91   282.1   24   0</span></span>
-<span><span class="co">#&gt;     silicate [μmol/kg]     1.71  16.853   36.52   24   0</span></span>
-<span><span class="co">#&gt;     nitrite [μmol/kg]         0   0.022    0.08   24  19</span></span>
-<span><span class="co">#&gt;     NO2+NO3 [μmol/kg]         0  14.619   23.73   24   0</span></span>
-<span><span class="co">#&gt;     phosphate [μmol/kg]       0  0.8925    1.39   24   0</span></span>
-<span><span class="co">#&gt;     salinity_QC               2  2.0833       3   24   0</span></span>
-<span><span class="co">#&gt;     salinityBottle_QC         2       2       2   24   0</span></span>
-<span><span class="co">#&gt;     oxygen_QC                 2       2       2   24   0</span></span>
-<span><span class="co">#&gt;     silicate_QC               2       2       2   24   0</span></span>
-<span><span class="co">#&gt;     nitrite_QC                2   4.375       5   24   0</span></span>
-<span><span class="co">#&gt;     NO2+NO3_QC                2       2       2   24   0</span></span>
-<span><span class="co">#&gt;     phosphate_QC              2       2       2   24   0</span></span>
-<span><span class="co">#&gt;     longitude [°E]      -69.376 -69.376 -69.376    1   0</span></span>
-<span><span class="co">#&gt;     latitude [°N]        36.323  36.323  36.323    1   0</span></span>
+<span><span class="co">#&gt;                           Min.   Mean   Max. Dim. NAs OriginalName</span></span>
+<span><span class="co">#&gt;     pressure [dbar]       11.4 2182.5 4398.3   24   0       CTDPRS</span></span>
+<span><span class="co">#&gt;     temperature [°C]    2.2228 7.3822 23.548   24   0       CTDTMP</span></span>
+<span><span class="co">#&gt;     salinity            34.883 35.315 36.692   24   0       CTDSAL</span></span>
+<span><span class="co">#&gt;     salinityBottle      34.889 35.315 36.702   24   0       SALNTY</span></span>
+<span><span class="co">#&gt;     oxygen [μmol/kg]     144.9 246.91  282.1   24   0       OXYGEN</span></span>
+<span><span class="co">#&gt;     silicate [μmol/kg]    1.71 16.853  36.52   24   0       SILCAT</span></span>
+<span><span class="co">#&gt;     nitrite [μmol/kg]        0  0.022   0.08   24  19       NITRIT</span></span>
+<span><span class="co">#&gt;     NO2+NO3 [μmol/kg]        0 14.619  23.73   24   0      NO2+NO3</span></span>
+<span><span class="co">#&gt;     phosphate [μmol/kg]      0 0.8925   1.39   24   0       PHSPHT</span></span>
+<span><span class="co">#&gt;     salinity_QC              2 2.0833      3   24   0            -</span></span>
+<span><span class="co">#&gt;     salinityBottle_QC        2      2      2   24   0            -</span></span>
+<span><span class="co">#&gt;     oxygen_QC                2      2      2   24   0            -</span></span>
+<span><span class="co">#&gt;     silicate_QC              2      2      2   24   0            -</span></span>
+<span><span class="co">#&gt;     nitrite_QC               2  4.375      5   24   0            -</span></span>
+<span><span class="co">#&gt;     NO2+NO3_QC               2      2      2   24   0            -</span></span>
+<span><span class="co">#&gt;     phosphate_QC             2      2      2   24   0            -</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; * Processing Log</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     - 2023-06-06 13:35:50 UTC: `Create oce object`</span></span></code></pre></div>
-<p>Note that the variable names have been converted from Netcdf names
-(e.g. <code>"TEMP"</code>) to oce names
-(e.g. <code>"temperature"</code>). Units have also been decoded (again,
+<span><span class="co">#&gt;     - 2023-06-06 20:58:04 UTC: `Create oce object`</span></span></code></pre></div>
+<p>Note that the variable names have been converted from Netcdf names to
+oce names (e.g. <code>"CTDPRS"</code> became
+<code>"temperature"</code>). Units have also been decoded (again,
 according to the <code>"argo"</code> varTable). However, notice that the
 flags are being displayed as though they were data columns
-(e.g. <code>temperature_QC</code>). This is because
-<code><a href="../reference/ncdf2oce.html">ncdf2oce()</a></code> does not try to translate these into flags. To
-do that, use <code><a href="https://dankelley.github.io/oce/reference/as.ctd.html" class="external-link">as.ctd()</a></code>, as follows.</p>
+(e.g. <code>salinity_QC</code>). This is because <code><a href="../reference/ncdf2oce.html">ncdf2oce()</a></code>
+does not try to migrate flags into the <code>metadata</code> slot.</p>
+<p>To move the flags to <code>metadata</code>, either call
+<code><a href="../reference/ncdf2ctd.html">ncdf2ctd()</a></code> instead of <code><a href="../reference/ncdf2oce.html">ncdf2oce()</a></code>, or use
+<code><a href="https://dankelley.github.io/oce/reference/as.ctd.html" class="external-link">as.ctd()</a></code> to do the work as a second step, as follows.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dankelley.github.io/oce/reference/as.ctd.html" class="external-link">as.ctd</a></span><span class="op">(</span><span class="va">A</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">B</span><span class="op">)</span></span>
@@ -277,18 +277,19 @@ do that, use <code><a href="https://dankelley.github.io/oce/reference/as.ctd.htm
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; * Start time:          1993-10-22 03:09:52</span></span>
 <span><span class="co">#&gt; * Station:             109</span></span>
+<span><span class="co">#&gt; * Mean Location:       36.323N 69.376W</span></span>
 <span><span class="co">#&gt; * Data Overview</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;                           Min.   Mean   Max. Dim. NAs</span></span>
-<span><span class="co">#&gt;     pressure [dbar]       11.4 2182.5 4398.3   24   0</span></span>
-<span><span class="co">#&gt;     temperature [°C]    2.2228 7.3822 23.548   24   0</span></span>
-<span><span class="co">#&gt;     salinity            34.883 35.315 36.692   24   0</span></span>
-<span><span class="co">#&gt;     salinityBottle      34.889 35.315 36.702   24   0</span></span>
-<span><span class="co">#&gt;     oxygen [μmol/kg]     144.9 246.91  282.1   24   0</span></span>
-<span><span class="co">#&gt;     silicate [μmol/kg]    1.71 16.853  36.52   24   0</span></span>
-<span><span class="co">#&gt;     nitrite [μmol/kg]        0  0.022   0.08   24  19</span></span>
-<span><span class="co">#&gt;     NO2+NO3 [μmol/kg]        0 14.619  23.73   24   0</span></span>
-<span><span class="co">#&gt;     phosphate [μmol/kg]      0 0.8925   1.39   24   0</span></span>
+<span><span class="co">#&gt;                           Min.   Mean   Max. Dim. NAs OriginalName</span></span>
+<span><span class="co">#&gt;     pressure [dbar]       11.4 2182.5 4398.3   24   0       CTDPRS</span></span>
+<span><span class="co">#&gt;     temperature [°C]    2.2228 7.3822 23.548   24   0       CTDTMP</span></span>
+<span><span class="co">#&gt;     salinity            34.883 35.315 36.692   24   0       CTDSAL</span></span>
+<span><span class="co">#&gt;     salinityBottle      34.889 35.315 36.702   24   0       SALNTY</span></span>
+<span><span class="co">#&gt;     oxygen [μmol/kg]     144.9 246.91  282.1   24   0       OXYGEN</span></span>
+<span><span class="co">#&gt;     silicate [μmol/kg]    1.71 16.853  36.52   24   0       SILCAT</span></span>
+<span><span class="co">#&gt;     nitrite [μmol/kg]        0  0.022   0.08   24  19       NITRIT</span></span>
+<span><span class="co">#&gt;     NO2+NO3 [μmol/kg]        0 14.619  23.73   24   0      NO2+NO3</span></span>
+<span><span class="co">#&gt;     phosphate [μmol/kg]      0 0.8925   1.39   24   0       PHSPHT</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; * Data-quality Flags</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -302,11 +303,8 @@ do that, use <code><a href="https://dankelley.github.io/oce/reference/as.ctd.htm
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; * Processing Log</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     - 2023-06-06 13:35:51 UTC: `create 'ctd' object`</span></span>
-<span><span class="co">#&gt;     - 2023-06-06 13:35:51 UTC: `as.ctd(salinity = A)`</span></span></code></pre></div>
-<p><strong>Exercise:</strong> Try using <code><a href="../reference/ncdf2ctd.html">ncdf2ctd()</a></code> instead
-of the two-step procedure used for <code>A</code> and <code>B</code>. Do
-you get the same results?</p>
+<span><span class="co">#&gt;     - 2023-06-06 20:58:04 UTC: `create 'ctd' object`</span></span>
+<span><span class="co">#&gt;     - 2023-06-06 20:58:04 UTC: `as.ctd(salinity = A)`</span></span></code></pre></div>
 </div>
   </div>
 

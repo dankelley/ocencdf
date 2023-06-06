@@ -13,7 +13,7 @@ test_that("ctd2nc on data(ctd) creates a file with expected variable names",
         o <- nc_open(ncfile)
         expect_equal(names(o$var),
             c("scan", "timeS", "PRES", "depth", "TEMP", "PSAL", "flag", "TIME",
-                "station", "LONGITUDE", "LATITUDE"))
+                "station"))
         unlink(ncfile)
     })
 

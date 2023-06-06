@@ -41,6 +41,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         ncfile <- "ctd.nc"
         message("Will save ctd object to \"", ncfile, "\".")
     }
+    varTableOrig <- varTable
     varTable <- read.varTable(varTable)
 
     # Set up variable dimensions etc, using an argo file
@@ -54,9 +55,10 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     # TO DO: determine whether we ought to examine the units in the oce object
     vars <- list()
     standardNames <- list() # called STANDARD_NAME in argo files
-    dmsg(debug, "  defining variable properties\n")
+    dmsg(debug, "  Defining netcdf structure.\n")
+    dmsg(debug, "    defining variable properties\n")
     for (name in names(x@data)) {
-        dmsg(debug, "    ", name, "\n")
+        dmsg(debug, "      ", name, "\n")
         varInfo <- getVarInfo(oce=x, name=name, varTable=varTable)
         units <- varInfo$unit
         # For the "argo" case, use "psu" as a unit for salinity.
@@ -72,7 +74,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         standardNames[[name]] <- varInfo$standard_name
     }
     #print(standardNames)
-    dmsg(debug, "  defining flag (QC) properties (if any exist)\n")
+    dmsg(debug, "    defining flag (QC) properties (if any exist)\n")
     flagnames <- names(x@metadata$flags)
     for (flagname in flagnames) {
         #message(oce::vectorShow(flagname))
@@ -80,7 +82,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         #print(varInfo)
         #browser()
         flagnameNCDF <- paste0(varInfo$name, "_QC")
-        dmsg(debug, "    ", flagname, " -> ", flagnameNCDF, "\n")
+        dmsg(debug, "      ", flagname, " -> ", flagnameNCDF, "\n")
         vars[[flagnameNCDF]] <- ncvar_def(
             name=flagnameNCDF,
             units="",
@@ -89,7 +91,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             dim=NLEVELdim,
             prec="float")
     }
-    dmsg(debug, "  defining variables for selected @metadata items\n")
+    dmsg(debug, "    defining variables for selected @metadata items\n")
     # Start time (which some files have)
     time <- x[["time"]][1]
     timeExists <- !is.null(time)
@@ -102,7 +104,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             dim=NPROFILEdim,
             prec="float")
         standardNames[["time"]] <- "time"
-        dmsg(debug, "    time\n")
+        dmsg(debug, "      time\n")
     }
     # Station (which some files have)
     station <- x[["station"]][1]
@@ -115,13 +117,13 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             missval="",
             dim=STRING16dim,
             prec="char")
-        dmsg(debug, "    station\n")
+        dmsg(debug, "      station\n")
     }
-    # location
-    longitude <- x[["longitude"]]
-    latitude <- x[["latitude"]]
-    locationExists <- is.finite(longitude) && is.finite(latitude)
-    if (locationExists) {
+    # location may be in data or metadata.  If the former, store in
+    # a variable.  If the latter, store in an attribute.
+    locationInData <- !is.null(x@data$longitude) && !is.null(x@data$latitude)
+    locationInMetadata <- !is.null(x@metadata$longitude) && !is.null(x@metadata$latitude)
+    if (locationInData) { # assume one value per profile
         vars[["longitude"]] <- ncvar_def(
             name=getVarInfo(name="longitude", varTable=varTable)$name,
             units="degree_east",
@@ -130,7 +132,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             dim=NPROFILEdim,
             prec="float")
         standardNames[["longitude"]] <- "longitude"
-        dmsg(debug, "    longitude\n")
+        dmsg(debug, "      longitude\n")
         vars[["latitude"]] <- ncvar_def(
             name=getVarInfo(name="latitude", varTable=varTable)$name,
             units="degree_north",
@@ -139,10 +141,10 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             dim=NPROFILEdim,
             prec="float")
         standardNames[["latitude"]] <- "latitude"
-        dmsg(debug, "    latitude\n")
+        dmsg(debug, "      latitude\n")
     }
     nc <- nc_create(ncfile, vars)
-    dmsg(debug, "  storing variable values\n")
+    dmsg(debug, "  Storing data.\n")
     for (name in names(x@data)) {
         dmsg(debug, "    ", name, " (", NLEVEL, " values)\n")
         vals <- x@data[[name]]
@@ -167,15 +169,15 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         if (!is.null(sn))
             ncatt_put(nc=nc, varid=vars[[name]], attname="standard_name", attval=sn)
     }
-    dmsg(debug, "  storing QC values\n")
+    dmsg(debug, "  Storing QC values.\n")
     for (flagname in names(x@metadata$flags)) {
         varInfo <- getVarInfo(oce=x, name=flagname, varTable=varTable)
         vals <- x@metadata$flags[[flagname]]
         flagnameNCDF <- paste0(varInfo$name, "_QC")
-        dmsg(debug, "    ", flagname, "Flag -> ", flagnameNCDF, "\n")
+        dmsg(debug, "      ", flagname, "Flag -> ", flagnameNCDF, "\n")
         ncvar_put(nc=nc, varid=vars[[flagnameNCDF]], vals=vals)
     }
-    dmsg(debug, "  storing selected @metadata items\n")
+    dmsg(debug, "  Storing selected @metadata items.\n")
     if (timeExists) {
         ncvar_put(nc=nc, varid=vars[["time"]], vals=as.numeric(time[1]))
         sn <- standardNames[["time"]]
@@ -187,20 +189,42 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         ncvar_put(nc=nc, varid=vars[["station"]], vals=sprintf("%-16s", substr(station[1], 1L, 16L)))
         dmsg(debug, "    station (", station[1], ")\n")
     }
-    if (locationExists) {
-        ncvar_put(nc=nc, varid=vars[["longitude"]], vals=longitude[1])
-        sn <- standardNames[["longitude"]]
-        if (!is.null(sn))
-            ncatt_put(nc=nc, varid=vars[["longitude"]], attname="standard_name", attval=sn)
-        dmsg(debug, "    longitude (", longitude, ")\n")
-        ncvar_put(nc=nc, varid=vars[["latitude"]], vals=latitude[1])
-        sn <- standardNames[["latitude"]]
-        if (!is.null(sn))
-            ncatt_put(nc=nc, varid=vars[["latitude"]], attname="standard_name", attval=sn)
-        dmsg(debug, "    latitude (", latitude, ")\n")
+    if (locationInData) {
+        ncvar_put(nc=nc, varid=vars[["longitude"]], vals=x@data$longitude)
+        #sn <- standardNames[["longitude"]]
+        #if (!is.null(sn))
+        #    ncatt_put(nc=nc, varid=vars[["longitude"]], attname="standard_name", attval=sn)
+        dmsg(debug, "    longitude (", x@data$longitude, ")\n")
+        ncvar_put(nc=nc, varid=vars[["latitude"]], vals=x@data$latitude)
+        #sn <- standardNames[["latitude"]]
+        #if (!is.null(sn))
+        #    ncatt_put(nc=nc, varid=vars[["latitude"]], attname="standard_name", attval=sn)
+        dmsg(debug, "    latitude (", x@data$latitude, ")\n")
     }
-    dmsg(debug, "saving whole ctd@metadata coontents as string attribute 'metadata'")
+    dmsg(debug, "  Storing global attributes.\n")
+    dmsg(debug, "    varTable\n")
+    ncatt_put(nc=nc, varid=0, attname="varTable", attval=varTableOrig)
+    dmsg(debug, "    class\n")
+    ncatt_put(nc=nc, varid=0, attname="class", attval=as.character(class(x)))
+    if (locationInMetadata) {
+        dmsg(debug, "    longitude\n")
+        ncatt_put(nc=nc, varid=0, attname="longitude", attval=x@metadata$longitude)
+        dmsg(debug, "    latitude\n")
+        ncatt_put(nc=nc, varid=0, attname="latitude", attval=x@metadata$latitude)
+    }
+    if ("dataNamesOriginal" %in% names(x@metadata)) {
+        dmsg(debug, "    data_names_original\n")
+        #print(names(x@data))
+        #print(names(x@metadata$dataNamesOriginal))
+        dno <- as.vector(sapply(names(x@data),
+                function(name) x@metadata$dataNamesOriginal[[name]]))
+        #<>dno <- paste(as.character(x@metadata$dataNamesOriginal), collapse="|")
+        dno <- paste(dno, collapse="|")
+        ncatt_put(nc=nc, varid=0, attname="data_names_original", attval=dno)
+    }
+    dmsg(debug, "    metadata\n")
     ncatt_put(nc, 0, "metadata", paste(capture.output(str(x@metadata)), collapse="\n"))
+    dmsg(debug, "  Closing netcdf file.\n")
     nc_close(nc)
     dmsg(debug, paste0("} # ctd2ncdf created file \"", ncfile, "\"\n"))
 }

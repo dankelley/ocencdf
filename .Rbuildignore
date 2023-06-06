@@ -3,7 +3,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^.*\.txt$
-^develope$r
+^developer$
 ^sandbox$
 ^man-roxygen$
 ^docs$

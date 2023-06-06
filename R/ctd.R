@@ -14,14 +14,14 @@
 #' data(ctd) # from 'oce' package
 #' oce2ncdf(ctd, ncfile="ctd.nc")
 #' CTD <- as.ctd(ncdf2oce("ctd.nc"))
-#' plot(CTD)
+#' summary(CTD)
 #'
 #' # example 2: a ctd file with per-variable QC flags
 #' data(section) # from 'oce' package
 #' stn <- section[["station", 100]] # 100-th station in section, not station '100'
 #' oce2ncdf(stn, ncfile="stn.nc")
 #' STN <- as.ctd(ncdf2oce("stn.nc"))
-#' plot(STN)
+#' summary(STN)
 #'
 #' # clean up temporary files (to prevent CRAN test failure)
 #' unlink("ctd.nc")

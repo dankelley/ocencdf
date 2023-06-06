@@ -7,11 +7,7 @@
 #' which lower-level function [oce2ncdf()] calls, e.g. if `x` is of
 #' `ctd` class, then [ctd2ncdf()] is called.
 #'
-#' @param varTable character value indicating the variable-naming
-#' scheme to be used. This is provided to [read.varTable()], the
-#' documentation of which explains the possibilities for pre-defined
-#' schemes named `"argo"` and `"whp"` and user-supplied files of
-#' similar format.
+#' @template varTableTemplate
 #'
 #' @param ncfile character value naming the output file.  Use NULL
 #' for a file name to be created automatically (e.g. `ctd.nc` for

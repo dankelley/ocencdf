@@ -4,6 +4,12 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/introduction.html</loc>
+  </url>
+  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
@@ -28,7 +34,13 @@
     <loc>/reference/ncdf2oce.html</loc>
   </url>
   <url>
+    <loc>/reference/ncdfNames2oceNames.html</loc>
+  </url>
+  <url>
     <loc>/reference/oce2ncdf.html</loc>
+  </url>
+  <url>
+    <loc>/reference/oceNames2ncdfNames.html</loc>
   </url>
   <url>
     <loc>/reference/read.varTable.html</loc>

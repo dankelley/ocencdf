@@ -25,6 +25,16 @@
       <ul class="nav navbar-nav"><li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/introduction.html">1. Introduction to ocencdf</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -47,13 +57,21 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ncdf2ctd</span><span class="op">(</span>ncfile <span class="op">=</span> <span class="cn">NULL</span>, debug <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ncdf2ctd</span><span class="op">(</span>ncfile <span class="op">=</span> <span class="cn">NULL</span>, varTable <span class="op">=</span> <span class="cn">NULL</span>, debug <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>ncfile</dt>
 <dd><p>character value naming the input file.</p></dd>
+
+
+<dt>varTable</dt>
+<dd><p>character value indicating the variable-naming
+scheme to be used. This is provided to <code><a href="read.varTable.html">read.varTable()</a></code>, the
+documentation of which explains the possibilities for pre-defined
+schemes named <code>"argo"</code> and <code>"whp"</code> and user-supplied files of
+similar format.</p></dd>
 
 
 <dt>debug</dt>

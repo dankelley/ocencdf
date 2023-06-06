@@ -1,4 +1,6 @@
 type:
+  comment: The variable names are taken from Section 3.3 of “Argo User’s Manual.”
+    Pdf. Ifremer, July 5, 2022. https://doi.org/10.13155/29825.
   date: '2022-06-05'
   name: argo
   version: 2
@@ -41,6 +43,7 @@ variables:
     standard_name: moles_of_nitrate_per_unit_mass_in_sea_water
   oxygen:
     name: DOXY
+    standard_name: moles_of_oxygen_per_unit_mass_in_sea_water
   oxygenMolar:
     name: MOLAR_DOXY
     standard_name: mole_concentration_of_dissolved_molecular_oxygen_in_sea_water

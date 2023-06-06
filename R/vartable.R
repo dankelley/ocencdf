@@ -158,3 +158,61 @@ getVarInfo <- function(name=NULL, varTable=NULL, oce=NULL, debug=0)
     rval
 }
 
+#' Translate netcdf names to oce  names
+#'
+#' @param names vector of character values in oce convention (e.g. "TEMP"
+#' for temperature, if varTable is "argo").
+#'
+#' @template varTableTemplate
+#'
+#' @template debugTemplate
+#'
+#' @author Dan Kelley
+#'
+#' @export
+ncdfNames2oceNames <- function(names, varTable=NULL, debug=0)
+{
+    vt <- read.varTable(varTable)
+    synonyms <- lapply(vt$variables, function(v) v$name)
+    translation <- data.frame(
+        oce=names(synonyms),
+        ncdf=unlist(unname(synonyms)))
+    dmsg(debug, "input: ", paste(names, collapse=" "), "\n")
+    for (name in names) {
+        w <- which(name == translation$ncdf)
+        if (length(w) > 0L)
+            names <- gsub(translation[w, "ncdf"], translation[w, "oce"], names)
+    }
+    dmsg(debug, "returning: ", paste(names, collapse=" "), "\n")
+    names
+}
+
+#' Translate netcdf names to oce names
+#'
+#' @param names vector of character values in oce convention (e.g. "temperature"
+#' for temperature).
+#'
+#' @template varTableTemplate
+#'
+#' @template debugTemplate
+#'
+#' @author Dan Kelley
+#'
+#' @export
+oceNames2ncdfNames <- function(names, varTable=NULL, debug=0)
+{
+    vt <- read.varTable(varTable)
+    synonyms <- lapply(vt$variables, function(v) v$name)
+    translation <- data.frame(
+        oce=names(synonyms),
+        ncdf=unlist(unname(synonyms)))
+    dmsg(debug, "input: ", paste(names, collapse=" "), "\n")
+    for (name in names) {
+        w <- which(name == translation$oce)
+        if (length(w) > 0L)
+            names <- gsub(translation[w, "oce"], translation[w, "ncdf"], names)
+    }
+    dmsg(debug, "returning: ", paste(names, collapse=" "), "\n")
+    names
+}
+

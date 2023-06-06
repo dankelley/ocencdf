@@ -1,0 +1,145 @@
+---
+title: "1. Introduction to ocencdf"
+author: "Dan Kelley (https://orcid.org/0000-0001-7808-5911)"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
+    fig_caption: yes
+    fig_width: 3.5
+    fig_height: 3.5
+    dpi: 72
+    dev.args: list(pointsize=11)
+vignette: >
+  %\VignetteIndexEntry{1. Introduction to ocencdf}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+<!--
+Building this vignette.
+
+1. Edit vignettes/oce.Rmd in a plain-text editor.
+
+2. In a unix shell at the level above ocencdf, type the following:
+
+       R CMD build --compact-vignettes="qpdf" ocencdf
+       R CMD install ocencdf_0.0-1.tar.gz
+
+   where the version number may need adjustment in the second command.
+
+3. To see the results, type the following in an R console:
+
+      browseVignettes("ocencdf")
+-->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+# Purpose
+
+The package provides a way to store approximate forms of oce objects as Netcdf
+files.  Since Netcdf is handled by many computing languages, it is a good
+intermediate format in multi-language processing, as well as a good choice for
+data archiving.
+
+# Limitations of Netcdf format
+
+Unfortunately, direct transferral of R information to Netcdf is not possible.
+This is because Netcdf is an array-oriented format that is not designed to hold
+tree-oriented data such as R lists (which are used throughout oce).  It is
+possible to flatten simple lists, but the process gets complicated for nested
+lists, which are common in oce.  This is not the only problem with Netcdf. It
+also lacks basic elements such as user-defined classes and variable-length
+character strings.  Related to this second point is the fact that Netcdf
+tolerates only a single unlimited dimension.
+
+This package address these and other Netcdf limitations by focussing effort only
+on certain important oce classes, and only certain elements within those
+classes.  The initial focus is on ctd data, mainly because they are of greatest
+importance in everyday work.
+
+# How the package works
+
+## Focus elements
+
+The design goal is to save the following elements
+
+1. Entries in the `data` slot (e.g. temperature, salinity, etc.)
+2. Entries in the `flags` entry of the `metadata` slot, as entries with names ending in `_QC`.
+3. An approximate form of units, as strings.
+4. The `header` item in the `metadata` slot.
+5. A few other entries from the `metadata` slot, e.g. `longitude` and `latitude`.
+
+Note that other `metadata` may be added as needed or requested, but that there
+is no intention of trying to copy everything over, mainly because of the
+awkardness of saving variable-length character strings and lists in Netcdf.
+
+Once, or if, significant progress is made on ctd data, the next object type
+to examine will likely be adcp data.
+
+## Renaming elements
+
+Oce uses a restricted set of names for certain variables.  For example, in ctd
+objects, temperature is called `temperature`, and if the ctd had two temperature
+sensors, there would be an additional entry called `temperature2`.  These are
+not typically the names used in raw data files, however.  More commonly,
+temperature might be named `TEMP`, for example.  In recognition of this, ocencdf
+provides a way to rename oce objects using other systems of names.  The mapping
+between oce name and other name is controlled by YAML (yet another markup
+language) files, which are called varTables in this package. Tables are provided
+for the Argo system and for the World Hydographic Program system. These are
+available as `"argo"` and `"whp"`, respectively.  They are stored in the
+`inst/extdata` directory of the package source tree. Users seeking to define new
+naming systems must copy the formats of those files.
+
+# Example with CTD data
+
+The first step is to create an oce object, e.g. station 100 of the built-in
+`section` dataset.  Note the variable names, units, and flag values in the
+summary.
+
+```{r}
+library(ocencdf)
+library(oce)
+data(section)
+stn <- section[["station", 100]]
+summary(stn)
+```
+
+Now, save as a netcdf file, using (say) the Argo convention for variable names.
+
+```{r}
+oce2ncdf(stn, varTable="argo", ncfile="stn.nc")
+```
+
+Loading this file verifies that the variable names are not in oce convention.
+Also, notice that the flags are stored in variables with names ending in `_QC`,
+which is the system used in the Argo netcdf format, rather than being stored in
+a list within the metadata slot (which gets displayed separately for conventional
+oce objects).
+
+```{r}
+A <- ncdf2oce("stn.nc", varTable="argo")
+summary(A)
+```
+
+Proper oce names are recovered by passing the object through [as.ctd()], as follows.
+
+```{r}
+B <- as.ctd(A)
+summary(B)
+```
+
+**Exercise:** Try using `ncdf2ctd()` instead of the two-step procedure used for
+`A` and `B`. Do you get the same results?
+
+```{r echo=FALSE}
+unlink("stn.nc")
+```
+

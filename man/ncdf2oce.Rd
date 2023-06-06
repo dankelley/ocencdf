@@ -4,10 +4,16 @@
 \alias{ncdf2oce}
 \title{Read a netcdf file and create a general oce object}
 \usage{
-ncdf2oce(ncfile = NULL, debug = 0)
+ncdf2oce(ncfile = NULL, varTable = NULL, debug = 0)
 }
 \arguments{
 \item{ncfile}{character value naming the input file.}
+
+\item{varTable}{character value indicating the variable-naming
+scheme to be used. This is provided to \code{\link[=read.varTable]{read.varTable()}}, the
+documentation of which explains the possibilities for pre-defined
+schemes named \code{"argo"} and \code{"whp"} and user-supplied files of
+similar format.}
 
 \item{debug}{integer, 0 (the default) for quiet action apart
 from messages and warnings, or any larger value to see more
@@ -17,11 +23,11 @@ output that describes the processing steps.}
 \code{\link[=ncdf2oce]{ncdf2oce()}} returns an \linkS4class{oce} object.
 }
 \description{
-This reads a netcdf file, interpreting units but not renaming
-variables or placing quality-control information in the \code{metadata}
-slot.  To get renaming and quality-control handling, call
-another oce function as appropriate, e.g. \code{\link[=as.ctd]{as.ctd()}} is
-used in the examples provided in the \code{\link[=ctd2ncdf]{ctd2ncdf()}} documentation.
+Read a netcdf file, interpreting variable names according to
+\code{varTable} (if provided).  The object does \emph{not} get a specialized
+oce class, because this is not known within netcdf files.  For
+ctd data, try \code{\link[=ncdf2ctd]{ncdf2ctd()}} instead of \code{\link[=ncdf2oce]{ncdf2oce()}}, or wrap the
+result of calling the latter in \code{\link[oce:as.ctd]{oce::as.ctd()}}.
 }
 \author{
 Dan Kelley

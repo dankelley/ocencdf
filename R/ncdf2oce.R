@@ -1,12 +1,14 @@
 #' Read a netcdf file and create a general oce object
 #'
-#' This reads a netcdf file, interpreting units but not renaming
-#' variables or placing quality-control information in the `metadata`
-#' slot.  To get renaming and quality-control handling, call
-#' another oce function as appropriate, e.g. [as.ctd()] is
-#' used in the examples provided in the [ctd2ncdf()] documentation.
+#' Read a netcdf file, interpreting variable names according to
+#' `varTable` (if provided).  The object does *not* get a specialized
+#' oce class, because this is not known within netcdf files.  For
+#' ctd data, try [ncdf2ctd()] instead of [ncdf2oce()], or wrap the
+#' result of calling the latter in [oce::as.ctd()].
 #'
 #' @param ncfile character value naming the input file.
+#'
+#' @template varTableTemplate
 #'
 #' @template debugTemplate
 #'
@@ -18,7 +20,7 @@
 #' @author Dan Kelley
 #'
 #' @export
-ncdf2oce <- function(ncfile=NULL, debug=0)
+ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
 {
     if (is.null(ncfile))
         stop("must supply ncfile")
@@ -81,6 +83,14 @@ ncdf2oce <- function(ncfile=NULL, debug=0)
         res@metadata$cruise <- ncatt_get(f, 0, "cruise")$value
     if (ncatt_get(f, 0, "time")$hasatt)
         res@metadata$time <- ncatt_get(f, 0, "time")$value
+    # Update naming convention, if varTable was provided.
+    if (!is.null(varTable)) {
+        names(res@data) <- ncdfNames2oceNames(names=names(res@data), varTable=varTable, debug=debug)
+        if ("units" %in% names(res@metadata))
+            names(res@metadata$units) <- ncdfNames2oceNames(names=names(res@metadata$units), varTable=varTable, debug=debug)
+        if ("flags" %in% names(res@metadata))
+            names(res@metadata$flags) <- ncdfNames2oceNames(names=names(res@metadata$flags), varTable=varTable, debug=debug)
+    }
     dmsg(debug, "} # ncdf2oce()\n")
     res
 }
@@ -96,8 +106,7 @@ ncdf2oce <- function(ncfile=NULL, debug=0)
 #' @author Dan Kelley
 #'
 #' @export
-ncdf2ctd <- function(ncfile=NULL, debug=0)
+ncdf2ctd <- function(ncfile=NULL, varTable=NULL, debug=0)
 {
-    as.ctd(ncdf2oce(ncfile=ncfile, debug=debug), debug=debug)
+    as.ctd(ncdf2oce(ncfile=ncfile, varTable=varTable, debug=debug))
 }
- 

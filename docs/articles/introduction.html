@@ -227,11 +227,12 @@ variable names.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/oce2ncdf.html">oce2ncdf</a></span><span class="op">(</span><span class="va">stn</span>, varTable<span class="op">=</span><span class="st">"argo"</span>, ncfile<span class="op">=</span><span class="st">"stn.nc"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Converting temperature from IPTS-68 scale to ITS-90 scale.</span></span></code></pre></div>
-<p>Loading this file verifies that the variable names are not in oce
-convention. Also, notice that the flags are stored in variables with
-names ending in <code>_QC</code>, which is the system used in the Argo
-netcdf format, rather than being stored in a list within the metadata
-slot (which gets displayed separately for conventional oce objects).</p>
+<p>The <code>stn.nc</code> file may be examined in various ways, but we
+leave that up to the reader. Note that the column names are
+e.g. <code>TEMP</code> in the Netcdf file, because the varTable named
+<code>"argo"</code> establishes that nickname.</p>
+<p>In R, we can read <code>stn.nc</code> and get a summary with the
+following.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ncdf2oce.html">ncdf2oce</a></span><span class="op">(</span><span class="st">"stn.nc"</span>, varTable<span class="op">=</span><span class="st">"argo"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">A</span><span class="op">)</span></span>
@@ -259,9 +260,15 @@ slot (which gets displayed separately for conventional oce objects).</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; * Processing Log</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     - 2023-06-06 13:21:50 UTC: `Create oce object`</span></span></code></pre></div>
-<p>Proper oce names are recovered by passing the object through
-[as.ctd()], as follows.</p>
+<span><span class="co">#&gt;     - 2023-06-06 13:35:50 UTC: `Create oce object`</span></span></code></pre></div>
+<p>Note that the variable names have been converted from Netcdf names
+(e.g. <code>"TEMP"</code>) to oce names
+(e.g. <code>"temperature"</code>). Units have also been decoded (again,
+according to the <code>"argo"</code> varTable). However, notice that the
+flags are being displayed as though they were data columns
+(e.g. <code>temperature_QC</code>). This is because
+<code><a href="../reference/ncdf2oce.html">ncdf2oce()</a></code> does not try to translate these into flags. To
+do that, use <code><a href="https://dankelley.github.io/oce/reference/as.ctd.html" class="external-link">as.ctd()</a></code>, as follows.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dankelley.github.io/oce/reference/as.ctd.html" class="external-link">as.ctd</a></span><span class="op">(</span><span class="va">A</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">B</span><span class="op">)</span></span>
@@ -295,8 +302,8 @@ slot (which gets displayed separately for conventional oce objects).</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; * Processing Log</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     - 2023-06-06 13:21:50 UTC: `create 'ctd' object`</span></span>
-<span><span class="co">#&gt;     - 2023-06-06 13:21:50 UTC: `as.ctd(salinity = A)`</span></span></code></pre></div>
+<span><span class="co">#&gt;     - 2023-06-06 13:35:51 UTC: `create 'ctd' object`</span></span>
+<span><span class="co">#&gt;     - 2023-06-06 13:35:51 UTC: `as.ctd(salinity = A)`</span></span></code></pre></div>
 <p><strong>Exercise:</strong> Try using <code><a href="../reference/ncdf2ctd.html">ncdf2ctd()</a></code> instead
 of the two-step procedure used for <code>A</code> and <code>B</code>. Do
 you get the same results?</p>

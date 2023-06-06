@@ -118,18 +118,22 @@ Now, save as a netcdf file, using (say) the Argo convention for variable names.
 oce2ncdf(stn, varTable="argo", ncfile="stn.nc")
 ```
 
-Loading this file verifies that the variable names are not in oce convention.
-Also, notice that the flags are stored in variables with names ending in `_QC`,
-which is the system used in the Argo netcdf format, rather than being stored in
-a list within the metadata slot (which gets displayed separately for conventional
-oce objects).
+The `stn.nc` file may be examined in various ways, but we leave that up to the
+reader.  Note that the column names are e.g. `TEMP` in the Netcdf file,
+because the varTable named `"argo"` establishes that nickname.
+
+In R, we can read `stn.nc` and get a summary with the following.
 
 ```{r}
 A <- ncdf2oce("stn.nc", varTable="argo")
 summary(A)
 ```
 
-Proper oce names are recovered by passing the object through [as.ctd()], as follows.
+Note that the variable names have been converted from Netcdf names (e.g. `"TEMP"`) to
+oce names (e.g. `"temperature"`).  Units have also been decoded (again, according to
+the `"argo"` varTable).  However, notice that the flags are being displayed as though
+they were data columns (e.g. `temperature_QC`).  This is because `ncdf2oce()` does
+not try to translate these into flags.  To do that, use `as.ctd()`, as follows.
 
 ```{r}
 B <- as.ctd(A)

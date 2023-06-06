@@ -1,9 +1,9 @@
-\.nc$
+^\.github$
+^.*\.nc$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^.*\.txt$
-developer
-sandbox
-man-roxygen
+^develope$r
+^sandbox$
+^man-roxygen$
 ^docs$
-

@@ -102,8 +102,29 @@ output that describes the processing steps.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Defaulting varTable to "argo".</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Converting temperature from IPTS-68 scale to ITS-90 scale.</span>
 <span class="r-in"><span><span class="va">CTD</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dankelley.github.io/oce/reference/as.ctd.html" class="external-link">as.ctd</a></span><span class="op">(</span><span class="fu"><a href="ncdf2oce.html">ncdf2oce</a></span><span class="op">(</span><span class="st">"ctd.nc"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">CTD</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="ctd2ncdf-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">CTD</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CTD Summary</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Start time:          2003-10-15 15:40:48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Station:             Stn 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Mean Location:       44.684N 63.644W</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Data Overview</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of rows of result is not a multiple of vector length (arg 2)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   Min.   Mean   Max. Dim. NAs OriginalName</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     scan           130    220    310  181   0         scan</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     timeS          129    219    309  181   0        timeS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     pressure      1.48 22.885 44.141  181   0           pr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     depth        1.468 22.698 43.778  181   0         depS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     temperature 2.9183 7.5045 14.233  181   0         t068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     salinity    29.916 31.219 31.498  181   0        sal00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     flag             0      0      0  181   0         flag</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Processing Log</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-06 22:10:05 UTC: `create 'ctd' object`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-06 22:10:05 UTC: `as.ctd(salinity = ncdf2oce("ctd.nc"))`</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># example 2: a ctd file with per-variable QC flags</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">section</span><span class="op">)</span> <span class="co"># from 'oce' package</span></span></span>
@@ -112,8 +133,41 @@ output that describes the processing steps.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Defaulting varTable to "argo".</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Converting temperature from IPTS-68 scale to ITS-90 scale.</span>
 <span class="r-in"><span><span class="va">STN</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dankelley.github.io/oce/reference/as.ctd.html" class="external-link">as.ctd</a></span><span class="op">(</span><span class="fu"><a href="ncdf2oce.html">ncdf2oce</a></span><span class="op">(</span><span class="st">"stn.nc"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">STN</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="ctd2ncdf-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">STN</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CTD Summary</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Start time:          1993-10-22 03:09:52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Station:             109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Mean Location:       36.323N 69.376W</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Data Overview</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of rows of result is not a multiple of vector length (arg 2)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                           Min.   Mean   Max. Dim. NAs OriginalName</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     pressure              11.4 2182.5 4398.3   24   0       CTDPRS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     temperature         2.2228 7.3822 23.548   24   0       CTDTMP</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     salinity            34.883 35.315 36.692   24   0       CTDSAL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     salinityBottle      34.889 35.315 36.702   24   0       SALNTY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     DOXY [μmol/kg]       144.9 246.91  282.1   24   0       OXYGEN</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     silicate [μmol/kg]    1.71 16.853  36.52   24   0       SILCAT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     nitrite [μmol/kg]        0  0.022   0.08   24  19       NITRIT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     NO2+NO3 [μmol/kg]        0 14.619  23.73   24   0      NO2+NO3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     phosphate [μmol/kg]      0 0.8925   1.39   24   0       PHSPHT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Data-quality Flags</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     salinity:       "2" 22, "3" 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     salinityBottle: "2" 24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     DOXY:           "2" 24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     silicate:       "2" 24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     nitrite:        "2" 5, "5" 19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     NO2+NO3:        "2" 24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     phosphate:      "2" 24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Processing Log</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-06 22:10:05 UTC: `create 'ctd' object`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-06 22:10:05 UTC: `as.ctd(salinity = ncdf2oce("stn.nc"))`</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># clean up temporary files (to prevent CRAN test failure)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"ctd.nc"</span><span class="op">)</span></span></span>

@@ -7,3 +7,4 @@
 ^sandbox$
 ^man-roxygen$
 ^docs$
+^README\.md$

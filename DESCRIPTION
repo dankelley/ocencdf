@@ -14,5 +14,5 @@ Suggests:
     knitr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-BuildVignetes: true
+BuildVignettes: true
 VignetteBuilder: knitr

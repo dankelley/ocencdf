@@ -12,12 +12,8 @@ summary(stn)
 oce2ncdf(stn, varTable="argo", ncfile="stn.nc")
 
 ## -----------------------------------------------------------------------------
-A <- ncdf2oce("stn.nc", varTable="argo")
+A <- ncdf2ctd("stn.nc", varTable="argo")
 summary(A)
-
-## -----------------------------------------------------------------------------
-B <- as.ctd(A)
-summary(B)
 
 ## ----echo=FALSE---------------------------------------------------------------
 unlink("stn.nc")

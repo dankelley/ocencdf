@@ -122,26 +122,16 @@ The `stn.nc` file may be examined in various ways, but we leave that up to the
 reader.  Note that the column names are e.g. `TEMP` in the Netcdf file,
 because the varTable named `"argo"` establishes that nickname.
 
-In R, we can read `stn.nc` and get a summary with the following.
+In R, we can read `stn.nc` into a ctd object and get a summary with the following.
 
 ```{r}
-A <- ncdf2oce("stn.nc", varTable="argo")
+A <- ncdf2ctd("stn.nc", varTable="argo")
 summary(A)
 ```
 
-Note that the variable names have been converted from Netcdf names to oce names
-(e.g. `"CTDPRS"` became `"temperature"`).  Units have also been decoded (again,
-according to the `"argo"` varTable).  However, notice that the flags are being
-displayed as though they were data columns (e.g. `salinity_QC`).  This is
-because `ncdf2oce()` does not try to migrate flags into the `metadata` slot.
-
-To move the flags to `metadata`, either call `ncdf2ctd()` instead of `ncdf2oce()
-`, or use `as.ctd()` to do the work as a second step, as follows.
-
-```{r}
-B <- as.ctd(A)
-summary(B)
-```
+Note that you may also use the more basic function `ncdf2oce()` instead of
+`ncdf2ctd()`, but if you do that, then `summary()` won't display location
+information, and won't parse the `_QC` items as flags.
 
 ```{r echo=FALSE}
 unlink("stn.nc")

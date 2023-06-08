@@ -96,6 +96,15 @@ ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
         res@metadata$cruise <- ncatt_get(f, 0, "cruise")$value
     if (ncatt_get(f, 0, "time")$hasatt)
         res@metadata$time <- ncatt_get(f, 0, "time")$value
+    # flag scheme
+    tmp <- ncatt_get(f, 0, "flagScheme")
+    if (tmp$hasatt) {
+        #message(tmp$value)
+        res@metadata$flagScheme <- eval(parse(text=tmp$value))
+        dmsg(debug, "  handling flagScheme\n")
+    }
+    #print(names(res@metadata))
+    #print(res@metadata$flagScheme)
     # Update naming convention, if varTable was provided.
     if (!is.null(varTable)) {
         names(res@data) <- ncdfNames2oceNames(names=names(res@data), varTable=varTable, debug=debug)

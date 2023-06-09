@@ -59,43 +59,7 @@ ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
             res@data[[name]] <- item
         }
     }
-    # Try setting some global attributes. (FIXME: coded for ctd. Brittle.)
-    # Original data names (FIXME: what if LONGITUDE,LATITUDE *are* data?)
-    #<> tmp <- ncatt_get(f, 0, "data_names_original")
-    #<> if (tmp$hasatt) {
-    #<>     dataNamesOriginal <- strsplit(tmp$value, "\\|")[[1]]
-    #<>     n <- names(res@data)
-    #<>     dmsg(debug, "  initial names(res@data): ", paste(n, collapse=" "), "\n")
-    #<>     n <- n[!grepl("QC$", n)]
-    #<>     if (length(n) != length(dataNamesOriginal)) {
-    #<>         warning("error in assigning original data names")
-    #<>     }
-    #<>     dmsg(debug, "  later names(res@data): ", paste(n, collapse=" "), "\n")
-    #<>     names(dataNamesOriginal) <- n
-    #<>     res@metadata$dataNamesOriginal <- dataNamesOriginal
-    #<> }
-    #<> if (ncatt_get(f, 0, "Longitude")$hasatt)
-    #<>     res@metadata$longitude <- ncatt_get(f, 0, "Longitude")$value
-    #<> if (ncatt_get(f, 0, "longitude")$hasatt)
-    #<>     res@metadata$longitude <- ncatt_get(f, 0, "longitude")$value
-    #<> if (ncatt_get(f, 0, "Latitude")$hasatt)
-    #<>     res@metadata$latitude <- ncatt_get(f, 0, "Latitude")$value
-    #<> if (ncatt_get(f, 0, "latitude")$hasatt)
-    #<>     res@metadata$latitude <- ncatt_get(f, 0, "latitude")$value
-    #<> if (ncatt_get(f, 0, "Station")$hasatt)
-    #<>     res@metadata$station <- ncatt_get(f, 0, "Station")$value
-    #<> if (ncatt_get(f, 0, "station")$hasatt)
-    #<>     res@metadata$station <- ncatt_get(f, 0, "station")$value
-    #<> if (ncatt_get(f, 0, "Ship")$hasatt)
-    #<>     res@metadata$ship <- ncatt_get(f, 0, "Ship")$value
-    #<> if (ncatt_get(f, 0, "ship")$hasatt)
-    #<>     res@metadata$ship <- ncatt_get(f, 0, "ship")$value
-    #<> if (ncatt_get(f, 0, "Cruise")$hasatt)
-    #<>     res@metadata$cruise <- ncatt_get(f, 0, "Cruise")$value
-    #<> if (ncatt_get(f, 0, "cruise")$hasatt)
-    #<>     res@metadata$cruise <- ncatt_get(f, 0, "cruise")$value
-    #<> if (ncatt_get(f, 0, "time")$hasatt)
-    #<>     res@metadata$time <- ncatt_get(f, 0, "time")$value
+    # metadata
     tmp <- ncatt_get(f, 0, "metadata")
     if (tmp$hasatt) {
         res@metadata <- eval(parse(text=tmp$value))

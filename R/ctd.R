@@ -43,7 +43,6 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     }
     varTableOrig <- varTable
     varTable <- read.varTable(varTable)
-
     # Set up variable dimensions etc, using an argo file
     # (~/data/argo/D4901788_045.nc) as a pattern.
     NLEVEL <- length(x@data[[1]])
@@ -73,14 +72,10 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             prec="float")
         standardNames[[name]] <- varInfo$standard_name
     }
-    #print(standardNames)
     dmsg(debug, "    defining flag (QC) properties (if any exist)\n")
     flagnames <- names(x@metadata$flags)
     for (flagname in flagnames) {
-        #message(oce::vectorShow(flagname))
         varInfo <- getVarInfo(oce=x, name=flagname, varTable=varTable)
-        #print(varInfo)
-        #browser()
         flagnameNCDF <- paste0(varInfo$name, "_QC")
         dmsg(debug, "      ", flagname, " -> ", flagnameNCDF, "\n")
         vars[[flagnameNCDF]] <- ncvar_def(
@@ -92,33 +87,6 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             prec="float")
     }
     dmsg(debug, "    defining variables for selected @metadata items\n")
-    # Start time (which some files have)
-    time <- x[["time"]][1]
-    timeExists <- !is.null(time)
-    if (timeExists) {
-        vars[["time"]] <- ncvar_def(
-            name="TIME",
-            units="seconds since 1970-01-01 UTC",
-            longname="time",
-            missval=varTable$values$missing_value,
-            dim=NPROFILEdim,
-            prec="float")
-        standardNames[["time"]] <- "time"
-        dmsg(debug, "      time\n")
-    }
-    # Station (which some files have)
-    station <- x[["station"]][1]
-    stationExists <- !is.null(station)
-    if (stationExists) {
-        vars[["station"]] <- ncvar_def(
-            name="station",
-            units="",
-            longname="station",
-            missval="",
-            dim=STRING16dim,
-            prec="char")
-        dmsg(debug, "      station\n")
-    }
     # location may be in data or metadata.  If the former, store in
     # a variable.  If the latter, store in an attribute.
     locationInData <- !is.null(x@data$longitude) && !is.null(x@data$latitude)
@@ -178,48 +146,11 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         ncvar_put(nc=nc, varid=vars[[flagnameNCDF]], vals=vals)
     }
     dmsg(debug, "  Storing selected @metadata items.\n")
-    if (timeExists) {
-        ncvar_put(nc=nc, varid=vars[["time"]], vals=as.numeric(time[1]))
-        sn <- standardNames[["time"]]
-        if (!is.null(sn))
-            ncatt_put(nc=nc, varid=vars[["time"]], attname="standard_name", attval=sn)
-        dmsg(debug, "    time (", time[1], " i.e. ", format(oce::numberAsPOSIXct(time[1])), ")\n")
-    }
-    if (stationExists) {
-        ncvar_put(nc=nc, varid=vars[["station"]], vals=sprintf("%-16s", substr(station[1], 1L, 16L)))
-        dmsg(debug, "    station (", station[1], ")\n")
-    }
-    if (locationInData) {
-        ncvar_put(nc=nc, varid=vars[["longitude"]], vals=x@data$longitude)
-        #sn <- standardNames[["longitude"]]
-        #if (!is.null(sn))
-        #    ncatt_put(nc=nc, varid=vars[["longitude"]], attname="standard_name", attval=sn)
-        dmsg(debug, "    longitude (", x@data$longitude, ")\n")
-        ncvar_put(nc=nc, varid=vars[["latitude"]], vals=x@data$latitude)
-        #sn <- standardNames[["latitude"]]
-        #if (!is.null(sn))
-        #    ncatt_put(nc=nc, varid=vars[["latitude"]], attname="standard_name", attval=sn)
-        dmsg(debug, "    latitude (", x@data$latitude, ")\n")
-    }
     dmsg(debug, "  Storing global attributes.\n")
     dmsg(debug, "    varTable\n")
     ncatt_put(nc=nc, varid=0, attname="varTable", attval=varTableOrig)
     dmsg(debug, "    class\n")
     ncatt_put(nc=nc, varid=0, attname="class", attval=as.character(class(x)))
-    #<> if (locationInMetadata) {
-    #<>     dmsg(debug, "    longitude\n")
-    #<>     ncatt_put(nc=nc, varid=0, attname="longitude", attval=x@metadata$longitude)
-    #<>     dmsg(debug, "    latitude\n")
-    #<>     ncatt_put(nc=nc, varid=0, attname="latitude", attval=x@metadata$latitude)
-    #<> }
-    #<> if ("dataNamesOriginal" %in% names(x@metadata)) {
-    #<>     dmsg(debug, "    data_names_original\n")
-    #<>     dno <- as.vector(sapply(names(x@data),
-    #<>             function(name) x@metadata$dataNamesOriginal[[name]]))
-    #<>     dno <- paste(dno, collapse="|")
-    #<>     ncatt_put(nc=nc, varid=0, attname="data_names_original", attval=dno)
-    #<> }
-    # FIXME: save the precise name mapping, to allow later reversal with ncdf2ctd()
     dmsg(debug, "    metadata\n")
     ncatt_put(nc, 0, "metadata", paste(deparse(x@metadata), collapse="\n"))
     dmsg(debug, "  Closing netcdf file.\n")

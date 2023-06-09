@@ -206,33 +206,24 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     ncatt_put(nc=nc, varid=0, attname="varTable", attval=varTableOrig)
     dmsg(debug, "    class\n")
     ncatt_put(nc=nc, varid=0, attname="class", attval=as.character(class(x)))
-    if (locationInMetadata) {
-        dmsg(debug, "    longitude\n")
-        ncatt_put(nc=nc, varid=0, attname="longitude", attval=x@metadata$longitude)
-        dmsg(debug, "    latitude\n")
-        ncatt_put(nc=nc, varid=0, attname="latitude", attval=x@metadata$latitude)
-    }
-    if ("dataNamesOriginal" %in% names(x@metadata)) {
-        dmsg(debug, "    data_names_original\n")
-        #print(names(x@data))
-        #print(names(x@metadata$dataNamesOriginal))
-        dno <- as.vector(sapply(names(x@data),
-                function(name) x@metadata$dataNamesOriginal[[name]]))
-        #<>dno <- paste(as.character(x@metadata$dataNamesOriginal), collapse="|")
-        dno <- paste(dno, collapse="|")
-        ncatt_put(nc=nc, varid=0, attname="data_names_original", attval=dno)
-    }
-    # save flagScheme, if there is one
-    fs <- x@metadata$flagScheme
-    if (!is.null(fs)) {
-        dmsg(debug, "    flagscheme\n")
-        ncatt_put(nc, 0, "flagScheme", paste(deparse(fs), collapse="\n"))
-    }
-    dmsg(debug, "    metadata, in its entirety (not parsed by ncdf2ctd() though)\n")
-    ncatt_put(nc, 0, "metadata", paste(capture.output(str(x@metadata)), collapse="\n"))
+    #<> if (locationInMetadata) {
+    #<>     dmsg(debug, "    longitude\n")
+    #<>     ncatt_put(nc=nc, varid=0, attname="longitude", attval=x@metadata$longitude)
+    #<>     dmsg(debug, "    latitude\n")
+    #<>     ncatt_put(nc=nc, varid=0, attname="latitude", attval=x@metadata$latitude)
+    #<> }
+    #<> if ("dataNamesOriginal" %in% names(x@metadata)) {
+    #<>     dmsg(debug, "    data_names_original\n")
+    #<>     dno <- as.vector(sapply(names(x@data),
+    #<>             function(name) x@metadata$dataNamesOriginal[[name]]))
+    #<>     dno <- paste(dno, collapse="|")
+    #<>     ncatt_put(nc=nc, varid=0, attname="data_names_original", attval=dno)
+    #<> }
+    # FIXME: save the precise name mapping, to allow later reversal with ncdf2ctd()
+    dmsg(debug, "    metadata\n")
+    ncatt_put(nc, 0, "metadata", paste(deparse(x@metadata), collapse="\n"))
     dmsg(debug, "  Closing netcdf file.\n")
     nc_close(nc)
     dmsg(debug, paste0("} # ctd2ncdf created file \"", ncfile, "\"\n"))
 }
-
 

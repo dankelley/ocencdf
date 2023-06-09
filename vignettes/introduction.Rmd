@@ -44,9 +44,9 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 # Purpose
 
 The package provides a way to store approximate forms of oce objects as Netcdf
-files.  Since Netcdf is handled by many computing languages, it is a good
-intermediate format in multi-language processing, as well as a good choice for
-data archiving.
+files.  This can be useful because the Netcdf format is handled by many
+computing languages, making it a good intermediate format in multi-language
+processing, as well as a sensible choice for data archiving.
 
 # Limitations of Netcdf format
 
@@ -54,15 +54,14 @@ Unfortunately, direct transferral of R information to Netcdf is not possible.
 This is because Netcdf is an array-oriented format that is not designed to hold
 tree-oriented data such as R lists (which are used throughout oce).  It is
 possible to flatten simple lists, but the process gets complicated for nested
-lists, which are common in oce.  This is not the only problem with Netcdf. It
-also lacks basic elements such as user-defined classes and variable-length
-character strings.  Related to this second point is the fact that Netcdf
-tolerates only a single unlimited dimension.
+lists, which are common in oce.  Other difficulties with the Netcdf format
+include its lack of basic elements programming elements such as user-defined
+classes and variable-length character strings in the data portion of the files.
 
-This package address these and other Netcdf limitations by focussing effort only
-on certain important oce classes, and only certain elements within those
-classes.  The initial focus is on ctd data, mainly because they are of greatest
-importance in everyday work.
+This package is in early development, and efforts are focussed on a single oce
+class, the ctd object.  This focus is intended to permit coding practices to gel,
+in preparation for the addition of other classes.  Given the anticipated needs
+of users, the next planned item for support is ADCP data.
 
 # How the package works
 
@@ -70,18 +69,10 @@ importance in everyday work.
 
 The design goal is to save the following elements
 
-1. Entries in the `data` slot (e.g. temperature, salinity, etc.)
-2. Entries in the `flags` entry of the `metadata` slot, as entries with names ending in `_QC`.
-3. An approximate form of units, as strings.
-4. The `header` item in the `metadata` slot.
-5. A few other entries from the `metadata` slot, e.g. `longitude` and `latitude`.
-
-Note that other `metadata` may be added as needed or requested, but that there
-is no intention of trying to copy everything over, mainly because of the
-awkardness of saving variable-length character strings and lists in Netcdf.
-
-Once, or if, significant progress is made on ctd data, the next object type
-to examine will likely be adcp data.
+1. Entries in the `data` slot (e.g. temperature, salinity, etc.), renamed as appropriate.
+2. The `metadata` slot (saved in a string form as a global attribute).
+3. An approximate form of units, as strings (to fit Netcdf conventions).
+4. Information on the conversion process.
 
 ## Renaming elements
 
@@ -128,10 +119,6 @@ In R, we can read `stn.nc` into a ctd object and get a summary with the followin
 A <- ncdf2ctd("stn.nc", varTable="argo")
 summary(A)
 ```
-
-Note that you may also use the more basic function `ncdf2oce()` instead of
-`ncdf2ctd()`, but if you do that, then `summary()` won't display location
-information, and won't parse the `_QC` items as flags.
 
 ```{r echo=FALSE}
 unlink("stn.nc")

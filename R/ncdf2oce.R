@@ -85,6 +85,8 @@ ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
 #'
 #' @importFrom oce as.ctd
 #'
+#' @family things related to CTD data
+#'
 #' @author Dan Kelley
 #'
 #' @export

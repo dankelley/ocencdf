@@ -5,8 +5,6 @@
 #'
 #' @inheritParams oce2ncdf
 #'
-#' @export
-#'
 #' @examples
 #' library(ocencdf)
 #'
@@ -27,7 +25,11 @@
 #' unlink("ctd.nc")
 #' unlink("stn.nc")
 #'
+#' @family things related to CTD data
+#'
 #' @author Dan Kelley
+#'
+#' @export
 ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
 {
     dmsg(debug, "ctd2ncdf(..., ncfile=\"", ncfile, "\") {\n")

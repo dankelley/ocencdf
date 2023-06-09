@@ -25,6 +25,11 @@ output that describes the processing steps.}
 \description{
 Read a netcdf file and create a ctd object
 }
+\seealso{
+Other things related to CTD data: 
+\code{\link{ctd2ncdf}()}
+}
 \author{
 Dan Kelley
 }
+\concept{things related to CTD data}

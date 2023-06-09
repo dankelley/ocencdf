@@ -48,6 +48,11 @@ unlink("ctd.nc")
 unlink("stn.nc")
 
 }
+\seealso{
+Other things related to CTD data: 
+\code{\link{ncdf2ctd}()}
+}
 \author{
 Dan Kelley
 }
+\concept{things related to CTD data}

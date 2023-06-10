@@ -23,11 +23,16 @@ output that describes the processing steps.}
 \code{\link[=ncdf2oce]{ncdf2oce()}} returns an \linkS4class{oce} object.
 }
 \description{
-Read a netcdf file, interpreting variable names according to
-\code{varTable} (if provided).  The object does \emph{not} get a specialized
-oce class, because this is not known within netcdf files.  For
-ctd data, try \code{\link[=ncdf2ctd]{ncdf2ctd()}} instead of \code{\link[=ncdf2oce]{ncdf2oce()}}, or wrap the
-result of calling the latter in \code{\link[oce:as.ctd]{oce::as.ctd()}}.
+Read a netcdf file such as are created with e.g. \code{\link[=oce2ncdf]{oce2ncdf()}},
+interpreting variable names according to \code{varTable} (if provided).
+This is intended to work with netcdf files created by
+\code{\link[=oce2ncdf]{oce2ncdf()}}, but it may also handle some other netcdf files.
+(Try \code{\link[oce:read.netcdf]{oce::read.netcdf()}} if this fails.  If that also fails,
+you will need to work with the \code{ncdf4} library directly.)
+Note that the returned object does \emph{not} get a specialized oce class,
+because this is not known within netcdf files.  For ctd data,
+try \code{\link[=ncdf2ctd]{ncdf2ctd()}} instead of \code{\link[=ncdf2oce]{ncdf2oce()}}, or wrap the result
+of calling the latter in \code{\link[oce:as.ctd]{oce::as.ctd()}}.
 }
 \author{
 Dan Kelley

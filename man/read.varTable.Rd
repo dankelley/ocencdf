@@ -7,13 +7,8 @@
 read.varTable(varTable = "argo", debug = 0)
 }
 \arguments{
-\item{varTable}{character value indicating the name of the table.  If this
-ends in \code{.yml}, then it is taken as a file to be read.  Alternatively, it
-is taken to be the name of a built-in scheme that is defined in a filename
-given by appending \code{.yml} on the end of \code{varTable}, to be found in the
-\code{inst/ext_data} source directory, as in the example.  At the moment,
-the two provided files correspond to \code{varTable} values of \code{"whp"}
-and \code{"argo"}.}
+\item{varTable}{character value indicating the name of the table
+(see \sQuote{Details}).}
 
 \item{debug}{integer, 0 (the default) for quiet action apart
 from messages and warnings, or any larger value to see more
@@ -29,6 +24,21 @@ This function, meant for internal use by the package, uses
 output netcdf format created by e.g. \code{\link[=ctd2ncdf]{ctd2ncdf()}}. Users wishing
 to define such files for their own use should follow the pattern
 of the source directory \code{inst/extdata/argo.yml}.
+}
+\details{
+The value of \code{varTable} controls the variable-name translation
+table to be used.  If \code{varTable} is NULL, then a default table
+is used, the choice of which depends on the function that
+calls \code{\link[=read.varTable]{read.varTable()}}.  Alternatively,
+if \code{varTable} is a character value, then there are 3 possibilities.
+\enumerate{
+\item If \code{varTable} is \code{"-"}, then an empty variable table is returned.
+\item If \code{varTable} ends in \code{.yml}, then it is taken as a file to be read.
+\item Otherwise, \code{".yml"} is appended to \code{varTable} and a file with that
+name is sought in the \code{inst/ext_data} source directory.
+At the moment, there are two such built-in files, named
+\code{"argo.yml"} and `"whp.yml".
+}
 }
 \examples{
 library(ocencdf)

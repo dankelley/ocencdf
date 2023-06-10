@@ -71,13 +71,8 @@ of the source directory <code>inst/extdata/argo.yml</code>.</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>varTable</dt>
-<dd><p>character value indicating the name of the table.  If this
-ends in <code>.yml</code>, then it is taken as a file to be read.  Alternatively, it
-is taken to be the name of a built-in scheme that is defined in a filename
-given by appending <code>.yml</code> on the end of <code>varTable</code>, to be found in the
-<code>inst/ext_data</code> source directory, as in the example.  At the moment,
-the two provided files correspond to <code>varTable</code> values of <code>"whp"</code>
-and <code>"argo"</code>.</p></dd>
+<dd><p>character value indicating the name of the table
+(see ‘Details’).</p></dd>
 
 
 <dt>debug</dt>
@@ -93,6 +88,19 @@ output that describes the processing steps.</p></dd>
 <p><code>read.varTable()</code> returns a list that specifies some information
 to be stored in netcdf files created by e.g. <code><a href="ctd2ncdf.html">ctd2ncdf()</a></code>.</p>
     </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>The value of <code>varTable</code> controls the variable-name translation
+table to be used.  If <code>varTable</code> is NULL, then a default table
+is used, the choice of which depends on the function that
+calls <code>read.varTable()</code>.  Alternatively,
+if <code>varTable</code> is a character value, then there are 3 possibilities.</p><ol><li><p>If <code>varTable</code> is <code>"-"</code>, then an empty variable table is returned.</p></li>
+<li><p>If <code>varTable</code> ends in <code>.yml</code>, then it is taken as a file to be read.</p></li>
+<li><p>Otherwise, <code>".yml"</code> is appended to <code>varTable</code> and a file with that
+name is sought in the <code>inst/ext_data</code> source directory.
+At the moment, there are two such built-in files, named
+<code>"argo.yml"</code> and `"whp.yml".</p></li>
+</ol></div>
     <div id="author">
     <h2>Author</h2>
     <p>Dan Kelley</p>

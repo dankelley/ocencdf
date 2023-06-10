@@ -6,13 +6,20 @@
 #' to define such files for their own use should follow the pattern
 #' of the source directory `inst/extdata/argo.yml`.
 #'
-#' @param varTable character value indicating the name of the table.  If this
-#' ends in `.yml`, then it is taken as a file to be read.  Alternatively, it
-#' is taken to be the name of a built-in scheme that is defined in a filename
-#' given by appending `.yml` on the end of `varTable`, to be found in the
-#' `inst/ext_data` source directory, as in the example.  At the moment,
-#' the two provided files correspond to `varTable` values of `"whp"`
-#' and `"argo"`.
+#' The value of `varTable` controls the variable-name translation
+#' table to be used.  If `varTable` is NULL, then a default table
+#' is used, the choice of which depends on the function that
+#' calls [read.varTable()].  Alternatively,
+#' if `varTable` is a character value, then there are 3 possibilities.
+#' 1. If `varTable` is `"-"`, then an empty variable table is returned.
+#' 2. If `varTable` ends in `.yml`, then it is taken as a file to be read.
+#' 3. Otherwise, `".yml"` is appended to `varTable` and a file with that
+#' name is sought in the `inst/ext_data` source directory.
+#' At the moment, there are two such built-in files, named
+#' `"argo.yml"` and `"whp.yml".
+#'
+#' @param varTable character value indicating the name of the table
+#' (see \sQuote{Details}).
 #'
 #' @template debugTemplate
 #'
@@ -30,6 +37,8 @@ read.varTable <- function(varTable="argo", debug=0)
 {
     if (!is.character(varTable))
         stop("varTable must be a character value")
+    if (varTable == "-")
+        return(list(name=NULL, units=NULL, values=NULL, variables=NULL))
     if (!is.numeric(debug))
         stop("debug must be a numeric value, but is ", debug)
     varTableOrig <- varTable

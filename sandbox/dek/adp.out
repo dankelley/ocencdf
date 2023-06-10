@@ -1,0 +1,55 @@
+
+R version 4.3.0 (2023-04-21) -- "Already Tomorrow"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(oce)
+> data(adp)
+> for (name in names(adp@data)) {
++     x <- adp@data[[name]]
++     if (is.array(x))
++         cat("#", name, "(", class(x), "): array with dimension ", paste(dim(x), collapse="x"), "\n")
++     else
++         cat("#", name, "(", class(x), "): vector of length", length(x), "\n")
++ }
+# v ( array ): array with dimension  25x84x4 
+# q ( array ): array with dimension  25x84x4 
+# a ( array ): array with dimension  25x84x4 
+# g ( array ): array with dimension  25x84x4 
+# distance ( numeric ): vector of length 84 
+# time ( POSIXct POSIXt ): vector of length 25 
+# pressure ( numeric ): vector of length 25 
+# temperature ( numeric ): vector of length 25 
+# salinity ( integer ): vector of length 25 
+# depth ( numeric ): vector of length 25 
+# soundSpeed ( integer ): vector of length 25 
+# heading ( numeric ): vector of length 25 
+# pitch ( numeric ): vector of length 25 
+# roll ( numeric ): vector of length 25 
+# headingStd ( numeric ): vector of length 25 
+# pitchStd ( numeric ): vector of length 25 
+# rollStd ( numeric ): vector of length 25 
+# pressureStd ( integer ): vector of length 25 
+# xmitCurrent ( numeric ): vector of length 25 
+# xmitVoltage ( numeric ): vector of length 25 
+# ambientTemp ( numeric ): vector of length 25 
+# pressurePlus ( numeric ): vector of length 25 
+# pressureMinus ( numeric ): vector of length 25 
+# attitudeTemp ( numeric ): vector of length 25 
+# attitude ( numeric ): vector of length 25 
+# contaminationSensor ( numeric ): vector of length 25 
+> 

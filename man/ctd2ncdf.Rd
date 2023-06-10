@@ -25,27 +25,50 @@ from messages and warnings, or any larger value to see more
 output that describes the processing steps.}
 }
 \description{
-Save a ctd object to a netcdf file
+This creates a netcdf file in a convention that permits later reading by
+\code{\link[=ncdf2ctd]{ncdf2ctd()}}, and that may be convenient for other purposes as well.
+}
+\details{
+The contents of the \code{data} slot of the oce object \code{x} are as netcdf
+data items.  If flags are present in the s \code{metadata} slot, they are
+also saved as data, with names ending in \verb{_QC}.
+
+In addition to storage in the netcdf data section, several attributes
+are saved as well. These include units for the data, which are tied
+to the corresponding variables.  The entire \code{metadata} slot is stored
+as a global attribute named \code{metadata}, so that a later call to
+\code{\link[=ncdf2ctd]{ncdf2ctd()}} will be able to recover the information, using an
+\code{eval(parse(text=))} construct.  However, the intention is that
+the netcdf file be useful in other types of processing stream,
+so certain key items from the \code{metadata} slot (if present) are
+stored as individual global attributes, named \code{"latitude"},
+\code{"longitude"}, \code{"startTime"} and \code{"station"}.  (Note that this
+list is under 20 percent of typical contents of the \code{metadata}
+slot of a ctd object.)
+
+Note that \code{\link[=oce2ncdf]{oce2ncdf()}} defaults \code{varTable} to \code{"argo"}.
 }
 \examples{
 library(ocencdf)
 
-# example 1: a ctd file with no per-variable QC flags
-data(ctd) # from 'oce' package
+# example 1: a ctd file without per-variable QC flags
+data(ctd, package="oce")
 oce2ncdf(ctd, ncfile="ctd.nc")
 CTD <- as.ctd(ncdf2oce("ctd.nc"))
 summary(CTD)
+plot(CTD)
 
 # example 2: a ctd file with per-variable QC flags
-data(section) # from 'oce' package
-stn <- section[["station", 100]] # 100-th station in section, not station '100'
+data(section, package="oce")
+stn <- section[["station", 100]]
 oce2ncdf(stn, ncfile="stn.nc")
 STN <- as.ctd(ncdf2oce("stn.nc"))
 summary(STN)
+plot(STN)
 
-# clean up temporary files (to prevent CRAN test failure)
-unlink("ctd.nc")
-unlink("stn.nc")
+# Remove temporary files
+file.remove("ctd.nc")
+file.remove("stn.nc")
 
 }
 \seealso{

@@ -1,10 +1,17 @@
+# See e.g. ctd.R for ncdf2ctd().
+
 #' Read a netcdf file and create a general oce object
 #'
-#' Read a netcdf file, interpreting variable names according to
-#' `varTable` (if provided).  The object does *not* get a specialized
-#' oce class, because this is not known within netcdf files.  For
-#' ctd data, try [ncdf2ctd()] instead of [ncdf2oce()], or wrap the
-#' result of calling the latter in [oce::as.ctd()].
+#' Read a netcdf file such as are created with e.g. [oce2ncdf()],
+#' interpreting variable names according to `varTable` (if provided).
+#' This is intended to work with netcdf files created by
+#' [oce2ncdf()], but it may also handle some other netcdf files.
+#' (Try [oce::read.netcdf()] if this fails.  If that also fails,
+#' you will need to work with the `ncdf4` library directly.)
+#' Note that the returned object does *not* get a specialized oce class,
+#' because this is not known within netcdf files.  For ctd data,
+#' try [ncdf2ctd()] instead of [ncdf2oce()], or wrap the result
+#' of calling the latter in [oce::as.ctd()].
 #'
 #' @param ncfile character value naming the input file.
 #'
@@ -48,10 +55,13 @@ ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
         if (is.array(item) && 1 == length(dim(item))) # 1D array converted to 1 column matrix
             item <- as.vector(item)
         if (tolower(name) == "time") {
-            if (units$hasatt && units$value == "seconds since 1970-01-01 UTC") {
-                res@metadata[["time"]] <- numberAsPOSIXct(item[1])
+            #message("DAN ncdf2oce() got time")
+            if (units$hasatt && grepl("1970-01-01", units$value)) {
+                #message("DAN time case 1")
+                res@data[["time"]] <- numberAsPOSIXct(item)
             } else {
-                warning("time unit is not understood, so it remains simply numeric")
+                #message("DAN time case 2")
+                res@data[["time"]] <- item
             }
         } else if (tolower(name) == "station") {
             res@metadata[["station"]] <- trimws(item[1])
@@ -77,20 +87,3 @@ ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
     res
 }
 
-#' Read a netcdf file and create a ctd object
-#'
-#' @inheritParams ncdf2oce
-#'
-#' @return [ncdf2ctd()] returns an [ctd-class] object.
-#'
-#' @importFrom oce as.ctd
-#'
-#' @family things related to CTD data
-#'
-#' @author Dan Kelley
-#'
-#' @export
-ncdf2ctd <- function(ncfile=NULL, varTable=NULL, debug=0)
-{
-    as.ctd(ncdf2oce(ncfile=ncfile, varTable=varTable, debug=debug))
-}

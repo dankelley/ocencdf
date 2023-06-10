@@ -19,6 +19,9 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/adp2ncdf.html</loc>
+  </url>
+  <url>
     <loc>/reference/ctd2ncdf.html</loc>
   </url>
   <url>
@@ -26,6 +29,9 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ncdf2adp.html</loc>
   </url>
   <url>
     <loc>/reference/ncdf2ctd.html</loc>

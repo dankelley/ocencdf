@@ -28,7 +28,6 @@ variables:
     name: nitrite+nitrate
   number:
     name: NUMBER
-    units: ''
   oxygen:
     name: CTDOXY
   oxygenBottle:
@@ -37,24 +36,20 @@ variables:
     name: PHSPHT
   pHTemperature:
     name: PH_TMP
-    units: degree_Celcius
   pHTotal:
     name: PH_TOT
   pressure:
     name: CTDPRS
   salinity:
     name: CTDSAL
-    units: psu
   salinityBottle:
     name: SALNTY
-    units: psu
   SF6:
     name: SF6
   silicate:
     name: SILCAT
   temperature:
     name: CTDTMP
-    units: degree_Celcius
   totalAlkalinity:
     name: ALKALI
   totalCarbon:

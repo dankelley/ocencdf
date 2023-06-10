@@ -1,5 +1,5 @@
 ---
-title: "1. Introduction to ocencdf"
+title: "Introduction to ocencdf"
 author: "Dan Kelley (https://orcid.org/0000-0001-7808-5911)"
 date: "`r Sys.Date()`"
 output:
@@ -12,7 +12,7 @@ output:
     dpi: 72
     dev.args: list(pointsize=11)
 vignette: >
-  %\VignetteIndexEntry{1. Introduction to ocencdf}
+  %\VignetteIndexEntry{Introduction to ocencdf}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
@@ -43,10 +43,25 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 # Purpose
 
-The package provides a way to store approximate forms of oce objects as Netcdf
-files.  This can be useful because the Netcdf format is handled by many
-computing languages, making it a good intermediate format in multi-language
-processing, as well as a sensible choice for data archiving.
+The `ocencdf` package provides a way to store approximate forms of oce objects
+as Netcdf files, and to translate those files back into oce objects. This is
+useful because Netcdf format is handled in a wide variety of computing languages,
+and is commonly used in data archives.
+
+The package provides both "forward" and "reverse" functions.  The former translate
+oce objects to Netcdf, and the latter transfer Netcdf files (made by the package)
+back into oce objects.
+
+It should be noted that the reverse functions are designed to work with Netcdf
+files created by the forward functions, with e.g. `ncdf2ctd()` handling Netcdf
+files created by `ctd2ncdf()` based on oce objects.  The reverse functions may
+be able to handle the data portions of other Netcdf files, but they do not parse
+the attribute portions of those Netcdf files in a useful way.  This is because there
+is no way for the code to know what conventions were used in creating an arbitrary
+Netcdf file.  For example, a CTD dataset might record the ship name, the name of
+the research program, etc., but whether these things are recorded in the data section
+of the Netcdf file, or in attributes, or not at all, cannot be known *a priori*,
+and guessing is a risky proposition.
 
 # Limitations of Netcdf format
 

@@ -1,0 +1,67 @@
+---
+title: "Built-in varTables"
+author: "Dan Kelley (https://orcid.org/0000-0001-7808-5911)"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
+    fig_caption: yes
+    fig_width: 3.5
+    fig_height: 3.5
+    dpi: 72
+    dev.args: list(pointsize=11)
+vignette: >
+  %\VignetteIndexEntry{Built-in varTables}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+# Introduction
+
+This vignette discusses two built-in variable-table files.  These may be used as
+patterns by users wishing to create their own tables.  Note that the package
+requires that the files be in proper YAML format, which can be checked by using
+`yaml::yaml.load_file("file.yml")`, where `"file.yml"` is the trial file.  This
+function will report an error if the contents are not in proper YAML format.
+
+# The built-in tables
+
+## argo
+
+This table, patterned on naming conventions in the Argo ocean float program, is
+stored in a file that may be accessed with
+```{r eval=FALSE}
+system.file("extdata", "argo.yml", package="ocencdf")
+```
+and the contents are as follows.
+```{r, echo=FALSE}
+#| echo: false
+#| fig.width: 10
+#| comment: ""
+lines <- readLines(system.file("extdata", "argo.yml", package="ocencdf"))
+for (line in lines)
+    cat(line, "\n")
+```
+
+## yhp
+
+This table, patterned on naming conventions in the World Hydrographic Program,
+is stored in a file that may be accessed with
+```{r eval=FALSE}
+system.file("extdata", "yhp.yml", package="ocencdf")
+```
+and the contents are as follows.
+```{r, echo=FALSE}
+#| echo: false
+#| fig.width: 10
+#| comment: ""
+lines <- readLines(system.file("extdata", "whp.yml", package="ocencdf"))
+for (line in lines)
+    cat(line, "\n")
+```
+
+

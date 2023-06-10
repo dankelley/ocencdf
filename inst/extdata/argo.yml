@@ -1,9 +1,8 @@
 type:
-  comment: The variable names are taken from Section 3.3 of “Argo User’s Manual.”
-    Pdf. Ifremer, July 5, 2022. https://doi.org/10.13155/29825.
-  date: '2022-06-05'
+  comment: See Section 3.3 of “Argo User’s Manual.” Pdf. Ifremer, July 5, 2022. https://doi.org/10.13155/29825.
+  date: '2022-06-10'
   name: argo
-  version: 2
+  version: 3
 units:
   1/m:
     name: m-1
@@ -17,8 +16,12 @@ units:
     name: degree_east
   degree * N:
     name: degree_north
+  mu * mol *quanta/m^2/s:
+    name: microMoleQuanta/m^2/sec
   mu * mol/kg:
     name: micromole/kg
+  ntu:
+    name: ntu
 values:
   missing_value: 99999.0
 variables:
@@ -32,6 +35,7 @@ variables:
     standard_name: sea_water_electrical_conductivity
   downwelling_par:
     name: DOWNWELLING_PAR
+    standard_name: downwelling_photosynthetic_photon_flux_in_sea_water
   latitude:
     name: LATITUDE
     standard_name: latitude

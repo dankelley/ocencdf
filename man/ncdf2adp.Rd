@@ -10,10 +10,8 @@ ncdf2adp(ncfile = NULL, varTable = NULL, debug = 0)
 \item{ncfile}{character value naming the input file.}
 
 \item{varTable}{character value indicating the variable-naming
-scheme to be used. This is provided to \code{\link[=read.varTable]{read.varTable()}}, the
-documentation of which explains the possibilities for pre-defined
-schemes named \code{"argo"} and \code{"whp"} and user-supplied files of
-similar format.}
+scheme to be used, which is passed to \code{\link[=read.varTable]{read.varTable()}} to set
+up variable names, units, etc.}
 
 \item{debug}{integer, 0 (the default) for quiet action apart
 from messages and warnings, or any larger value to see more
@@ -24,7 +22,12 @@ output that describes the processing steps.}
 }
 \description{
 This works by calling \code{\link[=ncdf2oce]{ncdf2oce()}} and then using \code{\link[=class]{class()}} on
-the result to make it be of subclass \code{"adp"}.
+the result to make it be of subclass \code{"adp"}.  This is intended
+to work with Netcdf files created with \code{\link[=adp2ncdf]{adp2ncdf()}}, which embeds
+sufficient information in the file to permit \code{\link[=ncdf2adp]{ncdf2adp()}} to
+reconstruct the original adp object. See the documentation
+for \code{\link[=adp2ncdf]{adp2ncdf()}} to learn more about what it stores, and therefore
+what \code{\link[=ncdf2adp]{ncdf2adp()}} attempts to read.
 }
 \examples{
 library(ocencdf)

@@ -1,6 +1,6 @@
 #' Save an oce-class object as a netcdf file.
 #'
-#' `oce2ncdf()` works by determining the class of its first argument,
+#' `oce1ncdf()` works by determining the class of its first argument,
 #' and then dispatching to an internal function, as appropriate.
 #'
 #' @param x an oce-class object. The subclass of this object determines

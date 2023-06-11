@@ -10,10 +10,8 @@ adp2ncdf(x, varTable = NULL, ncfile = NULL, debug = 0)
 \item{x}{an oce object of class \code{adp}, as created by e.g. \code{\link[oce:read.adp]{oce::read.adp()}}.}
 
 \item{varTable}{character value indicating the variable-naming
-scheme to be used. This is provided to \code{\link[=read.varTable]{read.varTable()}}, the
-documentation of which explains the possibilities for pre-defined
-schemes named \code{"argo"} and \code{"whp"} and user-supplied files of
-similar format.}
+scheme to be used, which is passed to \code{\link[=read.varTable]{read.varTable()}} to set
+up variable names, units, etc.}
 
 \item{ncfile}{character value naming the output file.  Use NULL
 for a file name to be created automatically (e.g. \code{ctd.nc} for
@@ -30,7 +28,21 @@ reproduce the original contents.
 }
 \details{
 Note that \code{\link[=oce2ncdf]{oce2ncdf()}} defaults \code{varTable} to \code{"-"},
-meaning that no variable-name translation is done.
+meaning that no variable-name translation is done; the names used in
+oce are retained in the file.
+
+The entire contents of the metadata slot are saved in the global attribute named
+\code{"metadata"}.  This permits reconstitution with \code{eval(parse(text=))} in R,
+or something similar in another language. In addition, the following metadata
+items are saved as individual global attributes:
+\code{"beamAngle"},
+\code{"frequency"},
+\code{"instrumentType"},
+\code{"instrumentSubtype"},
+\code{"numberOfBeams"},
+\code{"numberOfBeams"},
+and
+\code{"oceCoordinate"}.
 }
 \examples{
 library(ocencdf)

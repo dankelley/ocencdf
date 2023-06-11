@@ -3,8 +3,10 @@
 #' This creates a netcdf file in a convention that permits later reading by
 #' [ncdf2ctd()], and that may be convenient for other purposes as well.
 #'
+#' Note that [oce2ncdf()] defaults `varTable` to `"argo"`.
+#'
 #' The contents of the `data` slot of the oce object `x` are as netcdf
-#' data items.  If flags are present in the s `metadata` slot, they are
+#' data items.  If flags are present in the `metadata` slot, they are
 #' also saved as data, with names ending in `_QC`.
 #'
 #' In addition to storage in the netcdf data section, several attributes
@@ -12,15 +14,11 @@
 #' to the corresponding variables.  The entire `metadata` slot is stored
 #' as a global attribute named `metadata`, so that a later call to
 #' [ncdf2ctd()] will be able to recover the information, using an
-#' `eval(parse(text=))` construct.  However, the intention is that
-#' the netcdf file be useful in other types of processing stream,
-#' so certain key items from the `metadata` slot (if present) are
-#' stored as individual global attributes, named `"latitude"`,
-#' `"longitude"`, `"startTime"` and `"station"`.  (Note that this
-#' list is under 20 percent of typical contents of the `metadata`
-#' slot of a ctd object.)
+#' `eval(parse(text=))` construct.  As an aid to processing in other
+#' languages, the following `metadata` items are stored as
+#' individual global attributes: `"latitude"`, `"longitude"`,
+#' `"startTime"` and `"station"`.
 #'
-#' Note that [oce2ncdf()] defaults `varTable` to `"argo"`.
 #'
 #' @param x an oce object of class `ctd`, as created by e.g. [oce::as.ctd()]
 #' or [oce::read.ctd()].
@@ -172,16 +170,19 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         ncvar_put(nc=nc, varid=vars[[flagnameNCDF]], vals=vals)
     }
     dmsg(debug, "  Storing global attributes.\n")
-    dmsg(debug, "    varTable\n")
-    ncatt_put(nc=nc, varid=0, attname="varTable", attval=varTableOrig)
-    dmsg(debug, "    class\n")
-    ncatt_put(nc=nc, varid=0, attname="class", attval=as.character(class(x)))
     dmsg(debug, "    metadata\n")
     ncatt_put(nc, 0, "metadata", paste(deparse(x@metadata), collapse="\n"))
+    # Store some individual metadata items, for simple access
     for (item in c("station", "latitude", "longitude")) {
         dmsg(debug, "    ", item, "\n")
         storeNetcdfAttribute(x, item, nc, item)
     }
+    dmsg(debug, "    varTable\n")
+    ncatt_put(nc=nc, varid=0, attname="varTable", attval=varTableOrig)
+    dmsg(debug, "    class\n")
+    ncatt_put(nc=nc, varid=0, attname="class", attval=as.character(class(x)))
+    dmsg(debug, "    creator\n")
+    ncatt_put(nc=nc, varid=0, attname="creator", attval=paste0("ocencdf version ", packageVersion("ocencdf")))
     dmsg(debug, "  Closing netcdf file.\n")
     nc_close(nc)
     dmsg(debug, paste0("} # ctd2ncdf created file \"", ncfile, "\"\n"))
@@ -195,6 +196,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
 #' @return [ncdf2ctd()] returns an [ctd-class] object.
 #'
 #' @importFrom oce as.ctd
+#' @importFrom utils packageVersion
 #'
 #' @family things related to CTD data
 #'

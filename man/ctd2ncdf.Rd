@@ -11,10 +11,8 @@ ctd2ncdf(x, varTable = NULL, ncfile = NULL, debug = 0)
 or \code{\link[oce:read.ctd]{oce::read.ctd()}}.}
 
 \item{varTable}{character value indicating the variable-naming
-scheme to be used. This is provided to \code{\link[=read.varTable]{read.varTable()}}, the
-documentation of which explains the possibilities for pre-defined
-schemes named \code{"argo"} and \code{"whp"} and user-supplied files of
-similar format.}
+scheme to be used, which is passed to \code{\link[=read.varTable]{read.varTable()}} to set
+up variable names, units, etc.}
 
 \item{ncfile}{character value naming the output file.  Use NULL
 for a file name to be created automatically (e.g. \code{ctd.nc} for
@@ -29,8 +27,10 @@ This creates a netcdf file in a convention that permits later reading by
 \code{\link[=ncdf2ctd]{ncdf2ctd()}}, and that may be convenient for other purposes as well.
 }
 \details{
+Note that \code{\link[=oce2ncdf]{oce2ncdf()}} defaults \code{varTable} to \code{"argo"}.
+
 The contents of the \code{data} slot of the oce object \code{x} are as netcdf
-data items.  If flags are present in the s \code{metadata} slot, they are
+data items.  If flags are present in the \code{metadata} slot, they are
 also saved as data, with names ending in \verb{_QC}.
 
 In addition to storage in the netcdf data section, several attributes
@@ -38,15 +38,10 @@ are saved as well. These include units for the data, which are tied
 to the corresponding variables.  The entire \code{metadata} slot is stored
 as a global attribute named \code{metadata}, so that a later call to
 \code{\link[=ncdf2ctd]{ncdf2ctd()}} will be able to recover the information, using an
-\code{eval(parse(text=))} construct.  However, the intention is that
-the netcdf file be useful in other types of processing stream,
-so certain key items from the \code{metadata} slot (if present) are
-stored as individual global attributes, named \code{"latitude"},
-\code{"longitude"}, \code{"startTime"} and \code{"station"}.  (Note that this
-list is under 20 percent of typical contents of the \code{metadata}
-slot of a ctd object.)
-
-Note that \code{\link[=oce2ncdf]{oce2ncdf()}} defaults \code{varTable} to \code{"argo"}.
+\code{eval(parse(text=))} construct.  As an aid to processing in other
+languages, the following \code{metadata} items are stored as
+individual global attributes: \code{"latitude"}, \code{"longitude"},
+\code{"startTime"} and \code{"station"}.
 }
 \examples{
 library(ocencdf)

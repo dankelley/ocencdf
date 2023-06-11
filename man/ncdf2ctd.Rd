@@ -10,10 +10,8 @@ ncdf2ctd(ncfile = NULL, varTable = NULL, debug = 0)
 \item{ncfile}{character value naming the input file.}
 
 \item{varTable}{character value indicating the variable-naming
-scheme to be used. This is provided to \code{\link[=read.varTable]{read.varTable()}}, the
-documentation of which explains the possibilities for pre-defined
-schemes named \code{"argo"} and \code{"whp"} and user-supplied files of
-similar format.}
+scheme to be used, which is passed to \code{\link[=read.varTable]{read.varTable()}} to set
+up variable names, units, etc.}
 
 \item{debug}{integer, 0 (the default) for quiet action apart
 from messages and warnings, or any larger value to see more

@@ -5,7 +5,21 @@
 #' reproduce the original contents.
 #'
 #' Note that [oce2ncdf()] defaults `varTable` to `"-"`,
-#' meaning that no variable-name translation is done.
+#' meaning that no variable-name translation is done; the names used in
+#' oce are retained in the file.
+#'
+#' The entire contents of the metadata slot are saved in the global attribute named
+#' `"metadata"`.  This permits reconstitution with `eval(parse(text=))` in R,
+#' or something similar in another language. In addition, the following metadata
+#' items are saved as individual global attributes:
+#' `"beamAngle"`,
+#' `"frequency"`,
+#' `"instrumentType"`,
+#' `"instrumentSubtype"`,
+#' `"numberOfBeams"`,
+#' `"numberOfBeams"`,
+#' and
+#' `"oceCoordinate"`.
 #'
 #' @param x an oce object of class `adp`, as created by e.g. [oce::read.adp()].
 #'
@@ -63,7 +77,7 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     vars <- list()
     # time and distance (do they show up as n$var now?)
     dmsg(debug, "    time (length ", vdim[1], ")\n")
-    vars[["time"]] <- ncvar_def(name="time", units="seconds since 1970-01-01 UTC", dim=time, missval=1.0e30, prec="float")
+    vars[["time"]] <- ncvar_def(name="time", units="seconds since 1970-01-01 UTC", dim=time, missval=1.0e30, prec="double")
     dmsg(debug, "    distance (length ", vdim[2], ")\n")
     vars[["distance"]] <- ncvar_def(name="distance", units="m", dim=distance, missval=1.0e30)
     dmsg(debug, "  Setting up variable dimensions for ", paste(vdim, collapse="x"), " arrays:\n")
@@ -114,12 +128,22 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         }
     }
     dmsg(debug, "  Storing global attributes:\n")
+    dmsg(debug, "    metadata\n")
+    ncatt_put(nc, 0, "metadata", paste(deparse(x@metadata), collapse="\n"))
+    # Store some individual metadata items, for simple access
+    for (item in c("beamAngle", "frequency",
+            "instrumentType", "instrumentSubtype",
+            "numberOfBeams", "numberOfBeams",
+            "oceCoordinate")) {
+        dmsg(debug, "    ", item, "\n")
+        storeNetcdfAttribute(x, item, nc, item)
+    }
     dmsg(debug, "    varTable\n")
     ncatt_put(nc=nc, varid=0, attname="varTable", attval=varTableOrig)
     dmsg(debug, "    class\n")
     ncatt_put(nc=nc, varid=0, attname="class", attval=as.character(class(x)))
-    dmsg(debug, "    metadata\n")
-    ncatt_put(nc, 0, "metadata", paste(deparse(x@metadata), collapse="\n"))
+    dmsg(debug, "    creator\n")
+    ncatt_put(nc=nc, varid=0, attname="creator", attval=paste0("ocencdf version ", packageVersion("ocencdf")))
     nc_close(nc)
     dmsg(debug, paste0("} # adp2ncdf created file \"", ncfile, "\"\n"))
 }
@@ -127,7 +151,12 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
 #' Read a netcdf file and create an adp object
 #'
 #' This works by calling [ncdf2oce()] and then using [class()] on
-#' the result to make it be of subclass `"adp"`.
+#' the result to make it be of subclass `"adp"`.  This is intended
+#' to work with Netcdf files created with [adp2ncdf()], which embeds
+#' sufficient information in the file to permit [ncdf2adp()] to
+#' reconstruct the original adp object. See the documentation
+#' for [adp2ncdf()] to learn more about what it stores, and therefore
+#' what [ncdf2adp()] attempts to read.
 #'
 #' @inheritParams ncdf2oce
 #'

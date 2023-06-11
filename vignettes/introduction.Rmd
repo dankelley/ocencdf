@@ -116,6 +116,7 @@ library(oce)
 data(section)
 stn <- section[["station", 100]]
 summary(stn)
+plot(stn)
 ```
 
 Now, save as a netcdf file, using (say) the Argo convention for variable names.
@@ -131,8 +132,9 @@ because the varTable named `"argo"` establishes that nickname.
 In R, we can read `stn.nc` into a ctd object and get a summary with the following.
 
 ```{r}
-A <- ncdf2ctd("stn.nc", varTable="argo")
-summary(A)
+STN <- ncdf2ctd("stn.nc", varTable="argo")
+summary(STN)
+plot(STN)
 ```
 
 ```{r echo=FALSE}

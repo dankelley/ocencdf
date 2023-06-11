@@ -74,10 +74,8 @@ or <code><a href="https://dankelley.github.io/oce/reference/read.ctd.html" class
 
 <dt>varTable</dt>
 <dd><p>character value indicating the variable-naming
-scheme to be used. This is provided to <code><a href="read.varTable.html">read.varTable()</a></code>, the
-documentation of which explains the possibilities for pre-defined
-schemes named <code>"argo"</code> and <code>"whp"</code> and user-supplied files of
-similar format.</p></dd>
+scheme to be used, which is passed to <code><a href="read.varTable.html">read.varTable()</a></code> to set
+up variable names, units, etc.</p></dd>
 
 
 <dt>ncfile</dt>
@@ -94,22 +92,19 @@ output that describes the processing steps.</p></dd>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>The contents of the <code>data</code> slot of the oce object <code>x</code> are as netcdf
-data items.  If flags are present in the s <code>metadata</code> slot, they are
+    <p>Note that <code><a href="oce2ncdf.html">oce2ncdf()</a></code> defaults <code>varTable</code> to <code>"argo"</code>.</p>
+<p>The contents of the <code>data</code> slot of the oce object <code>x</code> are as netcdf
+data items.  If flags are present in the <code>metadata</code> slot, they are
 also saved as data, with names ending in <code>_QC</code>.</p>
 <p>In addition to storage in the netcdf data section, several attributes
 are saved as well. These include units for the data, which are tied
 to the corresponding variables.  The entire <code>metadata</code> slot is stored
 as a global attribute named <code>metadata</code>, so that a later call to
 <code><a href="ncdf2ctd.html">ncdf2ctd()</a></code> will be able to recover the information, using an
-<code>eval(parse(text=))</code> construct.  However, the intention is that
-the netcdf file be useful in other types of processing stream,
-so certain key items from the <code>metadata</code> slot (if present) are
-stored as individual global attributes, named <code>"latitude"</code>,
-<code>"longitude"</code>, <code>"startTime"</code> and <code>"station"</code>.  (Note that this
-list is under 20 percent of typical contents of the <code>metadata</code>
-slot of a ctd object.)</p>
-<p>Note that <code><a href="oce2ncdf.html">oce2ncdf()</a></code> defaults <code>varTable</code> to <code>"argo"</code>.</p>
+<code>eval(parse(text=))</code> construct.  As an aid to processing in other
+languages, the following <code>metadata</code> items are stored as
+individual global attributes: <code>"latitude"</code>, <code>"longitude"</code>,
+<code>"startTime"</code> and <code>"station"</code>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -154,8 +149,8 @@ slot of a ctd object.)</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Processing Log</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-10 13:39:40 UTC: `create 'ctd' object`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-10 13:39:40 UTC: `as.ctd(salinity = ncdf2oce("ctd.nc"))`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-11 11:48:56 UTC: `create 'ctd' object`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-11 11:48:56 UTC: `as.ctd(salinity = ncdf2oce("ctd.nc"))`</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">CTD</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="ctd2ncdf-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -206,8 +201,8 @@ slot of a ctd object.)</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Processing Log</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-10 13:39:41 UTC: `create 'ctd' object`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-10 13:39:41 UTC: `as.ctd(salinity = ncdf2oce("stn.nc"))`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-11 11:48:57 UTC: `create 'ctd' object`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-11 11:48:57 UTC: `as.ctd(salinity = ncdf2oce("stn.nc"))`</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">STN</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="ctd2ncdf-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>

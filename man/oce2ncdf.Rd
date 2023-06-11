@@ -12,10 +12,8 @@ which lower-level function \code{\link[=oce2ncdf]{oce2ncdf()}} calls, e.g. if \c
 \code{ctd} class, then \code{\link[=ctd2ncdf]{ctd2ncdf()}} is called.}
 
 \item{varTable}{character value indicating the variable-naming
-scheme to be used. This is provided to \code{\link[=read.varTable]{read.varTable()}}, the
-documentation of which explains the possibilities for pre-defined
-schemes named \code{"argo"} and \code{"whp"} and user-supplied files of
-similar format.}
+scheme to be used, which is passed to \code{\link[=read.varTable]{read.varTable()}} to set
+up variable names, units, etc.}
 
 \item{ncfile}{character value naming the output file.  Use NULL
 for a file name to be created automatically (e.g. \code{ctd.nc} for
@@ -26,7 +24,7 @@ from messages and warnings, or any larger value to see more
 output that describes the processing steps.}
 }
 \description{
-\code{oce2ncdf()} works by determining the class of its first argument,
+\code{oce1ncdf()} works by determining the class of its first argument,
 and then dispatching to an internal function, as appropriate.
 }
 \author{

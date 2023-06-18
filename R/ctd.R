@@ -172,6 +172,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     dmsg(debug, "  Storing global attributes.\n")
     dmsg(debug, "    metadata\n")
     ncatt_put(nc, 0, "metadata", paste(deparse(x@metadata), collapse="\n"))
+    ncatt_put(nc, 0, "NEWmetadata", metadata2json(x@metadata))
     # Store some individual metadata items, for simple access
     for (item in c("station", "latitude", "longitude")) {
         dmsg(debug, "    ", item, "\n")

@@ -17,10 +17,11 @@
 #' from messages and warnings, or any larger value to see more
 #' output that describes the processing steps.
 #'
-#' @importFrom utils str
-#' @importFrom yaml yaml.load_file
+#' @importFrom jsonlite fromJSON toJSON
 #' @importFrom ncdf4 ncatt_put nc_create nc_close ncdim_def nc_open ncvar_def ncvar_put
 #' @importFrom oce numberAsPOSIXct T90fromT48 T90fromT68
+#' @importFrom utils str
+## @importFrom yaml yaml.load_file
 #'
 #' @author Dan Kelley
 #'

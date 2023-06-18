@@ -170,8 +170,11 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         ncvar_put(nc=nc, varid=vars[[flagnameNCDF]], vals=vals)
     }
     dmsg(debug, "  Storing global attributes.\n")
+    dmsg(debug, "    metadata_explanation\n")
+    explanation <- paste(readLines(system.file("extdata", "ncdf_explanation.md", package="ocencdf")), collapse="\n")
+    ncatt_put(nc, 0, "metadata_explanation", explanation)
     dmsg(debug, "    metadata\n")
-    ncatt_put(nc, 0, "metadata", paste(deparse(x@metadata), collapse="\n"))
+    ncatt_put(nc, 0, "metadata", metadata2json(x@metadata))
     # Store some individual metadata items, for simple access
     for (item in c("station", "latitude", "longitude")) {
         dmsg(debug, "    ", item, "\n")

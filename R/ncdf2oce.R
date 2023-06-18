@@ -72,7 +72,8 @@ ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
     # metadata
     tmp <- ncatt_get(f, 0, "metadata")
     if (tmp$hasatt) {
-        res@metadata <- eval(parse(text=tmp$value))
+        #res@metadata <- eval(parse(text=tmp$value))
+        res@metadata <- json2metadata(tmp$value)
         dmsg(debug, "  handling metadata\n")
     }
     # Update naming convention, if varTable was provided.

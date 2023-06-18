@@ -9,8 +9,10 @@
 #' oce are retained in the file.
 #'
 #' The entire contents of the metadata slot are saved in the global attribute named
-#' `"metadata"`.  This permits reconstitution with `eval(parse(text=))` in R,
-#' or something similar in another language. In addition, the following metadata
+#' `"metadata"`, in a JSON format.  The JSON material is developed with
+#' [metadata2json()], which yields a value that can be decoded with
+#' [json2metadata()].
+#' In addition, the following metadata
 #' items are saved as individual global attributes:
 #' `"beamAngle"`,
 #' `"frequency"`,
@@ -128,8 +130,11 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         }
     }
     dmsg(debug, "  Storing global attributes:\n")
+    dmsg(debug, "    metadata_explanation\n")
+    explanation <- paste(readLines(system.file("extdata", "ncdf_explanation.md", package="ocencdf")), collapse="\n")
+    ncatt_put(nc, 0, "metadata_explanation", explanation)
     dmsg(debug, "    metadata\n")
-    ncatt_put(nc, 0, "metadata", paste(deparse(x@metadata), collapse="\n"))
+    ncatt_put(nc, 0, "metadata", metadata2json(x@metadata))
     # Store some individual metadata items, for simple access
     for (item in c("beamAngle", "frequency",
             "instrumentType", "instrumentSubtype",

@@ -32,8 +32,10 @@ meaning that no variable-name translation is done; the names used in
 oce are retained in the file.
 
 The entire contents of the metadata slot are saved in the global attribute named
-\code{"metadata"}.  This permits reconstitution with \code{eval(parse(text=))} in R,
-or something similar in another language. In addition, the following metadata
+\code{"metadata"}, in a JSON format.  The JSON material is developed with
+\code{\link[=metadata2json]{metadata2json()}}, which yields a value that can be decoded with
+\code{\link[=json2metadata]{json2metadata()}}.
+In addition, the following metadata
 items are saved as individual global attributes:
 \code{"beamAngle"},
 \code{"frequency"},

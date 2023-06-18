@@ -44,8 +44,9 @@
 metadata2json <- function(m, digits=15)
 {
     if ("units" %in% names(m)) {
-        for (item in names(m$units))
+        for (item in names(m$units)) {
             m$units[[item]]$unit <- as.character(m$units[[item]]$unit)
+        }
     }
     C <- m$codes
     if (!is.null(C) && is.matrix(C)) {

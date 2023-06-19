@@ -131,7 +131,9 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     }
     dmsg(debug, "  Storing global attributes:\n")
     dmsg(debug, "    metadata_explanation\n")
-    explanation <- paste(readLines(system.file("extdata", "ncdf_explanation.md", package="ocencdf")), collapse="\n")
+    explanation <- paste("This file was created with adp2ncdf from the ocencdf R package,\n",
+        "available at www.github.com/dankelley/ocencdf.\n",
+        readLines(system.file("extdata", "ncdf_explanation.md", package="ocencdf")), collapse="\n")
     ncatt_put(nc, 0, "metadata_explanation", explanation)
     dmsg(debug, "    metadata\n")
     ncatt_put(nc, 0, "metadata", metadata2json(x@metadata))

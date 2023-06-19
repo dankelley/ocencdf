@@ -34,6 +34,7 @@ oce2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     switch(xclass,
         ctd=ctd2ncdf(x, varTable=varTable, ncfile=ncfile, debug=debug),
         adp=adp2ncdf(x, varTable=varTable, ncfile=ncfile, debug=debug),
+        adv=adv2ncdf(x, varTable=varTable, ncfile=ncfile, debug=debug),
         stop("oce2ncdf() cannot handle \"", xclass, "\" objects")
     )
 }

@@ -4,9 +4,7 @@
 #' creates a netcdf file that can later by read by [ncdf2adv()] to approximately
 #' reproduce the original contents.
 #'
-#' Note that [oce2ncdf()] defaults `varTable` to `"-"`,
-#' meaning that no variable-name translation is done; the names used in
-#' oce are retained in the file.
+#' Note that [adv2ncdf()] defaults `varTable` to `"adv"`.
 #'
 #' The entire contents of the metadata slot are saved in the global attribute named
 #' `"metadata"`, in a JSON format.  The JSON material is developed with
@@ -44,7 +42,7 @@ adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     if (!inherits(x, "adv"))
         stop("'x' must be a adv object")
     if (is.null(varTable)) {
-        varTable <- "-"
+        varTable <- "adv"
         message("Defaulting varTable to \"", varTable, "\".")
     }
     if (is.null(ncfile)) {

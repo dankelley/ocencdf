@@ -3,7 +3,7 @@
 #' This creates a netcdf file in a convention that permits later reading by
 #' [ncdf2ctd()], and that may be convenient for other purposes as well.
 #'
-#' Note that [oce2ncdf()] defaults `varTable` to `"argo"`.
+#' Note that [ctd2ncdf()] defaults `varTable` to `"argo"`.
 #'
 #' The contents of the `data` slot of the oce object `x` are as netcdf
 #' data items.  If flags are present in the `metadata` slot, they are

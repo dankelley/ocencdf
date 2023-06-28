@@ -24,7 +24,7 @@ from messages and warnings, or any larger value to see more
 output that describes the processing steps.}
 }
 \description{
-\code{oce1ncdf()} works by determining the class of its first argument,
+\code{oce2ncdf()} works by determining the class of its first argument,
 and then dispatching to an internal function, as appropriate.
 }
 \author{

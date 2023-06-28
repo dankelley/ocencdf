@@ -27,9 +27,7 @@ creates a netcdf file that can later by read by \code{\link[=ncdf2adv]{ncdf2adv(
 reproduce the original contents.
 }
 \details{
-Note that \code{\link[=oce2ncdf]{oce2ncdf()}} defaults \code{varTable} to \code{"-"},
-meaning that no variable-name translation is done; the names used in
-oce are retained in the file.
+Note that \code{\link[=adv2ncdf]{adv2ncdf()}} defaults \code{varTable} to \code{"adv"}.
 
 The entire contents of the metadata slot are saved in the global attribute named
 \code{"metadata"}, in a JSON format.  The JSON material is developed with

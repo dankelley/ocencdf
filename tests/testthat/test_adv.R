@@ -4,7 +4,7 @@ test_that("adv2ncdf on data(adv) creates a file with expected variable names",
     {
         data(adv, package="oce")
         ncfile <- tempfile(pattern="adv", fileext=".nc")
-        expect_message(adv2ncdf(adv, ncfile=ncfile), "Defaulting varTable")
+        expect_silent(adv2ncdf(adv, ncfile=ncfile))
         o <- nc_open(ncfile)
         expect_equal(names(o$var),
             c("v", "a", "q", "time", "pressure", "timeBurst", "recordsBurst",
@@ -17,7 +17,7 @@ test_that("ncdf2adv creates a file with expected metadata",
     {
         data(adv, package="oce")
         ncfile <- tempfile(pattern="adv", fileext=".nc")
-        expect_message(adv2ncdf(adv, ncfile=ncfile), "Defaulting varTable")
+        expect_silent(adv2ncdf(adv, ncfile=ncfile))
         o <- nc_open(ncfile)
         ADV <- ncdf2adv(ncfile)
         expect_equal(adv@metadata, ADV@metadata)
@@ -28,8 +28,8 @@ test_that("ncdf2adv creates a file with expected data",
     {
         data(adv, package="oce")
         ncfile <- tempfile(pattern="adv", fileext=".nc")
-        expect_message(adv2ncdf(adv, ncfile=ncfile), "Defaulting varTable")
-        o <- nc_open(ncfile)
+        #ncfile <- "adv.nc"
+        expect_silent(adv2ncdf(adv, ncfile=ncfile))
         ADV <- ncdf2adv(ncfile)
         # Convert two numeric things to raw.  (We don't bother trying to
         # save them as raw in adv2ncdf(), but maybe we should.)
@@ -39,9 +39,6 @@ test_that("ncdf2adv creates a file with expected data",
             dim(ADV@data[[item]]) <- dim
         }
         for (name in paste('monkey',names(adv@data))) {
-            # For some reason, expect_equal() and identical() say that recordsBurst
-            # differs in adv and ADV, but that's wrong: both consist of 480 NA values.
-            if (name %in% c("recordsBurst", "timeBurst")) next
             expect_equal(adv@data[[name]], ADV@data[[name]])#, tolerance=1e-3)
             if (is.integer(adv@data[[name]])) {
                 if (!all.equal(adv@data[[name]], ADV@data[[name]])) {

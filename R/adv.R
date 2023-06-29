@@ -43,11 +43,11 @@ adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         stop("'x' must be a adv object")
     if (is.null(varTable)) {
         varTable <- "adv"
-        message("Defaulting varTable to \"", varTable, "\".")
+        #message("Defaulting varTable to \"", varTable, "\".")
     }
     if (is.null(ncfile)) {
         ncfile <- "adv.nc"
-        message("Will save adv object to \"", ncfile, "\".")
+        #message("Will save adv object to \"", ncfile, "\".")
     }
     varTableOrig <- varTable
     varTable <- read.varTable(varTable)
@@ -56,12 +56,12 @@ adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         stop("there is no data item named 'v', which is mandatory for an oce adv object")
     vdim <- dim(x@data$v)
     timeFastLen <- vdim[1]
-    dmsg(debug, "timeFastLen=", timeFastLen, "\n")
+    dmsg(debug, "  Defining overall variables:\n")
+    dmsg(debug, "    timeFastLen: ", timeFastLen, "\n")
     slowIndices <- grep("Slow$", dataNames)
     anySlow <- length(slowIndices) > 0L
-    dmsg(debug, "anySlow=", anySlow, "\n")
     timeSlowLen <- if (anySlow) length(x@data[[slowIndices[1]]]) else 0
-    dmsg(debug, "timeSlowLen=", timeSlowLen, "\n")
+    dmsg(debug, "    timeSlowLen: ", timeSlowLen, "\n")
     timeFast <- ncdim_def(name="TIME_FAST", units="", vals=seq_len(timeFastLen), create_dimvar=FALSE,
         longname="seconds since 1970-01-01 UTC")
     if (anySlow)
@@ -69,27 +69,48 @@ adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             longname="seconds since 1970-01-01 UTC")
     beam <- ncdim_def(name="BEAM", units="", vals=seq_len(vdim[2]))
     vars <- list()
+    #FIXME: use this : FillValue <- getVarInfo("-", varTable=varTable)$FillValue
     # Set up space for each item
+    dmsg(debug, "  Set up space for data items:\n")
     for (name in dataNames) {
+        dmsg(debug, "    name: \"", name, "\"\n")
         item <- x@data[[name]]
         if (is.matrix(item)) {
             if (!identical(dim(item), vdim))
                 stop("dimension of \"", name, "\" (",
                     paste(dim(item), collapse="x"), ") does not match dimension of \"v\" (",
                     paste(vdim, collapse="x"), ")")
-            vars[[name]] <- ncvar_def(name, "", list(timeFast, beam), 1.0e30)
+            if (identical(name, "v")) {
+                dmsg(debug, "      a matrix storing velocity, so given units m/s\n")
+                vars[[name]] <- ncvar_def(name, units="m/s", dim=list(timeFast, beam))
+            } else {
+                dmsg(debug, "      a matrix of unknown units\n")
+                vars[[name]] <- ncvar_def(name, units="", dim=list(timeFast, beam))
+            }
         } else {
             isTime <- grepl("time", name, ignore.case=TRUE)
             if (length(item) == timeSlowLen) {
-                vars[[name]] <- if (isTime)
-                    ncvar_def(name, "seconds since 1970-01-01 UTC", list(timeSlow), 1.0e30, prec="double")
-                else
-                    ncvar_def(name, "", list(timeSlow), 1.0e30)
+                if (isTime) {
+                    dmsg(debug, "      slow time\n")
+                    vars[[name]] <- ncvar_def(name, units="seconds since 1970-01-01 UTC", dim=list(timeSlow), prec="double")
+                } else if (grepl("records", name)) {
+                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeSlow), prec="integer")
+                    dmsg(debug, "      a record-count item at the slow time scale\n")
+                } else {
+                    dmsg(debug, "      an item at the slow time scale\n")
+                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeSlow))
+                }
             } else if (length(item) == timeFastLen) {
-                vars[[name]] <- if (isTime)
-                    ncvar_def(name, "seconds since 1970-01-01 UTC", list(timeFast), 1.0e30, prec="double")
-                else
-                    ncvar_def(name, "", list(timeFast), 1.0e30)
+                if (isTime) {
+                    dmsg(debug, "      fast time\n")
+                    vars[[name]] <- ncvar_def(name, units="seconds since 1970-01-01 UTC", dim=list(timeFast), prec="double")
+                } else if (grepl("records", name)) {
+                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeFast), prec="integer")
+                    dmsg(debug, "      a record-count item at the fast time scale\n")
+                } else {
+                    dmsg(debug, "      an item at the fast time scale\n")
+                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeFast))
+                }
             } else {
                 stop("item \"", name, "\" has length ", length(item), " but it should be either ", timeSlowLen,
                     " or ", timeFastLen)

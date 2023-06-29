@@ -49,23 +49,25 @@ ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
             res@metadata$units[[name]] <- oce::as.unit(units$value)
             dmsg(debug, "    inferring units from \"", units$value, "\"\n")
         } else {
-            dmsg(debug, "    (no units found for this variable)\n")
+            dmsg(debug, "    no units found for this variable\n")
         }
         item <- ncvar_get(f, name)
-        if (is.array(item) && 1 == length(dim(item))) # 1D array converted to 1 column matrix
+        if (is.array(item) && 1 == length(dim(item))) { # 1D array converted to 1 column matrix
+            dmsg(debug, "    converted from 1-column matrix to vector\n")
             item <- as.vector(item)
-        if (tolower(name) == "time") {
-            #message("DAN ncdf2oce() got time")
+        }
+        if (name %in% c("time", "timeBurst", "timeSlow")) {
             if (units$hasatt && grepl("1970-01-01", units$value)) {
-                #message("DAN time case 1")
-                res@data[["time"]] <- numberAsPOSIXct(item)
+                dmsg(debug, "    interpreted as POSIXct(), since an attribute indicates a ref. time\n")
+                res@data[[name]] <- numberAsPOSIXct(item)
             } else {
-                #message("DAN time case 2")
-                res@data[["time"]] <- item
+                dmsg(debug, "    interpreted as a general variable, even though the name indicates a time\n")
+                res@data[[name]] <- item
             }
         } else if (tolower(name) == "station") {
             res@metadata[["station"]] <- trimws(item[1])
         } else {
+            dmsg(debug, "    interpreted as a general variable\n")
             res@data[[name]] <- item
         }
     }

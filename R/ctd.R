@@ -3,7 +3,7 @@
 #' This creates a netcdf file in a convention that permits later reading by
 #' [ncdf2ctd()], and that may be convenient for other purposes as well.
 #'
-#' Note that [oce2ncdf()] defaults `varTable` to `"argo"`.
+#' Note that [ctd2ncdf()] defaults `varTable` to `"argo"`.
 #'
 #' The contents of the `data` slot of the oce object `x` are as netcdf
 #' data items.  If flags are present in the `metadata` slot, they are
@@ -59,11 +59,11 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         stop("'x' must be a ctd object")
     if (is.null(varTable)) {
         varTable <- "argo"
-        message("Defaulting varTable to \"", varTable, "\".")
+        #message("Defaulting varTable to \"", varTable, "\".")
     }
     if (is.null(ncfile)) {
         ncfile <- "ctd.nc"
-        message("Will save ctd object to \"", ncfile, "\".")
+        #message("Will save ctd object to \"", ncfile, "\".")
     }
     varTableOrig <- varTable
     varTable <- read.varTable(varTable)
@@ -91,7 +91,6 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             name=varInfo$name,
             units=units,
             longname=varInfo$long_name,
-            missval=varTable$values$missing_value,
             dim=NLEVELdim,
             prec="float")
         standardNames[[name]] <- varInfo$standard_name
@@ -106,7 +105,6 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             name=flagnameNCDF,
             units="",
             longname=paste("QC for ", flagname),
-            missval=varTable$values$missing_value,
             dim=NLEVELdim,
             prec="float")
     }
@@ -120,7 +118,6 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             name=getVarInfo(name="longitude", varTable=varTable)$name,
             units="degree_east",
             longname="Longitude of the station, best estimate",
-            missval=varTable$values$missing_value,
             dim=NPROFILEdim,
             prec="float")
         standardNames[["longitude"]] <- "longitude"
@@ -129,7 +126,6 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             name=getVarInfo(name="latitude", varTable=varTable)$name,
             units="degree_north",
             longname="Latitude of the station, best estimate",
-            missval=varTable$values$missing_value,
             dim=NPROFILEdim,
             prec="float")
         standardNames[["latitude"]] <- "latitude"
@@ -140,7 +136,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     for (name in names(x@data)) {
         dmsg(debug, "    ", name, " (", NLEVEL, " values)\n")
         vals <- x@data[[name]]
-        vals[is.na(vals)] <- varTable$values$missing_value
+        #vals[is.na(vals)] <- varTable$values$missing_value
         if (grepl("temperature", name, ignore.case=TRUE)) {
             scale <- x[[paste0(name, "Unit")]]$scale
             if (grepl("IPTS-68", scale, ignore.case=TRUE)) {
@@ -171,7 +167,9 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     }
     dmsg(debug, "  Storing global attributes.\n")
     dmsg(debug, "    metadata_explanation\n")
-    explanation <- paste(readLines(system.file("extdata", "ncdf_explanation.md", package="ocencdf")), collapse="\n")
+    explanation <- paste("This file was created with ctd2ncdf from the ocencdf R package,\n",
+        "available at www.github.com/dankelley/ocencdf.\n",
+        readLines(system.file("extdata", "ncdf_explanation.md", package="ocencdf")), collapse="\n")
     ncatt_put(nc, 0, "metadata_explanation", explanation)
     dmsg(debug, "    metadata\n")
     ncatt_put(nc, 0, "metadata", metadata2json(x@metadata))

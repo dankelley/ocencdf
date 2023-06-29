@@ -27,7 +27,7 @@ This creates a netcdf file in a convention that permits later reading by
 \code{\link[=ncdf2ctd]{ncdf2ctd()}}, and that may be convenient for other purposes as well.
 }
 \details{
-Note that \code{\link[=oce2ncdf]{oce2ncdf()}} defaults \code{varTable} to \code{"argo"}.
+Note that \code{\link[=ctd2ncdf]{ctd2ncdf()}} defaults \code{varTable} to \code{"argo"}.
 
 The contents of the \code{data} slot of the oce object \code{x} are as netcdf
 data items.  If flags are present in the \code{metadata} slot, they are

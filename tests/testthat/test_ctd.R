@@ -6,10 +6,7 @@ stn <- section[["station", 100]]
 test_that("ctd2nc on data(ctd) creates a file with expected variable names",
     {
         ncfile <- tempfile(pattern="ctd", fileext=".nc")
-        expect_message(
-            expect_message(ctd2ncdf(ctd, ncfile=ncfile),
-                "Defaulting varTable"),
-            "Converting temperature")
+        expect_message(ctd2ncdf(ctd, ncfile=ncfile), "Converting temperature")
         o <- nc_open(ncfile)
         expect_equal(names(o$var),
             c("scan", "timeS", "PRES", "depth", "TEMP", "PSAL", "flag"))
@@ -19,10 +16,7 @@ test_that("ctd2nc on data(ctd) creates a file with expected variable names",
 test_that("ctd2nc on a section station creates a file with expected variable names",
     {
         ncfile <- tempfile(pattern="ctd", fileext=".nc")
-        expect_message(
-            expect_message(ctd2ncdf(stn, ncfile=ncfile),
-                "Defaulting varTable"),
-            "Converting temperature")
+        expect_message(ctd2ncdf(stn, ncfile=ncfile), "Converting temperature")
         #o <- nc_open(ncfile)
         #expect_equal(names(o$var),
         #    c("scan", "timeS", "PRES", "depth", "TEMP", "PSAL", "flag", "TIME",

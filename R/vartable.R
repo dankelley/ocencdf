@@ -165,7 +165,7 @@ getVarInfo <- function(name=NULL, varTable=NULL, oce=NULL, debug=0)
     }
     dmsg(debug, "} # getVarInfo()\n")
     rval
-}
+} # getVarInfo()
 
 #' Translate netcdf names to oce  names
 #'

@@ -4,9 +4,7 @@
 #' creates a netcdf file that can later by read by [ncdf2adp()] to approximately
 #' reproduce the original contents.
 #'
-#' Note that [oce2ncdf()] defaults `varTable` to `"-"`,
-#' meaning that no variable-name translation is done; the names used in
-#' oce are retained in the file.
+#' Note that [adp2ncdf()] defaults `varTable` to `"adp"`.
 #'
 #' The entire contents of the metadata slot are saved in the global attribute named
 #' `"metadata"`, in a JSON format.  The JSON material is developed with
@@ -54,12 +52,12 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     if (!inherits(x, "adp"))
         stop("'x' must be a adp object")
     if (is.null(varTable)) {
-        varTable <- "-"
-        message("Defaulting varTable to \"", varTable, "\".")
+        varTable <- "adp"
+        #message("Defaulting varTable to \"", varTable, "\".")
     }
     if (is.null(ncfile)) {
         ncfile <- "adp.nc"
-        message("Will save adp object to \"", ncfile, "\".")
+        #message("Will save adp object to \"", ncfile, "\".")
     }
     varTableOrig <- varTable
     varTable <- read.varTable(varTable)
@@ -77,26 +75,27 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         longname="Distance to cell")
     beam <- ncdim_def(name="BEAM", units="", vals=seq_len(vdim[3]))
     vars <- list()
+    FillValue <- getVarInfo("-", varTable=varTable)$FillValue
     # time and distance (do they show up as n$var now?)
     dmsg(debug, "    time (length ", vdim[1], ")\n")
-    vars[["time"]] <- ncvar_def(name="time", units="seconds since 1970-01-01 UTC", dim=time, missval=1.0e30, prec="double")
+    vars[["time"]] <- ncvar_def(name="time", units="seconds since 1970-01-01 UTC", dim=time, prec="double")
     dmsg(debug, "    distance (length ", vdim[2], ")\n")
-    vars[["distance"]] <- ncvar_def(name="distance", units="m", dim=distance, missval=1.0e30)
+    vars[["distance"]] <- ncvar_def(name="distance", units="m", dim=distance)
     dmsg(debug, "  Setting up variable dimensions for ", paste(vdim, collapse="x"), " arrays:\n")
     # array data
     dmsg(debug, "    v\n")
-    vars[["v"]] <- ncvar_def(name="v", units="m/s", dim=list(time, distance, beam), missval=1.0e30)
+    vars[["v"]] <- ncvar_def(name="v", units="m/s", dim=list(time, distance, beam))
     if (extant$a) {
         dmsg(debug, "    a\n")
-        vars[["a"]] <- ncvar_def("a", "", list(time, distance, beam), 1.0e30)
+        vars[["a"]] <- ncvar_def("a", units="", dim=list(time, distance, beam))
     }
     if (extant$g) {
         dmsg(debug, "    g\n")
-        vars[["g"]] <- ncvar_def("g", "", list(time, distance, beam), 1.0e30)
+        vars[["g"]] <- ncvar_def("g", units="", dim=list(time, distance, beam))
     }
     if (extant$q) {
         dmsg(debug, "    q\n")
-        vars[["q"]] <- ncvar_def("q", "", list(time, distance, beam), 1.0e30)
+        vars[["q"]] <- ncvar_def("q", units="", dim=list(time, distance, beam))
     }
     # time-series data
     dmsg(debug, "  Setting up dimensions for time-series vectors of length ", vdim[1], ":\n")
@@ -104,7 +103,7 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     for (item in names(x@data)) {
         if (item != "time" && item != "distance" && is.vector(x@data[[item]])) {
             dmsg(debug, "    ", item, "\n")
-            vars[[item]] <- ncvar_def(item, "", time, 1.0e30)
+            vars[[item]] <- ncvar_def(item, units="", dim=time)
         }
     }
     nc <- nc_create(ncfile, vars)
@@ -131,7 +130,9 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     }
     dmsg(debug, "  Storing global attributes:\n")
     dmsg(debug, "    metadata_explanation\n")
-    explanation <- paste(readLines(system.file("extdata", "ncdf_explanation.md", package="ocencdf")), collapse="\n")
+    explanation <- paste("This file was created with adp2ncdf from the ocencdf R package,\n",
+        "available at www.github.com/dankelley/ocencdf.\n",
+        readLines(system.file("extdata", "ncdf_explanation.md", package="ocencdf")), collapse="\n")
     ncatt_put(nc, 0, "metadata_explanation", explanation)
     dmsg(debug, "    metadata\n")
     ncatt_put(nc, 0, "metadata", metadata2json(x@metadata))

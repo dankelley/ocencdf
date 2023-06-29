@@ -1,3 +1,9 @@
+# ocencdf 0.0.3
+
+* Handle ADV data with `adv2ncdf()` and `ncdf2adv()`.
+* Change metadata from YAML to JSON format.
+* Add a global attribute explaining how to use metadata.
+
 # ocencdf 0.0.2
 
 * Handle ADCP data with `adp2ncdf()` and `ncdf2adp()`.

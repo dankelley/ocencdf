@@ -1,0 +1,37 @@
+type:
+  comment: A varTable for adp data.
+  date: '2022-06-28'
+  name: adp
+  version: 1
+units:
+  1/m:
+    name: m-1
+  dbar:
+    name: decibar
+  degree * C:
+    name: degree_Celcius
+  degree * E:
+    name: degree_east
+  degree * N:
+    name: degree_north
+  m / s:
+    name: meters_per_second
+values:
+  missing_value: 99999.0
+variables:
+  v:
+    name: v
+    standard_name: velocity
+  pressure:
+    name: pressure
+    long_name: Sea water pressure, equals 0 at sea-level
+    standard_name: sea_water_pressure
+  salinity:
+    name: PSAL
+    long_name: Practical Salinity
+    standard_name: sea_water_salinity
+  temperature:
+    name: TEMP
+    long_name: Sea temperature in-situ ITS-90 scale
+    standard_name: sea_water_temperature
+

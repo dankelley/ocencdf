@@ -12,6 +12,16 @@ makeNumeric <- function(debug, x)
     x
 }
 
+typeNcdf <- function(x)
+{
+    Rtype <- typeof(x)
+    switch(Rtype,
+        double="double",
+        integer="integer",
+        raw="byte",
+        character="char")
+}
+
 dmsg <- function(debug, ...)
 {
     if (debug > 0)

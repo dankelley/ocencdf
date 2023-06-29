@@ -28,6 +28,9 @@
     <loc>/reference/adp2ncdf.html</loc>
   </url>
   <url>
+    <loc>/reference/adv2ncdf.html</loc>
+  </url>
+  <url>
     <loc>/reference/ctd2ncdf.html</loc>
   </url>
   <url>
@@ -37,7 +40,16 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/json2metadata.html</loc>
+  </url>
+  <url>
+    <loc>/reference/metadata2json.html</loc>
+  </url>
+  <url>
     <loc>/reference/ncdf2adp.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ncdf2adv.html</loc>
   </url>
   <url>
     <loc>/reference/ncdf2ctd.html</loc>
@@ -53,6 +65,9 @@
   </url>
   <url>
     <loc>/reference/oceNames2ncdfNames.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ocencdf.html</loc>
   </url>
   <url>
     <loc>/reference/read.varTable.html</loc>

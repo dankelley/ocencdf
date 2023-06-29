@@ -18,7 +18,7 @@ ncdf2ctd(), and that may be convenient for other purposes as well."><!-- mathjax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ocencdf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.3</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@ output that describes the processing steps.</p></dd>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>Note that <code><a href="oce2ncdf.html">oce2ncdf()</a></code> defaults <code>varTable</code> to <code>"argo"</code>.</p>
+    <p>Note that <code>ctd2ncdf()</code> defaults <code>varTable</code> to <code>"argo"</code>.</p>
 <p>The contents of the <code>data</code> slot of the oce object <code>x</code> are as netcdf
 data items.  If flags are present in the <code>metadata</code> slot, they are
 also saved as data, with names ending in <code>_QC</code>.</p>
@@ -123,7 +123,6 @@ individual global attributes: <code>"latitude"</code>, <code>"longitude"</code>,
 <span class="r-in"><span><span class="co"># example 1: a ctd file without per-variable QC flags</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ctd</span>, package<span class="op">=</span><span class="st">"oce"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="oce2ncdf.html">oce2ncdf</a></span><span class="op">(</span><span class="va">ctd</span>, ncfile<span class="op">=</span><span class="st">"ctd.nc"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Defaulting varTable to "argo".</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Converting temperature from IPTS-68 scale to ITS-90 scale.</span>
 <span class="r-in"><span><span class="va">CTD</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dankelley.github.io/oce/reference/as.ctd.html" class="external-link">as.ctd</a></span><span class="op">(</span><span class="fu"><a href="ncdf2oce.html">ncdf2oce</a></span><span class="op">(</span><span class="st">"ctd.nc"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">CTD</span><span class="op">)</span></span></span>
@@ -149,8 +148,8 @@ individual global attributes: <code>"latitude"</code>, <code>"longitude"</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Processing Log</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-11 11:48:56 UTC: `create 'ctd' object`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-11 11:48:56 UTC: `as.ctd(salinity = ncdf2oce("ctd.nc"))`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-29 18:18:47 UTC: `create 'ctd' object`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-29 18:18:47 UTC: `as.ctd(salinity = ncdf2oce("ctd.nc"))`</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">CTD</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="ctd2ncdf-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -158,7 +157,6 @@ individual global attributes: <code>"latitude"</code>, <code>"longitude"</code>,
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">section</span>, package<span class="op">=</span><span class="st">"oce"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">stn</span> <span class="op">&lt;-</span> <span class="va">section</span><span class="op">[[</span><span class="st">"station"</span>, <span class="fl">100</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="oce2ncdf.html">oce2ncdf</a></span><span class="op">(</span><span class="va">stn</span>, ncfile<span class="op">=</span><span class="st">"stn.nc"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Defaulting varTable to "argo".</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Converting temperature from IPTS-68 scale to ITS-90 scale.</span>
 <span class="r-in"><span><span class="va">STN</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dankelley.github.io/oce/reference/as.ctd.html" class="external-link">as.ctd</a></span><span class="op">(</span><span class="fu"><a href="ncdf2oce.html">ncdf2oce</a></span><span class="op">(</span><span class="st">"stn.nc"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">STN</span><span class="op">)</span></span></span>
@@ -185,8 +183,8 @@ individual global attributes: <code>"latitude"</code>, <code>"longitude"</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Data-quality Flag Scheme</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     name    "WHP bottle"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     mapping list(no_information=1, no_problems_noted=2, leaking=3, did_not_trip=4, not_reported=5, discrepency=6, unknown_problem=7, did_not_trip=8, no_sample=9)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     default c(1, 3, 4, 5, 6, 7, 8, 9)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mapping list(no_information=1L, no_problems_noted=2L, leaking=3L, did_not_trip=4L, not_reported=5L, discrepency=6L, unknown_problem=7L, did_not_trip.1=8L, no_sample=9L)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     default c(1L, 3L, 4L, 5L, 6L, 7L, 8L, 9L)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Data-quality Flags</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -201,8 +199,8 @@ individual global attributes: <code>"latitude"</code>, <code>"longitude"</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Processing Log</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-11 11:48:57 UTC: `create 'ctd' object`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-11 11:48:57 UTC: `as.ctd(salinity = ncdf2oce("stn.nc"))`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-29 18:18:48 UTC: `create 'ctd' object`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-06-29 18:18:48 UTC: `as.ctd(salinity = ncdf2oce("stn.nc"))`</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">STN</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="ctd2ncdf-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>

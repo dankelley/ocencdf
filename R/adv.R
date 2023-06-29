@@ -56,7 +56,7 @@ adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         stop("there is no data item named 'v', which is mandatory for an oce adv object")
     vdim <- dim(x@data$v)
     timeFastLen <- vdim[1]
-    dmsg(debug, "  Defining overall variables:\n")
+    dmsg(debug, "  Define dimensions:\n")
     dmsg(debug, "    timeFastLen: ", timeFastLen, "\n")
     slowIndices <- grep("Slow$", dataNames)
     anySlow <- length(slowIndices) > 0L
@@ -73,7 +73,8 @@ adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     # Set up space for each item
     dmsg(debug, "  Set up space for data items:\n")
     for (name in dataNames) {
-        dmsg(debug, "    name: \"", name, "\"\n")
+        type <- typeNcdf(x@data[[name]])
+        dmsg(debug, "    ", name, " (storage type: ", type, ")\n")
         item <- x@data[[name]]
         if (is.matrix(item)) {
             if (!identical(dim(item), vdim))
@@ -81,35 +82,35 @@ adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
                     paste(dim(item), collapse="x"), ") does not match dimension of \"v\" (",
                     paste(vdim, collapse="x"), ")")
             if (identical(name, "v")) {
-                dmsg(debug, "      a matrix storing velocity, so given units m/s\n")
-                vars[[name]] <- ncvar_def(name, units="m/s", dim=list(timeFast, beam))
+                dmsg(debug, "      a matrix holding velocity, so given units m/s\n")
+                vars[[name]] <- ncvar_def(name, units="m/s", dim=list(timeFast, beam), prec=type)
             } else {
                 dmsg(debug, "      a matrix of unknown units\n")
-                vars[[name]] <- ncvar_def(name, units="", dim=list(timeFast, beam))
+                vars[[name]] <- ncvar_def(name, units="", dim=list(timeFast, beam), prec=type)
             }
         } else {
             isTime <- grepl("time", name, ignore.case=TRUE)
             if (length(item) == timeSlowLen) {
                 if (isTime) {
                     dmsg(debug, "      slow time\n")
-                    vars[[name]] <- ncvar_def(name, units="seconds since 1970-01-01 UTC", dim=list(timeSlow), prec="double")
+                    vars[[name]] <- ncvar_def(name, units="seconds since 1970-01-01 UTC", dim=list(timeSlow), prec=type)
                 } else if (grepl("records", name)) {
-                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeSlow), prec="integer")
                     dmsg(debug, "      a record-count item at the slow time scale\n")
+                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeSlow), prec=type)
                 } else {
                     dmsg(debug, "      an item at the slow time scale\n")
-                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeSlow))
+                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeSlow), prec=type)
                 }
             } else if (length(item) == timeFastLen) {
                 if (isTime) {
                     dmsg(debug, "      fast time\n")
-                    vars[[name]] <- ncvar_def(name, units="seconds since 1970-01-01 UTC", dim=list(timeFast), prec="double")
+                    vars[[name]] <- ncvar_def(name, units="seconds since 1970-01-01 UTC", dim=list(timeFast), prec=typeNcdf(x@data[[name]]))
                 } else if (grepl("records", name)) {
-                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeFast), prec="integer")
                     dmsg(debug, "      a record-count item at the fast time scale\n")
+                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeFast), prec=type)
                 } else {
                     dmsg(debug, "      an item at the fast time scale\n")
-                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeFast))
+                    vars[[name]] <- ncvar_def(name, units="", dim=list(timeFast), prec=type)
                 }
             } else {
                 stop("item \"", name, "\" has length ", length(item), " but it should be either ", timeSlowLen,
@@ -196,7 +197,22 @@ adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
 ncdf2adv <- function(ncfile=NULL, varTable=NULL, debug=0)
 {
     adv <- ncdf2oce(ncfile=ncfile, varTable=varTable, debug=debug)
-    # Need to tailor the types of some things that were not stored properly
+    dataNames <- names(adv@data)
+    # Recast 'a' and 'q' as raw values (called byte in netcdf)
+    for (item in c("a", "q")) {
+        if (item %in% dataNames) {
+            dim <- dim(adv@data[[item]])
+            adv@data[[item]] <- as.raw(adv@data[[item]])
+            dim(adv@data[[item]]) <- dim
+        }
+    }
+    # Time-related variables need to be made POSIXct.
+    for (item in c("time", "timeBurst", "timeSlow")) {
+        if (item %in% dataNames) {
+            adv@data[[item]] <- as.POSIXct(adv@data[[item]], tz="UTC")
+        }
+    }
+    # Tailor the types of some things that were not stored properly
     # in the Netcdf.  I think it's clearer to do this here, as opposed to
     # in ncdf2oce().
     mnames <- names(adv@metadata)

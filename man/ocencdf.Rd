@@ -3,22 +3,22 @@
 \docType{package}
 \name{ocencdf}
 \alias{ocencdf}
-\title{ocencdf: Save oce Objects in Netcdf Files}
+\title{ocencdf: Save oce Objects in NetCDF Files}
 \description{
 The ocencdf package provides functions for saving objects
-created by the oce package into Netcdf files.
+created by the oce package into NetCDF files.
 
 Oce objects have two main components, named 'data' and 'metadata'.
 
 The 'data' contents take the form of vector and array data, and hence can be
-stored in the DATA section of the Netcdf file.  Since these items can be
-accessed easily by standard means of reading Netcdf files, nothing special need
+stored in the DATA section of the NetCDF file.  Since these items can be
+accessed easily by standard means of reading NetCDF files, nothing special need
 be explained here.
 
 However, the 'metadata' contents of oce objects take the form of a tree-like
-structure that cannot be stored in the DATA section of a Netcdf file, which is
+structure that cannot be stored in the DATA section of a NetCDF file, which is
 designed for vectors and arrays.  For this reason, the 'metadata' contents are
-stored in a global attribute of the Netcdf file, named "metadata".  It is in
+stored in a global attribute of the NetCDF file, named "metadata".  It is in
 JSON format, for ease of parsing in many languages. In R, for example, this can
 be converted using the json2metadata() function of the 'ocencdf' package. This
 does more than just translate, however, because JSON format lacks the ability to

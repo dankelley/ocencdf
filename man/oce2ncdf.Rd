@@ -2,7 +2,7 @@
 % Please edit documentation in R/oce2ncdf.R
 \name{oce2ncdf}
 \alias{oce2ncdf}
-\title{Save an oce-class object as a netcdf file.}
+\title{Save an oce-class object as a NetCDF file.}
 \usage{
 oce2ncdf(x, varTable = NULL, ncfile = NULL, debug = 0)
 }

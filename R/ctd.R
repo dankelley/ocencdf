@@ -1,15 +1,15 @@
-#' Save a ctd object to a netcdf file
+#' Save a ctd object to a NetCDF file
 #'
-#' This creates a netcdf file in a convention that permits later reading by
+#' This creates a NetCDF file in a convention that permits later reading by
 #' [ncdf2ctd()], and that may be convenient for other purposes as well.
 #'
 #' Note that [ctd2ncdf()] defaults `varTable` to `"argo"`.
 #'
-#' The contents of the `data` slot of the oce object `x` are as netcdf
+#' The contents of the `data` slot of the oce object `x` are as NetCDF
 #' data items.  If flags are present in the `metadata` slot, they are
 #' also saved as data, with names ending in `_QC`.
 #'
-#' In addition to storage in the netcdf data section, several attributes
+#' In addition to storage in the NetCDF data section, several attributes
 #' are saved as well. These include units for the data, which are tied
 #' to the corresponding variables.  The entire `metadata` slot is stored
 #' as a global attribute named `metadata`, so that a later call to
@@ -78,7 +78,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     # TO DO: determine whether we ought to examine the units in the oce object
     vars <- list()
     standardNames <- list() # called STANDARD_NAME in argo files
-    dmsg(debug, "  Defining netcdf structure.\n")
+    dmsg(debug, "  Defining NetCDF structure.\n")
     dmsg(debug, "    defining variable properties\n")
     for (name in names(x@data)) {
         dmsg(debug, "      ", name, "\n")
@@ -176,7 +176,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     # Store some individual metadata items, for simple access
     for (item in c("station", "latitude", "longitude")) {
         dmsg(debug, "    ", item, "\n")
-        storeNetcdfAttribute(x, item, nc, item)
+        storeNetCDFAttribute(x, item, nc, item)
     }
     dmsg(debug, "    varTable\n")
     ncatt_put(nc=nc, varid=0, attname="varTable", attval=varTableOrig)
@@ -184,13 +184,13 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     ncatt_put(nc=nc, varid=0, attname="class", attval=as.character(class(x)))
     dmsg(debug, "    creator\n")
     ncatt_put(nc=nc, varid=0, attname="creator", attval=paste0("ocencdf version ", packageVersion("ocencdf")))
-    dmsg(debug, "  Closing netcdf file.\n")
+    dmsg(debug, "  Closing NetCDF file.\n")
     nc_close(nc)
     dmsg(debug, paste0("} # ctd2ncdf created file \"", ncfile, "\"\n"))
 }
 
 
-#' Read a netcdf file and create a ctd object
+#' Read a NetCDF file and create a ctd object
 #'
 #' @inheritParams ncdf2oce
 #'

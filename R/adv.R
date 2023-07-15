@@ -1,7 +1,7 @@
-#' Save an adv object to a netcdf file
+#' Save an adv object to a NetCDF file
 #'
 #' Given an `adv` object created by the `oce` package, this function
-#' creates a netcdf file that can later by read by [ncdf2adv()] to approximately
+#' creates a NetCDF file that can later by read by [ncdf2adv()] to approximately
 #' reproduce the original contents.
 #'
 #' Note that [adv2ncdf()] defaults `varTable` to `"adv"`.
@@ -22,7 +22,7 @@
 #' data(adv, package="oce")
 #' summary(adv)
 #' plot(adv)
-#' # Transfer to netcdf and back to see if results make sense
+#' # Transfer to NetCDF and back to see if results make sense
 #' oce2ncdf(adv, ncfile="adv.nc")
 #' ADV <- ncdf2adv("adv.nc")
 #' summary(ADV)
@@ -159,11 +159,11 @@ adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     dmsg(debug, paste0("} # adv2ncdf created file \"", ncfile, "\"\n"))
 }
 
-#' Read a netcdf file and create an adv object
+#' Read a NetCDF file and create an adv object
 #'
 #' This works by calling [ncdf2oce()] and then using [class()] on
 #' the result to make it be of subclass `"adv"`.  This is intended
-#' to work with Netcdf files created with [adv2ncdf()], which embeds
+#' to work with NetCDF files created with [adv2ncdf()], which embeds
 #' sufficient information in the file to permit [ncdf2adv()] to
 #' reconstruct the original adv object. See the documentation
 #' for [adv2ncdf()] to learn more about what it stores, and therefore
@@ -182,7 +182,7 @@ adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
 #' data(adv, package="oce")
 #' summary(adv)
 #' plot(adv)
-#' # Transfer to netcdf and back to see if results make sense
+#' # Transfer to NetCDF and back to see if results make sense
 #' oce2ncdf(adv, ncfile="adv.nc")
 #' ADV <- ncdf2adv("adv.nc")
 #' summary(ADV)
@@ -198,7 +198,7 @@ ncdf2adv <- function(ncfile=NULL, varTable=NULL, debug=0)
 {
     adv <- ncdf2oce(ncfile=ncfile, varTable=varTable, debug=debug)
     dataNames <- names(adv@data)
-    # Recast 'a' and 'q' as raw values (called byte in netcdf)
+    # Recast 'a' and 'q' as raw values (called byte in NetCDF)
     for (item in c("a", "q")) {
         if (item %in% dataNames) {
             dim <- dim(adv@data[[item]])
@@ -213,7 +213,7 @@ ncdf2adv <- function(ncfile=NULL, varTable=NULL, debug=0)
         }
     }
     # Tailor the types of some things that were not stored properly
-    # in the Netcdf.  I think it's clearer to do this here, as opposed to
+    # in the NetCDF.  I think it's clearer to do this here, as opposed to
     # in ncdf2oce().
     mnames <- names(adv@metadata)
     if ("measurementStart" %in% mnames)

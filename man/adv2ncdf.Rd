@@ -2,7 +2,7 @@
 % Please edit documentation in R/adv.R
 \name{adv2ncdf}
 \alias{adv2ncdf}
-\title{Save an adv object to a netcdf file}
+\title{Save an adv object to a NetCDF file}
 \usage{
 adv2ncdf(x, varTable = NULL, ncfile = NULL, debug = 0)
 }
@@ -23,7 +23,7 @@ output that describes the processing steps.}
 }
 \description{
 Given an \code{adv} object created by the \code{oce} package, this function
-creates a netcdf file that can later by read by \code{\link[=ncdf2adv]{ncdf2adv()}} to approximately
+creates a NetCDF file that can later by read by \code{\link[=ncdf2adv]{ncdf2adv()}} to approximately
 reproduce the original contents.
 }
 \details{
@@ -41,7 +41,7 @@ library(ocencdf)
 data(adv, package="oce")
 summary(adv)
 plot(adv)
-# Transfer to netcdf and back to see if results make sense
+# Transfer to NetCDF and back to see if results make sense
 oce2ncdf(adv, ncfile="adv.nc")
 ADV <- ncdf2adv("adv.nc")
 summary(ADV)

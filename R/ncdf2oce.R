@@ -1,15 +1,15 @@
 # See e.g. ctd.R for ncdf2ctd().
 
-#' Read a netcdf file and create a general oce object
+#' Read a NetCDF file and create a general oce object
 #'
-#' Read a netcdf file such as are created with e.g. [oce2ncdf()],
+#' Read a NetCDF file such as are created with e.g. [oce2ncdf()],
 #' interpreting variable names according to `varTable` (if provided).
-#' This is intended to work with netcdf files created by
-#' [oce2ncdf()], but it may also handle some other netcdf files.
+#' This is intended to work with NetCDF files created by
+#' [oce2ncdf()], but it may also handle some other NetCDF files.
 #' (Try [oce::read.netcdf()] if this fails.  If that also fails,
 #' you will need to work with the `ncdf4` library directly.)
 #' Note that the returned object does *not* get a specialized oce class,
-#' because this is not known within netcdf files.  For ctd data,
+#' because this is not known within NetCDF files.  For ctd data,
 #' try [ncdf2ctd()] instead of [ncdf2oce()], or wrap the result
 #' of calling the latter in [oce::as.ctd()].
 #'

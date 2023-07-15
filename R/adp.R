@@ -1,7 +1,7 @@
-#' Save an adp object to a netcdf file
+#' Save an adp object to a NetCDF file
 #'
 #' Given an `adp` object created by the `oce` package, this function
-#' creates a netcdf file that can later by read by [ncdf2adp()] to approximately
+#' creates a NetCDF file that can later by read by [ncdf2adp()] to approximately
 #' reproduce the original contents.
 #'
 #' Note that [adp2ncdf()] defaults `varTable` to `"adp"`.
@@ -32,7 +32,7 @@
 #' data(adp, package="oce")
 #' summary(adp)
 #' plot(adp)
-#' # Transfer to netcdf and back to see if results make sense
+#' # Transfer to NetCDF and back to see if results make sense
 #' oce2ncdf(adp, ncfile="adp.nc")
 #' ADP <- ncdf2adp("adp.nc")
 #' summary(ADP)
@@ -142,7 +142,7 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             "numberOfBeams", "numberOfBeams",
             "oceCoordinate")) {
         dmsg(debug, "    ", item, "\n")
-        storeNetcdfAttribute(x, item, nc, item)
+        storeNetCDFAttribute(x, item, nc, item)
     }
     dmsg(debug, "    varTable\n")
     ncatt_put(nc=nc, varid=0, attname="varTable", attval=varTableOrig)
@@ -154,11 +154,11 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
     dmsg(debug, paste0("} # adp2ncdf created file \"", ncfile, "\"\n"))
 }
 
-#' Read a netcdf file and create an adp object
+#' Read a NetCDF file and create an adp object
 #'
 #' This works by calling [ncdf2oce()] and then using [class()] on
 #' the result to make it be of subclass `"adp"`.  This is intended
-#' to work with Netcdf files created with [adp2ncdf()], which embeds
+#' to work with NetCDF files created with [adp2ncdf()], which embeds
 #' sufficient information in the file to permit [ncdf2adp()] to
 #' reconstruct the original adp object. See the documentation
 #' for [adp2ncdf()] to learn more about what it stores, and therefore
@@ -177,7 +177,7 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
 #' data(adp, package="oce")
 #' summary(adp)
 #' plot(adp)
-#' # Transfer to netcdf and back to see if results make sense
+#' # Transfer to NetCDF and back to see if results make sense
 #' oce2ncdf(adp, ncfile="adp.nc")
 #' ADP <- ncdf2adp("adp.nc")
 #' summary(ADP)

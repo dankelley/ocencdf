@@ -2,7 +2,7 @@
 % Please edit documentation in R/vartable.R
 \name{ncdfNames2oceNames}
 \alias{ncdfNames2oceNames}
-\title{Translate netcdf names to oce  names}
+\title{Translate NetCDF names to oce  names}
 \usage{
 ncdfNames2oceNames(names, varTable = NULL, debug = 0)
 }
@@ -19,7 +19,7 @@ from messages and warnings, or any larger value to see more
 output that describes the processing steps.}
 }
 \description{
-Translate netcdf names to oce  names
+Translate NetCDF names to oce  names
 }
 \author{
 Dan Kelley

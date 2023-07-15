@@ -2,7 +2,7 @@
 % Please edit documentation in R/adp.R
 \name{adp2ncdf}
 \alias{adp2ncdf}
-\title{Save an adp object to a netcdf file}
+\title{Save an adp object to a NetCDF file}
 \usage{
 adp2ncdf(x, varTable = NULL, ncfile = NULL, debug = 0)
 }
@@ -23,7 +23,7 @@ output that describes the processing steps.}
 }
 \description{
 Given an \code{adp} object created by the \code{oce} package, this function
-creates a netcdf file that can later by read by \code{\link[=ncdf2adp]{ncdf2adp()}} to approximately
+creates a NetCDF file that can later by read by \code{\link[=ncdf2adp]{ncdf2adp()}} to approximately
 reproduce the original contents.
 }
 \details{
@@ -51,7 +51,7 @@ library(ocencdf)
 data(adp, package="oce")
 summary(adp)
 plot(adp)
-# Transfer to netcdf and back to see if results make sense
+# Transfer to NetCDF and back to see if results make sense
 oce2ncdf(adp, ncfile="adp.nc")
 ADP <- ncdf2adp("adp.nc")
 summary(ADP)

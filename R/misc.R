@@ -28,7 +28,7 @@ dmsg <- function(debug, ...)
         cat(..., sep="")
 }
 
-storeNetcdfAttribute <- function(x, ocename, nc, ncname)
+storeNetCDFAttribute <- function(x, ocename, nc, ncname)
 {
     if (missing(ncname))
         ncname <- ocename

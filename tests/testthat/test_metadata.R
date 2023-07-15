@@ -1,7 +1,7 @@
 # vim:textwidth=80:expandtab:shiftwidth=4:softtabstop=4
 
 # Test the scheme used to convert metadata contents to a JSON string, for
-# storage in the netcdf file as a global attribute named 'metadata'.
+# storage in the NetCDF file as a global attribute named 'metadata'.
 
 test_that("ctd metadata",
     {

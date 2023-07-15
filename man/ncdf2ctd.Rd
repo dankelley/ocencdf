@@ -2,7 +2,7 @@
 % Please edit documentation in R/ctd.R
 \name{ncdf2ctd}
 \alias{ncdf2ctd}
-\title{Read a netcdf file and create a ctd object}
+\title{Read a NetCDF file and create a ctd object}
 \usage{
 ncdf2ctd(ncfile = NULL, varTable = NULL, debug = 0)
 }
@@ -21,7 +21,7 @@ output that describes the processing steps.}
 \code{\link[=ncdf2ctd]{ncdf2ctd()}} returns an \linkS4class{ctd} object.
 }
 \description{
-Read a netcdf file and create a ctd object
+Read a NetCDF file and create a ctd object
 }
 \seealso{
 Other things related to CTD data: 

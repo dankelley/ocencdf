@@ -1,4 +1,4 @@
-#' Save an oce-class object as a netcdf file.
+#' Save an oce-class object as a NetCDF file.
 #'
 #' `oce2ncdf()` works by determining the class of its first argument,
 #' and then dispatching to an internal function, as appropriate.

@@ -2,7 +2,7 @@
 #'
 #' This function, meant for internal use by the package, uses
 #' [yaml::yaml.load_file()] to read YAML files that describe the
-#' output netcdf format created by e.g. [ctd2ncdf()]. Users wishing
+#' output NetCDF format created by e.g. [ctd2ncdf()]. Users wishing
 #' to define such files for their own use should follow the pattern
 #' of the source directory `inst/extdata/argo.yml`.
 #'
@@ -24,7 +24,7 @@
 #' @template debugTemplate
 #'
 #' @return [read.varTable()] returns a list that specifies some information
-#' to be stored in netcdf files created by e.g. [ctd2ncdf()].
+#' to be stored in NetCDF files created by e.g. [ctd2ncdf()].
 #'
 #' @examples
 #' library(ocencdf)
@@ -75,7 +75,7 @@ read.varTable <- function(varTable="argo", debug=0)
 #' Get information on a variable, using varTable
 #'
 #' This is used by e.g. [ctd2ncdf()] to determine how to describe the variable in a
-#' particular flavour of netcdf file, as specified by [read.varTable()].
+#' particular flavour of NetCDF file, as specified by [read.varTable()].
 #'
 #' @param name character value naming the variable.  If `name` is
 #' not the name of a chemical species, then trailing digits are removed,
@@ -95,8 +95,8 @@ read.varTable <- function(varTable="argo", debug=0)
 #' @template debugTemplate
 #'
 #' @return [getVarInfo()] returns a list containing `name` (the
-#' name as used in argo netcdf files), `long_name` (again, as used in
-#' Argo netcdf files, although the usefulness of this is debatable),
+#' name as used in argo NetCDF files), `long_name` (again, as used in
+#' Argo NetCDF files, although the usefulness of this is debatable),
 #' `standard_name` (not used by [ctd2ncdf()] as of now), `FillValue`
 #' (used by [ctd2ncdf()] for missing values) and, if `oce` is provided
 #' and it can be determined, `unit` (a character string specifying
@@ -167,7 +167,7 @@ getVarInfo <- function(name=NULL, varTable=NULL, oce=NULL, debug=0)
     rval
 } # getVarInfo()
 
-#' Translate netcdf names to oce  names
+#' Translate NetCDF names to oce  names
 #'
 #' @param names vector of character values in oce convention (e.g. "TEMP"
 #' for temperature, if varTable is "argo").
@@ -196,7 +196,7 @@ ncdfNames2oceNames <- function(names, varTable=NULL, debug=0)
     names
 }
 
-#' Translate netcdf names to oce names
+#' Translate NetCDF names to oce names
 #'
 #' @param names vector of character values in oce convention (e.g. "temperature"
 #' for temperature).

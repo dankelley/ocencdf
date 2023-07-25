@@ -30,6 +30,41 @@ function will report an error if the contents are not in proper YAML format.
 
 # The built-in tables
 
+## adp
+
+This table is stored in a file that may be accessed with
+```{r eval=FALSE}
+system.file("extdata", "adp.yml", package="ocencdf")
+```
+and the contents are as follows.
+```{r, echo=FALSE}
+#| echo: false
+#| fig.width: 10
+#| comment: ""
+lines <- readLines(system.file("extdata", "adp.yml", package="ocencdf"))
+for (line in lines)
+    cat(line, "\n")
+```
+
+
+## adv
+
+This table is stored in a file that may be accessed with
+```{r eval=FALSE}
+system.file("extdata", "adv.yml", package="ocencdf")
+```
+and the contents are as follows.
+```{r, echo=FALSE}
+#| echo: false
+#| fig.width: 10
+#| comment: ""
+lines <- readLines(system.file("extdata", "adv.yml", package="ocencdf"))
+for (line in lines)
+    cat(line, "\n")
+```
+
+
+
 ## argo
 
 This table, patterned on naming conventions in the Argo ocean float program, is
@@ -63,5 +98,4 @@ lines <- readLines(system.file("extdata", "whp.yml", package="ocencdf"))
 for (line in lines)
     cat(line, "\n")
 ```
-
 

@@ -77,7 +77,7 @@
       <h1 data-toc-skip>Built-in varTables</h1>
                         <h4 data-toc-skip class="author">Dan Kelley (<a href="https://orcid.org/0000-0001-7808-5911" class="external-link uri">https://orcid.org/0000-0001-7808-5911</a>)</h4>
             
-            <h4 data-toc-skip class="date">2023-07-15</h4>
+            <h4 data-toc-skip class="date">2023-07-25</h4>
       
       
       <div class="hidden name"><code>built_in_vartables.Rmd</code></div>
@@ -100,11 +100,105 @@ report an error if the contents are not in proper YAML format.</p>
 <h2 id="the-built-in-tables">The built-in tables<a class="anchor" aria-label="anchor" href="#the-built-in-tables"></a>
 </h2>
 <div class="section level3">
+<h3 id="adp">adp<a class="anchor" aria-label="anchor" href="#adp"></a>
+</h3>
+<p>This table is stored in a file that may be accessed with</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"adp.yml"</span>, package<span class="op">=</span><span class="st">"ocencdf"</span><span class="op">)</span></span></code></pre></div>
+<p>and the contents are as follows.</p>
+<pre><code>type: 
+  comment: A varTable for adp data. 
+  date: '2022-06-28' 
+  name: adp 
+  version: 1 
+units: 
+  1/m: 
+    name: m-1 
+  dbar: 
+    name: decibar 
+  degree * C: 
+    name: degree_Celcius 
+  degree * E: 
+    name: degree_east 
+  degree * N: 
+    name: degree_north 
+  m / s: 
+    name: meters_per_second 
+values: 
+  missing_value: 99999.0 
+variables: 
+  v: 
+    name: v 
+    standard_name: velocity 
+  pressure: 
+    name: pressure 
+    long_name: Sea water pressure, equals 0 at sea-level 
+    standard_name: sea_water_pressure 
+  salinity: 
+    name: PSAL 
+    long_name: Practical Salinity 
+    standard_name: sea_water_salinity 
+  temperature: 
+    name: TEMP 
+    long_name: Sea temperature in-situ ITS-90 scale 
+    standard_name: sea_water_temperature 
+ </code></pre>
+</div>
+<div class="section level3">
+<h3 id="adv">adv<a class="anchor" aria-label="anchor" href="#adv"></a>
+</h3>
+<p>This table is stored in a file that may be accessed with</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"adv.yml"</span>, package<span class="op">=</span><span class="st">"ocencdf"</span><span class="op">)</span></span></code></pre></div>
+<p>and the contents are as follows.</p>
+<pre><code>type: 
+  comment: A varTable for adv data. 
+  date: '2022-06-28' 
+  name: adv 
+  version: 1 
+units: 
+  1/m: 
+    name: m-1 
+  dbar: 
+    name: decibar 
+  degree * C: 
+    name: degree_Celcius 
+  degree * E: 
+    name: degree_east 
+  degree * N: 
+    name: degree_north 
+  m / s: 
+    name: meters_per_second 
+values: 
+  missing_value: 99999.0 
+variables: 
+  v: 
+    name: v 
+    standard_name: velocity 
+  pressure: 
+    name: pressure 
+    long_name: Sea water pressure, equals 0 at sea-level 
+    standard_name: sea_water_pressure 
+  pitchSlow: 
+    name: pitchSlow 
+    long_name: Pitch in degrees 
+    standard_name: pitch 
+  salinity: 
+    name: PSAL 
+    long_name: Practical Salinity 
+    standard_name: sea_water_salinity 
+  temperature: 
+    name: TEMP 
+    long_name: Sea temperature in-situ ITS-90 scale 
+    standard_name: sea_water_temperature 
+ </code></pre>
+</div>
+<div class="section level3">
 <h3 id="argo">argo<a class="anchor" aria-label="anchor" href="#argo"></a>
 </h3>
 <p>This table, patterned on naming conventions in the Argo ocean float
 program, is stored in a file that may be accessed with</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"argo.yml"</span>, package<span class="op">=</span><span class="st">"ocencdf"</span><span class="op">)</span></span></code></pre></div>
 <p>and the contents are as follows.</p>
 <pre><code>type: 
@@ -190,7 +284,7 @@ variables:
 </h3>
 <p>This table, patterned on naming conventions in the World Hydrographic
 Program, is stored in a file that may be accessed with</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"yhp.yml"</span>, package<span class="op">=</span><span class="st">"ocencdf"</span><span class="op">)</span></span></code></pre></div>
 <p>and the contents are as follows.</p>
 <pre><code><span><span class="va">type</span><span class="op">:</span> </span>

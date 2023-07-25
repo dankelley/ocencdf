@@ -33,16 +33,22 @@ ncdf2ctd(), and that may be convenient for other purposes as well."><!-- mathjax
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/introduction.html">Introduction to ocencdf</a>
+      <a href="../articles/built_in_vartables.html">Built-in varTables</a>
     </li>
     <li>
-      <a href="../articles/built_in_vartables.html">Built-in varTables</a>
+      <a href="../articles/introduction.html">Introduction to ocencdf</a>
     </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/dankelley/ocencdf/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -52,7 +58,7 @@ ncdf2ctd(), and that may be convenient for other purposes as well."><!-- mathjax
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Save a ctd object to a NetCDF file</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/dankelley/ocencdf/blob/HEAD/R/ctd.R" class="external-link"><code>R/ctd.R</code></a></small>
     <div class="hidden name"><code>ctd2ncdf.Rd</code></div>
     </div>
 
@@ -148,8 +154,8 @@ individual global attributes: <code>"latitude"</code>, <code>"longitude"</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Processing Log</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-07-25 13:23:44 UTC: `create 'ctd' object`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-07-25 13:23:44 UTC: `as.ctd(salinity = ncdf2oce("ctd.nc"))`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-07-25 13:39:13 UTC: `create 'ctd' object`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-07-25 13:39:13 UTC: `as.ctd(salinity = ncdf2oce("ctd.nc"))`</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">CTD</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="ctd2ncdf-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -199,8 +205,8 @@ individual global attributes: <code>"latitude"</code>, <code>"longitude"</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Processing Log</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-07-25 13:23:44 UTC: `create 'ctd' object`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-07-25 13:23:44 UTC: `as.ctd(salinity = ncdf2oce("stn.nc"))`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-07-25 13:39:14 UTC: `create 'ctd' object`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-07-25 13:39:14 UTC: `as.ctd(salinity = ncdf2oce("stn.nc"))`</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">STN</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="ctd2ncdf-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>

@@ -14,6 +14,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
+BugReports: https://github.com/dankelley/ocencdf/issues
 Config/testthat/edition: 3
 BuildVignettes: true
 VignetteBuilder: knitr

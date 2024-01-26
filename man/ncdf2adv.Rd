@@ -33,20 +33,23 @@ what \code{\link[=ncdf2adv]{ncdf2adv()}} attempts to read.
 library(ocencdf)
 
 # Example with an adv file from oce package
-data(adv, package="oce")
+data(adv, package = "oce")
 summary(adv)
 plot(adv)
 # Transfer to NetCDF and back to see if results make sense
-oce2ncdf(adv, ncfile="adv.nc")
-ADV <- ncdf2adv("adv.nc")
+# Use a temporary nc file to let package pass CRAN checks.
+ncfile <- tempfile(pattern = "adv", fileext = ".nc")
+oce2ncdf(adv, ncfile = ncfile)
+ADV <- ncdf2adv(ncfile)
 summary(ADV)
 plot(ADV)
-
-# Remove temporary file
-file.remove("adv.nc")
+file.remove(ncfile)
 
 }
 \seealso{
+Other things related to adv data: 
+\code{\link{adv2ncdf}()}
+
 Other things related to adv data: 
 \code{\link{adv2ncdf}()}
 }

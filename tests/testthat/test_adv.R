@@ -8,6 +8,6 @@ test_that("adv2ncdf/ncdf2adv duplicates original data and metadata",
         ADV <- ncdf2adv(ncfile)
         expect_equal(adv@data, ADV@data)
         expect_equal(adv@metadata, ADV@metadata)
-        unlink(ncfile)
+        file.remove(ncfile)
     })
 

@@ -10,13 +10,14 @@ summary(stn)
 plot(stn)
 
 ## -----------------------------------------------------------------------------
-oce2ncdf(stn, varTable="argo", ncfile="stn.nc")
+ncfile <- tempfile(pattern = "argo", fileext = ".nc")
+oce2ncdf(stn, varTable = "argo", ncfile = ncfile)
 
 ## -----------------------------------------------------------------------------
-STN <- ncdf2ctd("stn.nc", varTable="argo")
+STN <- ncdf2ctd(ncfile, varTable = "argo")
 summary(STN)
 plot(STN)
 
 ## ----echo=FALSE---------------------------------------------------------------
-unlink("stn.nc")
+file.remove(ncfile)
 

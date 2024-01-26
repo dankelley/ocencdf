@@ -10,7 +10,7 @@ test_that("ctd2nc on data(ctd) creates a file with expected variable names",
         o <- nc_open(ncfile)
         expect_equal(names(o$var),
             c("scan", "timeS", "PRES", "depth", "TEMP", "PSAL", "flag"))
-        unlink(ncfile)
+        file.remove(ncfile)
     })
 
 test_that("ctd2nc on a section station creates a file with expected variable names",
@@ -21,5 +21,5 @@ test_that("ctd2nc on a section station creates a file with expected variable nam
         #expect_equal(names(o$var),
         #    c("scan", "timeS", "PRES", "depth", "TEMP", "PSAL", "flag", "TIME",
         #        "station", "LONGITUDE", "LATITUDE"))
-        unlink(ncfile)
+        file.remove(ncfile)
     })

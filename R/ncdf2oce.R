@@ -27,14 +27,16 @@
 #' @author Dan Kelley
 #'
 #' @export
-ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
-{
-    if (is.null(ncfile))
+ncdf2oce <- function(ncfile = NULL, varTable = NULL, debug = 0) {
+    if (is.null(ncfile)) {
         stop("must supply ncfile")
-    if (!is.character(ncfile))
+    }
+    if (!is.character(ncfile)) {
         stop("ncfile must be a character value")
-    if (!file.exists(ncfile))
+    }
+    if (!file.exists(ncfile)) {
         stop("ncfile \"", ncfile, "\" not found")
+    }
     dmsg(debug, "ncdf2oce() {\n")
     f <- nc_open(ncfile)
     res <- new("oce")
@@ -42,8 +44,9 @@ ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
     data <- list()
     for (name in names) {
         dmsg(debug, "  handling \"", name, "\"\n")
-        if (grepl("^history_", name, ignore.case=TRUE))
+        if (grepl("^history_", name, ignore.case = TRUE)) {
             next
+        }
         units <- ncatt_get(f, name, "units")
         if (units$hasatt) {
             res@metadata$units[[name]] <- oce::as.unit(units$value)
@@ -74,19 +77,20 @@ ncdf2oce <- function(ncfile=NULL, varTable=NULL, debug=0)
     # metadata
     tmp <- ncatt_get(f, 0, "metadata")
     if (tmp$hasatt) {
-        #res@metadata <- eval(parse(text=tmp$value))
+        # res@metadata <- eval(parse(text=tmp$value))
         res@metadata <- json2metadata(tmp$value)
         dmsg(debug, "  handling metadata\n")
     }
     # Update naming convention, if varTable was provided.
     if (!is.null(varTable)) {
-        names(res@data) <- ncdfNames2oceNames(names=names(res@data), varTable=varTable, debug=debug)
-        if ("units" %in% names(res@metadata))
-            names(res@metadata$units) <- ncdfNames2oceNames(names=names(res@metadata$units), varTable=varTable, debug=debug)
-        if ("flags" %in% names(res@metadata))
-            names(res@metadata$flags) <- ncdfNames2oceNames(names=names(res@metadata$flags), varTable=varTable, debug=debug)
+        names(res@data) <- ncdfNames2oceNames(names = names(res@data), varTable = varTable, debug = debug)
+        if ("units" %in% names(res@metadata)) {
+            names(res@metadata$units) <- ncdfNames2oceNames(names = names(res@metadata$units), varTable = varTable, debug = debug)
+        }
+        if ("flags" %in% names(res@metadata)) {
+            names(res@metadata$flags) <- ncdfNames2oceNames(names = names(res@metadata$flags), varTable = varTable, debug = debug)
+        }
     }
     dmsg(debug, "} # ncdf2oce()\n")
     res
 }
-

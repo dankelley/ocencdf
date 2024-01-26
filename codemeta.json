@@ -3,7 +3,8 @@
   "@type": "SoftwareSourceCode",
   "identifier": "ocencdf",
   "description": "This provides a way to export `oce` objects to `NetCDF` format, perhaps for data archiving, or perhaps for secondary analysis outside R.",
-  "name": "ocencdf: Provide NetCDF Interface for Oce",
+  "name": "ocencdf: NetCDF Interface for oce Objects",
+  "codeRepository": "https://github.com/dankelley/ocencdf",
   "issueTracker": "https://github.com/dankelley/ocencdf/issues",
   "license": "https://spdx.org/licenses/GPL-2.0",
   "version": "0.0.4",
@@ -142,8 +143,9 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "248.896KB",
-  "codeRepository": "https://github.com/dankelley/ocencdf",
+  "fileSize": "251.97KB",
+  "relatedLink": "https://dankelley.github.io/ocencdf/",
   "releaseNotes": "https://github.com/dankelley/ocencdf/blob/master/NEWS.md",
-  "readme": "https://github.com/dankelley/ocencdf/blob/main/README.md"
+  "readme": "https://github.com/dankelley/ocencdf/blob/main/README.md",
+  "contIntegration": "https://github.com/dankelley/ocencdf/actions/workflows/R-CMD-check.yaml"
 }

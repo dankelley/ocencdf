@@ -53,23 +53,25 @@ individual global attributes: \code{"latitude"}, \code{"longitude"},
 library(ocencdf)
 
 # example 1: a ctd file without per-variable QC flags
-data(ctd, package="oce")
-oce2ncdf(ctd, ncfile="ctd.nc")
-CTD <- as.ctd(ncdf2oce("ctd.nc"))
+data(ctd, package = "oce")
+# Use a temporary nc file to let package pass CRAN checks.
+ncfile <- tempfile(pattern = "ctd", fileext = ".nc")
+oce2ncdf(ctd, ncfile = ncfile)
+CTD <- as.ctd(ncdf2oce(ncfile))
+file.remove(ncfile)
 summary(CTD)
 plot(CTD)
 
 # example 2: a ctd file with per-variable QC flags
-data(section, package="oce")
+data(section, package = "oce")
 stn <- section[["station", 100]]
-oce2ncdf(stn, ncfile="stn.nc")
-STN <- as.ctd(ncdf2oce("stn.nc"))
+# Use a temporary nc file to let package pass CRAN checks.
+ncfile <- tempfile(pattern = "ctd", fileext = ".nc")
+oce2ncdf(stn, ncfile = ncfile)
+STN <- as.ctd(ncdf2oce(ncfile))
+file.remove(ncfile)
 summary(STN)
 plot(STN)
-
-# Remove temporary files
-file.remove("ctd.nc")
-file.remove("stn.nc")
 
 }
 \seealso{

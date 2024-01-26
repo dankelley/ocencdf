@@ -41,8 +41,7 @@
 #' @author Dan Kelley
 #'
 #' @export
-metadata2json <- function(m, digits=15)
-{
+metadata2json <- function(m, digits = 15) {
     if ("units" %in% names(m)) {
         for (item in names(m$units)) {
             m$units[[item]]$unit <- as.character(m$units[[item]]$unit)
@@ -54,7 +53,7 @@ metadata2json <- function(m, digits=15)
         dim(Cnew) <- dim(C)
         m$codes <- Cnew
     }
-    jsonlite::toJSON(m, digits=digits, pretty=TRUE, raw="hex")
+    jsonlite::toJSON(m, digits = digits, pretty = TRUE, raw = "hex")
 }
 
 #' Convert a JSON string to an oce metadata slot
@@ -74,14 +73,15 @@ metadata2json <- function(m, digits=15)
 #' @author Dan Kelley
 #'
 #' @export
-json2metadata <- function(j)
-{
+json2metadata <- function(j) {
     m <- jsonlite::fromJSON(j)
-    for (item in names(m$units))
-        m$units[[item]]$unit <- parse(text=m$units[[item]]$unit, keep.source=FALSE)
+    for (item in names(m$units)) {
+        m$units[[item]]$unit <- parse(text = m$units[[item]]$unit, keep.source = FALSE)
+    }
     for (t in c("date", "endTime", "startTime", "systemUploadTime")) {
-        if (!is.null(m[[t]]))
-            m[[t]] <- as.POSIXct(m[[t]], tz="UTC")
+        if (!is.null(m[[t]])) {
+            m[[t]] <- as.POSIXct(m[[t]], tz = "UTC")
+        }
     }
     C <- m$codes
     if (is.matrix(m$codes)) {
@@ -91,4 +91,3 @@ json2metadata <- function(j)
     }
     m
 }
-

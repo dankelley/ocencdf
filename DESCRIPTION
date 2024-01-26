@@ -1,5 +1,5 @@
 Package: ocencdf
-Title: Provide NetCDF Interface for Oce
+Title: NetCDF Interface for oce Objects
 Version: 0.0.4
 Authors@R: c(
     person(given="Dan", family="Kelley", email="Dan.Kelley@Dal.Ca", role=c("aut", "cre"), comment=c(ORCID="https://orcid.org/0000-0001-7808-5911")),
@@ -9,6 +9,7 @@ Depends: R (>= 4.00), oce (>= 1.8.0)
 Imports: jsonlite, ncdf4, methods, yaml
 License: GPL (>= 2)
 Encoding: UTF-8
+URL: https://dankelley.github.io/ocencdf/
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Suggests:

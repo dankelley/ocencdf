@@ -23,7 +23,7 @@ what ncdf2adv() attempts to read.'><!-- mathjax --><script src="https://cdnjs.cl
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ocencdf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
       </span>
     </div>
 
@@ -108,6 +108,8 @@ output that describes the processing steps.</p></dd>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p>Other things related to adv data: 
+<code><a href="adv2ncdf.html">adv2ncdf</a>()</code></p>
+<p>Other things related to adv data: 
 <code><a href="adv2ncdf.html">adv2ncdf</a>()</code></p></div>
     </div>
     <div id="author">
@@ -117,10 +119,10 @@ output that describes the processing steps.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ocencdf</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dankelley.github.io/ocencdf/" class="external-link">ocencdf</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example with an adv file from oce package</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">adv</span>, package<span class="op">=</span><span class="st">"oce"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">adv</span>, package <span class="op">=</span> <span class="st">"oce"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">adv</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ADV Summary</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------</span>
@@ -158,8 +160,10 @@ output that describes the processing steps.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">adv</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="ncdf2adv-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># Transfer to NetCDF and back to see if results make sense</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="oce2ncdf.html">oce2ncdf</a></span><span class="op">(</span><span class="va">adv</span>, ncfile<span class="op">=</span><span class="st">"adv.nc"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">ADV</span> <span class="op">&lt;-</span> <span class="fu">ncdf2adv</span><span class="op">(</span><span class="st">"adv.nc"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Use a temporary nc file to let package pass CRAN checks.</span></span></span>
+<span class="r-in"><span><span class="va">ncfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"adv"</span>, fileext <span class="op">=</span> <span class="st">".nc"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="oce2ncdf.html">oce2ncdf</a></span><span class="op">(</span><span class="va">adv</span>, ncfile <span class="op">=</span> <span class="va">ncfile</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ADV</span> <span class="op">&lt;-</span> <span class="fu">ncdf2adv</span><span class="op">(</span><span class="va">ncfile</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ADV</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ADV Summary</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------</span>
@@ -187,12 +191,10 @@ output that describes the processing steps.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Processing Log</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2024-01-26 11:42:57 UTC: `Create oce object`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2024-01-26 13:14:45 UTC: `Create oce object`</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ADV</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="ncdf2adv-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Remove temporary file</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="st">"adv.nc"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="va">ncfile</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -205,7 +207,7 @@ output that describes the processing steps.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Dan Kelley, Clark Richards.</p>
+  <p></p><p>Developed by Dan Kelley.</p>
 </div>
 
 <div class="pkgdown">

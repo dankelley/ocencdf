@@ -1,3 +1,10 @@
+<!-- badges: start -->
+
+[![GitHub last commit](https://img.shields.io/github/last-commit/dankelley/ocencdf)](https://img.shields.io/github/last-commit/dankelley/ocencdf)
+[![R-CMD-check](https://github.com/dankelley/ocencdf/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dankelley/ocencdf/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+
 This package provides an interface from the internal representation used
 by the `oce` package to the NetCDF file format.  It is in an early stage
 of development, with work focused on CTD, ADCP and ADV data, to set up

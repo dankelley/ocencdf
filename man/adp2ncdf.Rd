@@ -54,17 +54,17 @@ and
 library(ocencdf)
 
 # Example with an ADP file from `oce` package
-data(adp, package="oce")
+data(adp, package = "oce")
 summary(adp)
 plot(adp)
-# Transfer to NetCDF and back to see if results make sense
-oce2ncdf(adp, ncfile="adp.nc")
-ADP <- ncdf2adp("adp.nc")
+# Transfer to NetCDF and back to see if results make sense.
+# Use a temporary nc file to let package pass CRAN checks.
+ncfile <- tempfile(pattern = "adp", fileext = ".nc")
+oce2ncdf(adp, ncfile = ncfile)
+ADP <- ncdf2adp(ncfile)
 summary(ADP)
 plot(ADP)
-
-# Remove temporary file
-file.remove("adp.nc")
+file.remove(ncfile)
 
 }
 \seealso{

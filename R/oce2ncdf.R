@@ -32,16 +32,15 @@
 #' @author Dan Kelley and Clark Richards
 #'
 #' @export
-oce2ncdf <- function(x, varTable=NULL, ncfile=NULL, force_v4=TRUE, debug=0)
-{
-    if (!inherits(x, "oce"))
+oce2ncdf <- function(x, varTable = NULL, ncfile = NULL, force_v4 = TRUE, debug = 0) {
+    if (!inherits(x, "oce")) {
         stop("'x' must be an oce object")
+    }
     xclass <- as.character(class(x))
     switch(xclass,
-        ctd=ctd2ncdf(x, varTable=varTable, ncfile=ncfile, force_v4=force_v4, debug=debug),
-        adp=adp2ncdf(x, varTable=varTable, ncfile=ncfile, force_v4=force_v4, debug=debug),
-        adv=adv2ncdf(x, varTable=varTable, ncfile=ncfile, force_v4=force_v4, debug=debug),
+        ctd = ctd2ncdf(x, varTable = varTable, ncfile = ncfile, force_v4 = force_v4, debug = debug),
+        adp = adp2ncdf(x, varTable = varTable, ncfile = ncfile, force_v4 = force_v4, debug = debug),
+        adv = adv2ncdf(x, varTable = varTable, ncfile = ncfile, force_v4 = force_v4, debug = debug),
         stop("oce2ncdf() cannot handle \"", xclass, "\" objects")
     )
 }
-

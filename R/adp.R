@@ -43,10 +43,10 @@
 #'
 #' @family things related to adp data
 #'
-#' @author Dan Kelley
+#' @author Dan Kelley and Clark Richards
 #'
 #' @export
-adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
+adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, force_v4=TRUE, debug=0)
 {
     dmsg(debug, "adp2ncdf(..., ncfile=\"", ncfile, "\") {\n")
     if (!inherits(x, "adp"))
@@ -106,7 +106,7 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             vars[[item]] <- ncvar_def(item, units="", dim=time)
         }
     }
-    nc <- nc_create(ncfile, vars)
+    nc <- nc_create(ncfile, vars, force_v4=force_v4)
     dmsg(debug, "  Storing time and distance\n")
     dmsg(debug, "    time\n")
     ncvar_put(nc, "time", as.numeric(x@data$time))

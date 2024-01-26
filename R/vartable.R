@@ -16,7 +16,7 @@
 #' 3. Otherwise, `".yml"` is appended to `varTable` and a file with that
 #' name is sought in the `inst/ext_data` source directory.
 #' At the moment, there are two such built-in files, named
-#' `"argo.yml"` and `"whp.yml".
+#' `"argo.yml"` and `"whp.yml"`.
 #'
 #' @param varTable character value indicating the name of the table
 #' (see \sQuote{Details}).
@@ -95,7 +95,7 @@ read.varTable <- function(varTable="argo", debug=0)
 #' @template debugTemplate
 #'
 #' @return [getVarInfo()] returns a list containing `name` (the
-#' name as used in argo NetCDF files), `long_name` (again, as used in
+#' name as used in Argo NetCDF files), `long_name` (again, as used in
 #' Argo NetCDF files, although the usefulness of this is debatable),
 #' `standard_name` (not used by [ctd2ncdf()] as of now), `FillValue`
 #' (used by [ctd2ncdf()] for missing values) and, if `oce` is provided
@@ -170,7 +170,7 @@ getVarInfo <- function(name=NULL, varTable=NULL, oce=NULL, debug=0)
 #' Translate NetCDF names to oce  names
 #'
 #' @param names vector of character values in oce convention (e.g. "TEMP"
-#' for temperature, if varTable is "argo").
+#' for temperature, if `varTable` equals `"argo"`).
 #'
 #' @template varTableTemplate
 #'

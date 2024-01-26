@@ -22,15 +22,15 @@ editor_options:
 
 # Introduction
 
-This vignette discusses two built-in variable-table files.  These may be used as
-patterns by users wishing to create their own tables.  Note that the package
+This vignette discusses two built-in variable-table files.  These may be used
+as patterns by users wishing to create their own tables.  Note that the package
 requires that the files be in proper YAML format, which can be checked by using
 `yaml::yaml.load_file("file.yml")`, where `"file.yml"` is the trial file.  This
 function will report an error if the contents are not in proper YAML format.
 
 # The built-in tables
 
-## adp
+## `adp`
 
 This table is stored in a file that may be accessed with
 ```{r eval=FALSE}
@@ -47,7 +47,7 @@ for (line in lines)
 ```
 
 
-## adv
+## `adv`
 
 This table is stored in a file that may be accessed with
 ```{r eval=FALSE}
@@ -64,8 +64,7 @@ for (line in lines)
 ```
 
 
-
-## argo
+## `argo`
 
 This table, patterned on naming conventions in the Argo ocean float program, is
 stored in a file that may be accessed with
@@ -82,7 +81,7 @@ for (line in lines)
     cat(line, "\n")
 ```
 
-## yhp
+## `yhp`
 
 This table, patterned on naming conventions in the World Hydrographic Program,
 is stored in a file that may be accessed with

@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Introduction to ocencdf</h1>
                         <h4 data-toc-skip class="author">Dan Kelley (<a href="https://orcid.org/0000-0001-7808-5911" class="external-link uri">https://orcid.org/0000-0001-7808-5911</a>)</h4>
             
-            <h4 data-toc-skip class="date">2023-07-25</h4>
+            <h4 data-toc-skip class="date">2024-01-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/dankelley/ocencdf/blob/HEAD/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -130,13 +130,13 @@ This is because there is no way for the code to know what conventions
 were used in creating an arbitrary NetCDF file. For example, a CTD
 dataset might record the ship name, the name of the research program,
 etc., but whether these things are recorded in the data section of the
-NetCDF file, or in attributes, or not at all, cannot be known <em>a
-priori</em>, and guessing is a risky proposition.</p>
+NetCDF file, or in attributes, or not at all, cannot be known before the
+fact, and guessing is a risky proposition.</p>
 </div>
 <div class="section level2">
 <h2 id="limitations-of-netcdf-format">Limitations of NetCDF format<a class="anchor" aria-label="anchor" href="#limitations-of-netcdf-format"></a>
 </h2>
-<p>Unfortunately, direct transferral of R information to NetCDF is not
+<p>Unfortunately, direct transferal of R information to NetCDF is not
 possible. This is because NetCDF is an array-oriented format that is not
 designed to hold tree-oriented data such as R lists (which are used
 throughout oce). It is possible to flatten simple lists, but the process
@@ -144,7 +144,7 @@ gets complicated for nested lists, which are common in oce. Other
 difficulties with the NetCDF format include its lack of basic elements
 programming elements such as user-defined classes and variable-length
 character strings in the data portion of the files.</p>
-<p>This package is in early development, and efforts are focussed on a
+<p>This package is in early development, and efforts are focused on a
 single oce class, the ctd object. This focus is intended to permit
 coding practices to gel, in preparation for the addition of other
 classes. Given the anticipated needs of users, the next planned item for
@@ -180,7 +180,7 @@ provides a way to rename oce objects using other systems of names. The
 mapping between oce name and other name is controlled by YAML (yet
 another markup language) files, which are called varTables in this
 package. Tables are provided for the Argo system and for the World
-Hydographic Program system. These are available as <code>"argo"</code>
+Hydrographic Program system. These are available as <code>"argo"</code>
 and <code>"whp"</code>, respectively. They are stored in the
 <code>inst/extdata</code> directory of the package source tree. Users
 seeking to define new naming systems must copy the formats of those
@@ -295,8 +295,8 @@ summary with the following.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; * Processing Log</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     - 2023-07-25 13:39:28 UTC: `create 'ctd' object`</span></span>
-<span><span class="co">#&gt;     - 2023-07-25 13:39:28 UTC: `as.ctd(salinity = ncdf2oce(ncfile = ncfile, varTable = varTable,     debug = debug))`</span></span>
+<span><span class="co">#&gt;     - 2024-01-26 11:43:06 UTC: `create 'ctd' object`</span></span>
+<span><span class="co">#&gt;     - 2024-01-26 11:43:06 UTC: `as.ctd(salinity = ncdf2oce(ncfile = ncfile, varTable = varTable,     debug = debug))`</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">STN</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
@@ -314,12 +314,12 @@ summary with the following.</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Dan Kelley.</p>
+<p>Developed by Dan Kelley, Clark Richards.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer>

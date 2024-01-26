@@ -28,7 +28,7 @@ output that describes the processing steps.}
 }
 \value{
 \code{\link[=getVarInfo]{getVarInfo()}} returns a list containing \code{name} (the
-name as used in argo NetCDF files), \code{long_name} (again, as used in
+name as used in Argo NetCDF files), \code{long_name} (again, as used in
 Argo NetCDF files, although the usefulness of this is debatable),
 \code{standard_name} (not used by \code{\link[=ctd2ncdf]{ctd2ncdf()}} as of now), \code{FillValue}
 (used by \code{\link[=ctd2ncdf]{ctd2ncdf()}} for missing values) and, if \code{oce} is provided

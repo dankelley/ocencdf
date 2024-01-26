@@ -9,4 +9,7 @@
 ^docs$
 ^README\.md$
 ^_pkgdown.yml$
-
+^.lintr$
+^check_package.R$
+^codemeta\.json$
+^revdep$

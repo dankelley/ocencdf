@@ -2,7 +2,7 @@
 % Please edit documentation in R/adp.R
 \name{ncdf2adp}
 \alias{ncdf2adp}
-\title{Read a NetCDF file and create an adp object}
+\title{Read a NetCDF file and create an ADP object}
 \usage{
 ncdf2adp(ncfile = NULL, varTable = NULL, debug = 0)
 }
@@ -32,7 +32,7 @@ what \code{\link[=ncdf2adp]{ncdf2adp()}} attempts to read.
 \examples{
 library(ocencdf)
 
-# Example with an adp file from oce package
+# Example with an ADP file from `oce` package
 data(adp, package="oce")
 summary(adp)
 plot(adp)

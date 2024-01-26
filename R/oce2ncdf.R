@@ -13,12 +13,12 @@
 #' for a file name to be created automatically (e.g. `ctd.nc` for
 #' a CTD object).
 #'
-#' @param force_v4 logical value which controls the netCDF file version during
+#' @param force_v4 logical value which controls the NetCDF file version during
 #' the \link[ncdf4]{nc_create} step. The default here is TRUE, whereas the
-#' \link[ncdf4]{ncdf4-package} defaults to FALSE (ensuring that the netCDF
-#' file is compatible with netCDF v3). Some features, including large data
+#' \link[ncdf4]{ncdf4-package} defaults to FALSE (ensuring that the NetCDF
+#' file is compatible with NetCDF v3). Some features, including large data
 #' sizes, may require v4.
-#' 
+#'
 #' @param debug integer, 0 (the default) for quiet action apart
 #' from messages and warnings, or any larger value to see more
 #' output that describes the processing steps.

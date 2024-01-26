@@ -70,7 +70,7 @@ reproduce the original contents.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">adv2ncdf</span><span class="op">(</span><span class="va">x</span>, varTable <span class="op">=</span> <span class="cn">NULL</span>, ncfile <span class="op">=</span> <span class="cn">NULL</span>, debug <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">adv2ncdf</span><span class="op">(</span><span class="va">x</span>, varTable <span class="op">=</span> <span class="cn">NULL</span>, ncfile <span class="op">=</span> <span class="cn">NULL</span>, force_v4 <span class="op">=</span> <span class="cn">TRUE</span>, debug <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -89,6 +89,14 @@ up variable names, units, etc.</p></dd>
 <dd><p>character value naming the output file.  Use NULL
 for a file name to be created automatically (e.g. <code>ctd.nc</code> for
 a CTD object).</p></dd>
+
+
+<dt>force_v4</dt>
+<dd><p>logical value which controls the NetCDF file version during
+the <a href="https://rdrr.io/pkg/ncdf4/man/nc_create.html" class="external-link">nc_create</a> step. The default here is TRUE, whereas the
+<a href="https://rdrr.io/pkg/ncdf4/man/ncdf4-package.html" class="external-link">ncdf4-package</a> defaults to FALSE (ensuring that the NetCDF
+file is compatible with NetCDF v3). Some features, including large data
+sizes, may require v4.</p></dd>
 
 
 <dt>debug</dt>
@@ -112,7 +120,7 @@ output that describes the processing steps.</p></dd>
     </div>
     <div id="author">
     <h2>Author</h2>
-    <p>Dan Kelley</p>
+    <p>Dan Kelley and Clark Richards</p>
     </div>
 
     <div id="ref-examples">
@@ -187,7 +195,7 @@ output that describes the processing steps.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Processing Log</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2023-07-25 13:39:12 UTC: `Create oce object`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - 2024-01-26 11:42:50 UTC: `Create oce object`</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ADV</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="adv2ncdf-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -205,11 +213,11 @@ output that describes the processing steps.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Dan Kelley.</p>
+  <p></p><p>Developed by Dan Kelley, Clark Richards.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer></div>

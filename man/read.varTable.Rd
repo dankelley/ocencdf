@@ -37,7 +37,7 @@ if \code{varTable} is a character value, then there are 3 possibilities.
 \item Otherwise, \code{".yml"} is appended to \code{varTable} and a file with that
 name is sought in the \code{inst/ext_data} source directory.
 At the moment, there are two such built-in files, named
-\code{"argo.yml"} and `"whp.yml".
+\code{"argo.yml"} and \code{"whp.yml"}.
 }
 }
 \examples{

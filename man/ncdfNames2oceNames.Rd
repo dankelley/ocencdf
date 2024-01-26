@@ -8,7 +8,7 @@ ncdfNames2oceNames(names, varTable = NULL, debug = 0)
 }
 \arguments{
 \item{names}{vector of character values in oce convention (e.g. "TEMP"
-for temperature, if varTable is "argo").}
+for temperature, if \code{varTable} equals \code{"argo"}).}
 
 \item{varTable}{character value indicating the variable-naming
 scheme to be used, which is passed to \code{\link[=read.varTable]{read.varTable()}} to set

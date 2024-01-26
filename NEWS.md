@@ -1,3 +1,8 @@
+# ocencdf 0.0.4
+
+* Specify `force_v4` in all conversions to NetCDF, which permits the handling
+  of large files.
+
 # ocencdf 0.0.3
 
 * Handle ADV data with `adv2ncdf()` and `ncdf2adv()`.

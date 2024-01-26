@@ -1,4 +1,4 @@
-#' Save an adp object to a NetCDF file
+#' Save an ADP object to a NetCDF file
 #'
 #' Given an `adp` object created by the `oce` package, this function
 #' creates a NetCDF file that can later by read by [ncdf2adp()] to approximately
@@ -21,14 +21,14 @@
 #' and
 #' `"oceCoordinate"`.
 #'
-#' @param x an oce object of class `adp`, as created by e.g. [oce::read.adp()].
+#' @param x an `oce` object of class `adp`, as created by e.g. [oce::read.adp()].
 #'
 #' @inheritParams oce2ncdf
 #'
 #' @examples
 #' library(ocencdf)
 #'
-#' # Example with an adp file from oce package
+#' # Example with an ADP file from `oce` package
 #' data(adp, package="oce")
 #' summary(adp)
 #' plot(adp)
@@ -154,7 +154,7 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, force_v4=TRUE, debug=0)
     dmsg(debug, paste0("} # adp2ncdf created file \"", ncfile, "\"\n"))
 }
 
-#' Read a NetCDF file and create an adp object
+#' Read a NetCDF file and create an ADP object
 #'
 #' This works by calling [ncdf2oce()] and then using [class()] on
 #' the result to make it be of subclass `"adp"`.  This is intended
@@ -173,7 +173,7 @@ adp2ncdf <- function(x, varTable=NULL, ncfile=NULL, force_v4=TRUE, debug=0)
 #' @examples
 #' library(ocencdf)
 #'
-#' # Example with an adp file from oce package
+#' # Example with an ADP file from `oce` package
 #' data(adp, package="oce")
 #' summary(adp)
 #' plot(adp)

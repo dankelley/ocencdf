@@ -49,10 +49,10 @@
 #'
 #' @family things related to CTD data
 #'
-#' @author Dan Kelley
+#' @author Dan Kelley and Clark Richards
 #'
 #' @export
-ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
+ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, force_v4=TRUE, debug=0)
 {
     dmsg(debug, "ctd2ncdf(..., ncfile=\"", ncfile, "\") {\n")
     if (!inherits(x, "ctd"))
@@ -131,7 +131,7 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
         standardNames[["latitude"]] <- "latitude"
         dmsg(debug, "      latitude\n")
     }
-    nc <- nc_create(ncfile, vars)
+    nc <- nc_create(ncfile, vars, force_v4=force_v4)
     dmsg(debug, "  Storing data.\n")
     for (name in names(x@data)) {
         dmsg(debug, "    ", name, " (", NLEVEL, " values)\n")

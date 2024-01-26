@@ -4,7 +4,7 @@
 \alias{ctd2ncdf}
 \title{Save a ctd object to a NetCDF file}
 \usage{
-ctd2ncdf(x, varTable = NULL, ncfile = NULL, debug = 0)
+ctd2ncdf(x, varTable = NULL, ncfile = NULL, force_v4 = TRUE, debug = 0)
 }
 \arguments{
 \item{x}{an oce object of class \code{ctd}, as created by e.g. \code{\link[oce:as.ctd]{oce::as.ctd()}}
@@ -17,6 +17,12 @@ up variable names, units, etc.}
 \item{ncfile}{character value naming the output file.  Use NULL
 for a file name to be created automatically (e.g. \code{ctd.nc} for
 a CTD object).}
+
+\item{force_v4}{logical value which controls the netCDF file version during
+the \link[ncdf4]{nc_create} step. The default here is TRUE, whereas the
+\link[ncdf4]{ncdf4-package} defaults to FALSE (ensuring that the netCDF
+file is compatible with netCDF v3). Some features, including large data
+sizes, may require v4.}
 
 \item{debug}{integer, 0 (the default) for quiet action apart
 from messages and warnings, or any larger value to see more
@@ -71,6 +77,6 @@ Other things related to CTD data:
 \code{\link{ncdf2ctd}()}
 }
 \author{
-Dan Kelley
+Dan Kelley and Clark Richards
 }
 \concept{things related to CTD data}

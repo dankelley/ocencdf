@@ -33,10 +33,10 @@
 #'
 #' @family things related to adv data
 #'
-#' @author Dan Kelley
+#' @author Dan Kelley and Clark Richards
 #'
 #' @export
-adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
+adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, force_v4=TRUE, debug=0)
 {
     dmsg(debug, "adv2ncdf(..., ncfile=\"", ncfile, "\") {\n")
     if (!inherits(x, "adv"))
@@ -118,7 +118,7 @@ adv2ncdf <- function(x, varTable=NULL, ncfile=NULL, debug=0)
             }
         }
     }
-    nc <- nc_create(ncfile, vars)
+    nc <- nc_create(ncfile, vars, force_v4=force_v4)
     dmsg(debug, "  Storing data:\n")
     for (name in dataNames) {
         item <- x@data[[name]]

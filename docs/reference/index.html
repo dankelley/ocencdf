@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ocencdf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
       </span>
     </div>
 
@@ -32,16 +32,22 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/introduction.html">Introduction to ocencdf</a>
+      <a href="../articles/built_in_vartables.html">Built-in varTables</a>
     </li>
     <li>
-      <a href="../articles/built_in_vartables.html">Built-in varTables</a>
+      <a href="../articles/introduction.html">Introduction to ocencdf</a>
     </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/dankelley/ocencdf/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -60,39 +66,55 @@
       </tr></tbody><tbody><tr><td>
           <p><code><a href="adp2ncdf.html">adp2ncdf()</a></code> </p>
         </td>
-        <td><p>Save an adp object to a netcdf file</p></td>
+        <td><p>Save an ADP object to a NetCDF file</p></td>
+      </tr><tr><td>
+          <p><code><a href="adv2ncdf.html">adv2ncdf()</a></code> </p>
+        </td>
+        <td><p>Save an adv object to a NetCDF file</p></td>
       </tr><tr><td>
           <p><code><a href="ctd2ncdf.html">ctd2ncdf()</a></code> </p>
         </td>
-        <td><p>Save a ctd object to a netcdf file</p></td>
+        <td><p>Save a ctd object to a NetCDF file</p></td>
       </tr><tr><td>
           <p><code><a href="getVarInfo.html">getVarInfo()</a></code> </p>
         </td>
         <td><p>Get information on a variable, using varTable</p></td>
       </tr><tr><td>
+          <p><code><a href="json2metadata.html">json2metadata()</a></code> </p>
+        </td>
+        <td><p>Convert a JSON string to an oce metadata slot</p></td>
+      </tr><tr><td>
+          <p><code><a href="metadata2json.html">metadata2json()</a></code> </p>
+        </td>
+        <td><p>Convert an oce metadata slot to JSON</p></td>
+      </tr><tr><td>
           <p><code><a href="ncdf2adp.html">ncdf2adp()</a></code> </p>
         </td>
-        <td><p>Read a netcdf file and create an adp object</p></td>
+        <td><p>Read a NetCDF file and create an ADP object</p></td>
+      </tr><tr><td>
+          <p><code><a href="ncdf2adv.html">ncdf2adv()</a></code> </p>
+        </td>
+        <td><p>Read a NetCDF file and create an adv object</p></td>
       </tr><tr><td>
           <p><code><a href="ncdf2ctd.html">ncdf2ctd()</a></code> </p>
         </td>
-        <td><p>Read a netcdf file and create a ctd object</p></td>
+        <td><p>Read a NetCDF file and create a ctd object</p></td>
       </tr><tr><td>
           <p><code><a href="ncdf2oce.html">ncdf2oce()</a></code> </p>
         </td>
-        <td><p>Read a netcdf file and create a general oce object</p></td>
+        <td><p>Read a NetCDF file and create a general <code>oce</code> object</p></td>
       </tr><tr><td>
           <p><code><a href="ncdfNames2oceNames.html">ncdfNames2oceNames()</a></code> </p>
         </td>
-        <td><p>Translate netcdf names to oce  names</p></td>
+        <td><p>Translate NetCDF names to oce names</p></td>
       </tr><tr><td>
           <p><code><a href="oce2ncdf.html">oce2ncdf()</a></code> </p>
         </td>
-        <td><p>Save an oce-class object as a netcdf file.</p></td>
+        <td><p>Save an oce-class object as a NetCDF file.</p></td>
       </tr><tr><td>
           <p><code><a href="oceNames2ncdfNames.html">oceNames2ncdfNames()</a></code> </p>
         </td>
-        <td><p>Translate netcdf names to oce names</p></td>
+        <td><p>Translate NetCDF names to oce names</p></td>
       </tr><tr><td>
           <p><code><a href="read.varTable.html">read.varTable()</a></code> </p>
         </td>
@@ -110,7 +132,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer></div>

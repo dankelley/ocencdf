@@ -16,12 +16,12 @@ output that describes the processing steps.}
 }
 \value{
 \code{\link[=read.varTable]{read.varTable()}} returns a list that specifies some information
-to be stored in netcdf files created by e.g. \code{\link[=ctd2ncdf]{ctd2ncdf()}}.
+to be stored in NetCDF files created by e.g. \code{\link[=ctd2ncdf]{ctd2ncdf()}}.
 }
 \description{
 This function, meant for internal use by the package, uses
 \code{\link[yaml:yaml.load]{yaml::yaml.load_file()}} to read YAML files that describe the
-output netcdf format created by e.g. \code{\link[=ctd2ncdf]{ctd2ncdf()}}. Users wishing
+output NetCDF format created by e.g. \code{\link[=ctd2ncdf]{ctd2ncdf()}}. Users wishing
 to define such files for their own use should follow the pattern
 of the source directory \code{inst/extdata/argo.yml}.
 }
@@ -37,7 +37,7 @@ if \code{varTable} is a character value, then there are 3 possibilities.
 \item Otherwise, \code{".yml"} is appended to \code{varTable} and a file with that
 name is sought in the \code{inst/ext_data} source directory.
 At the moment, there are two such built-in files, named
-\code{"argo.yml"} and `"whp.yml".
+\code{"argo.yml"} and \code{"whp.yml"}.
 }
 }
 \examples{

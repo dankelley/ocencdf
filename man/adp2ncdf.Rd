@@ -2,12 +2,12 @@
 % Please edit documentation in R/adp.R
 \name{adp2ncdf}
 \alias{adp2ncdf}
-\title{Save an adp object to a netcdf file}
+\title{Save an ADP object to a NetCDF file}
 \usage{
 adp2ncdf(x, varTable = NULL, ncfile = NULL, force_v4 = TRUE, debug = 0)
 }
 \arguments{
-\item{x}{an oce object of class \code{adp}, as created by e.g. \code{\link[oce:read.adp]{oce::read.adp()}}.}
+\item{x}{an \code{oce} object of class \code{adp}, as created by e.g. \code{\link[oce:read.adp]{oce::read.adp()}}.}
 
 \item{varTable}{character value indicating the variable-naming
 scheme to be used, which is passed to \code{\link[=read.varTable]{read.varTable()}} to set
@@ -17,10 +17,10 @@ up variable names, units, etc.}
 for a file name to be created automatically (e.g. \code{ctd.nc} for
 a CTD object).}
 
-\item{force_v4}{logical value which controls the netCDF file version during
+\item{force_v4}{logical value which controls the NetCDF file version during
 the \link[ncdf4]{nc_create} step. The default here is TRUE, whereas the
-\link[ncdf4]{ncdf4-package} defaults to FALSE (ensuring that the netCDF
-file is compatible with netCDF v3). Some features, including large data
+\link[ncdf4]{ncdf4-package} defaults to FALSE (ensuring that the NetCDF
+file is compatible with NetCDF v3). Some features, including large data
 sizes, may require v4.}
 
 \item{debug}{integer, 0 (the default) for quiet action apart
@@ -29,7 +29,7 @@ output that describes the processing steps.}
 }
 \description{
 Given an \code{adp} object created by the \code{oce} package, this function
-creates a netcdf file that can later by read by \code{\link[=ncdf2adp]{ncdf2adp()}} to approximately
+creates a NetCDF file that can later by read by \code{\link[=ncdf2adp]{ncdf2adp()}} to approximately
 reproduce the original contents.
 }
 \details{
@@ -53,18 +53,18 @@ and
 \examples{
 library(ocencdf)
 
-# Example with an adp file from oce package
-data(adp, package="oce")
+# Example with an ADP file from `oce` package
+data(adp, package = "oce")
 summary(adp)
 plot(adp)
-# Transfer to netcdf and back to see if results make sense
-oce2ncdf(adp, ncfile="adp.nc")
-ADP <- ncdf2adp("adp.nc")
+# Transfer to NetCDF and back to see if results make sense.
+# Use a temporary nc file to let package pass CRAN checks.
+ncfile <- tempfile(pattern = "adp", fileext = ".nc")
+oce2ncdf(adp, ncfile = ncfile)
+ADP <- ncdf2adp(ncfile)
 summary(ADP)
 plot(ADP)
-
-# Remove temporary file
-file.remove("adp.nc")
+file.remove(ncfile)
 
 }
 \seealso{

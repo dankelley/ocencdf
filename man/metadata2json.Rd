@@ -40,11 +40,11 @@ values: \code{date}, \code{endTime}, \code{startTime}, and \code{systemUploadTim
 }
 }
 \examples{
-# Example 1: ctd data
+# Example 1: CTD data
 data("ctd")
 metadata2json(ctd@metadata)
 
-# Example 2: adp data
+# Example 2: ADP data
 data("adp")
 metadata2json(adp@metadata)
 

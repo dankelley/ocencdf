@@ -2,7 +2,7 @@
 #'
 #' This function, meant for internal use by the package, uses
 #' [yaml::yaml.load_file()] to read YAML files that describe the
-#' output netcdf format created by e.g. [ctd2ncdf()]. Users wishing
+#' output NetCDF format created by e.g. [ctd2ncdf()]. Users wishing
 #' to define such files for their own use should follow the pattern
 #' of the source directory `inst/extdata/argo.yml`.
 #'
@@ -16,7 +16,7 @@
 #' 3. Otherwise, `".yml"` is appended to `varTable` and a file with that
 #' name is sought in the `inst/ext_data` source directory.
 #' At the moment, there are two such built-in files, named
-#' `"argo.yml"` and `"whp.yml".
+#' `"argo.yml"` and `"whp.yml"`.
 #'
 #' @param varTable character value indicating the name of the table
 #' (see \sQuote{Details}).
@@ -24,7 +24,7 @@
 #' @template debugTemplate
 #'
 #' @return [read.varTable()] returns a list that specifies some information
-#' to be stored in netcdf files created by e.g. [ctd2ncdf()].
+#' to be stored in NetCDF files created by e.g. [ctd2ncdf()].
 #'
 #' @examples
 #' library(ocencdf)
@@ -33,21 +33,26 @@
 #' @export
 #'
 #' @author Dan Kelley
-read.varTable <- function(varTable="argo", debug=0)
-{
-    if (!is.character(varTable))
+read.varTable <- function(varTable = "argo", debug = 0) {
+    if (!is.character(varTable)) {
         stop("varTable must be a character value")
-    if (varTable == "-")
-        return(list(name=NULL, units=NULL, values=NULL, variables=NULL))
-    if (!is.numeric(debug))
+    }
+    if (varTable == "-") {
+        return(list(name = NULL, units = NULL, values = NULL, variables = NULL))
+    }
+    if (!is.numeric(debug)) {
         stop("debug must be a numeric value, but is ", debug)
+    }
     varTableOrig <- varTable
-    if (!grepl(".yml$", varTable))
-        varTable <- system.file("extdata", paste0(varTable, ".yml"), package="ocencdf")
-    if (nchar(varTable) < 1L)
-        stop("file there is no \"", varTableOrig, ".yml\" file in ", system.file(package="ocencdf"))
-    if (!file.exists(varTable))
+    if (!grepl(".yml$", varTable)) {
+        varTable <- system.file("extdata", paste0(varTable, ".yml"), package = "ocencdf")
+    }
+    if (nchar(varTable) < 1L) {
+        stop("file there is no \"", varTableOrig, ".yml\" file in ", system.file(package = "ocencdf"))
+    }
+    if (!file.exists(varTable)) {
         stop("file \"", varTableOrig, "\" does not exist")
+    }
     dmsg(debug, "read.varTable(\"", varTable, "\") {\n")
     rval <- yaml::yaml.load_file(varTable)
     # Fill in empty units and longnames with defaults that at least permit
@@ -59,14 +64,17 @@ read.varTable <- function(varTable="argo", debug=0)
     for (i in seq_along(variableNames)) {
         name <- variableNames[i]
         dmsg(debug, "  handling \"", name, "\"\n")
-        #if (is.null(rval$variables[[i]]$units))
+        # if (is.null(rval$variables[[i]]$units))
         #    rval$variables[[i]]$units <- ""
-        if (is.null(rval$variables[[i]]$long_name))
+        if (is.null(rval$variables[[i]]$long_name)) {
             rval$variables[[i]]$long_name <- name
-        if (is.null(rval$variables[[i]]$standard_name))
+        }
+        if (is.null(rval$variables[[i]]$standard_name)) {
             rval$variables[[i]]$standard_name <- name
-        if (is.null(rval$variables[[i]]$missing_value))
+        }
+        if (is.null(rval$variables[[i]]$missing_value)) {
             rval$variables[[i]]$missing_value <- 99999.0
+        }
     }
     dmsg(debug, "} # read.varTable()\n")
     rval
@@ -75,7 +83,7 @@ read.varTable <- function(varTable="argo", debug=0)
 #' Get information on a variable, using varTable
 #'
 #' This is used by e.g. [ctd2ncdf()] to determine how to describe the variable in a
-#' particular flavour of netcdf file, as specified by [read.varTable()].
+#' particular flavour of NetCDF file, as specified by [read.varTable()].
 #'
 #' @param name character value naming the variable.  If `name` is
 #' not the name of a chemical species, then trailing digits are removed,
@@ -95,8 +103,8 @@ read.varTable <- function(varTable="argo", debug=0)
 #' @template debugTemplate
 #'
 #' @return [getVarInfo()] returns a list containing `name` (the
-#' name as used in argo netcdf files), `long_name` (again, as used in
-#' Argo netcdf files, although the usefulness of this is debatable),
+#' name as used in Argo NetCDF files), `long_name` (again, as used in
+#' Argo NetCDF files, although the usefulness of this is debatable),
 #' `standard_name` (not used by [ctd2ncdf()] as of now), `FillValue`
 #' (used by [ctd2ncdf()] for missing values) and, if `oce` is provided
 #' and it can be determined, `unit` (a character string specifying
@@ -113,22 +121,27 @@ read.varTable <- function(varTable="argo", debug=0)
 #' @author Dan Kelley
 #'
 #' @export
-getVarInfo <- function(name=NULL, varTable=NULL, oce=NULL, debug=0)
-{
+getVarInfo <- function(name = NULL, varTable = NULL, oce = NULL, debug = 0) {
     # Error checking.
-    if (!is.null(oce) && !inherits(oce, "oce"))
+    if (!is.null(oce) && !inherits(oce, "oce")) {
         stop("oce must be an 'oce' object, e.g. made by read.oce()")
-    if (is.null(name))
+    }
+    if (is.null(name)) {
         stop("must supply name")
-    if (!is.character(name))
+    }
+    if (!is.character(name)) {
         stop("name must be a character value")
-    if (is.null(varTable))
+    }
+    if (is.null(varTable)) {
         stop("must supply varTable")
+    }
     dmsg(debug, "getVarInfo(name=\"", name, "\", varTable=\"", varTable, "\")\n")
-    if (is.character(varTable))
+    if (is.character(varTable)) {
         varTable <- read.varTable(varTable)
-    if (!is.list(varTable))
+    }
+    if (!is.list(varTable)) {
         stop("varTable must be a character value, or the output of read.varTable()")
+    }
     # Remove trailing numbers e.g. temperature2, but not in e.g. NO2.
     suffix <- ""
     dmsg(debug, "  name=\"", name, "\"\n")
@@ -139,18 +152,21 @@ getVarInfo <- function(name=NULL, varTable=NULL, oce=NULL, debug=0)
     }
     FillValue <- varTable$values$missing_value
     # Establish a default return value.
-    rval <- list(name=name, long_name=name, FillValue=FillValue, unit="")
+    rval <- list(name = name, long_name = name, FillValue = FillValue, unit = "")
     # Fill in variable names and fill value, if they can be determined.
     if (name %in% names(varTable$variables)) {
         tmp <- varTable$variables[[name]]$name
-        if (!is.null(tmp))
+        if (!is.null(tmp)) {
             rval$name <- tmp
+        }
         tmp <- varTable$variables[[name]]$long_name
-        if (!is.null(tmp))
+        if (!is.null(tmp)) {
             rval$long_name <- tmp
+        }
         tmp <- varTable$variables[[name]]$standard_name
-        if (!is.null(tmp))
+        if (!is.null(tmp)) {
             rval$standard_name <- tmp
+        }
     }
     rval$name <- paste0(rval$name, suffix)
     # Fill in units, if they can be determined.
@@ -160,17 +176,18 @@ getVarInfo <- function(name=NULL, varTable=NULL, oce=NULL, debug=0)
     # but we could special-case this in ctd2ncdf().
     if (!is.null(oce)) {
         unit <- as.character(oce[[paste0(name, "Unit")]]$unit)
-        if (length(unit) && (unit %in% names(varTable$units)))
+        if (length(unit) && (unit %in% names(varTable$units))) {
             rval$unit <- varTable$units[[unit]]$name
+        }
     }
     dmsg(debug, "} # getVarInfo()\n")
     rval
 } # getVarInfo()
 
-#' Translate netcdf names to oce  names
+#' Translate NetCDF names to oce  names
 #'
 #' @param names vector of character values in oce convention (e.g. "TEMP"
-#' for temperature, if varTable is "argo").
+#' for temperature, if `varTable` equals `"argo"`).
 #'
 #' @template varTableTemplate
 #'
@@ -179,24 +196,25 @@ getVarInfo <- function(name=NULL, varTable=NULL, oce=NULL, debug=0)
 #' @author Dan Kelley
 #'
 #' @export
-ncdfNames2oceNames <- function(names, varTable=NULL, debug=0)
-{
+ncdfNames2oceNames <- function(names, varTable = NULL, debug = 0) {
     vt <- read.varTable(varTable)
     synonyms <- lapply(vt$variables, function(v) v$name)
     translation <- data.frame(
-        oce=names(synonyms),
-        ncdf=unlist(unname(synonyms)))
-    dmsg(debug, "input: ", paste(names, collapse=" "), "\n")
+        oce = names(synonyms),
+        ncdf = unlist(unname(synonyms))
+    )
+    dmsg(debug, "input: ", paste(names, collapse = " "), "\n")
     for (name in names) {
         w <- which(name == translation$ncdf)
-        if (length(w) > 0L)
+        if (length(w) > 0L) {
             names <- gsub(translation[w, "ncdf"], translation[w, "oce"], names)
+        }
     }
-    dmsg(debug, "returning: ", paste(names, collapse=" "), "\n")
+    dmsg(debug, "returning: ", paste(names, collapse = " "), "\n")
     names
 }
 
-#' Translate netcdf names to oce names
+#' Translate NetCDF names to oce names
 #'
 #' @param names vector of character values in oce convention (e.g. "temperature"
 #' for temperature).
@@ -208,20 +226,20 @@ ncdfNames2oceNames <- function(names, varTable=NULL, debug=0)
 #' @author Dan Kelley
 #'
 #' @export
-oceNames2ncdfNames <- function(names, varTable=NULL, debug=0)
-{
+oceNames2ncdfNames <- function(names, varTable = NULL, debug = 0) {
     vt <- read.varTable(varTable)
     synonyms <- lapply(vt$variables, function(v) v$name)
     translation <- data.frame(
-        oce=names(synonyms),
-        ncdf=unlist(unname(synonyms)))
-    dmsg(debug, "input: ", paste(names, collapse=" "), "\n")
+        oce = names(synonyms),
+        ncdf = unlist(unname(synonyms))
+    )
+    dmsg(debug, "input: ", paste(names, collapse = " "), "\n")
     for (name in names) {
         w <- which(name == translation$oce)
-        if (length(w) > 0L)
+        if (length(w) > 0L) {
             names <- gsub(translation[w, "oce"], translation[w, "ncdf"], names)
+        }
     }
-    dmsg(debug, "returning: ", paste(names, collapse=" "), "\n")
+    dmsg(debug, "returning: ", paste(names, collapse = " "), "\n")
     names
 }
-

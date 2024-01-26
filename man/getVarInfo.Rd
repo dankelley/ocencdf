@@ -28,8 +28,8 @@ output that describes the processing steps.}
 }
 \value{
 \code{\link[=getVarInfo]{getVarInfo()}} returns a list containing \code{name} (the
-name as used in argo netcdf files), \code{long_name} (again, as used in
-Argo netcdf files, although the usefulness of this is debatable),
+name as used in Argo NetCDF files), \code{long_name} (again, as used in
+Argo NetCDF files, although the usefulness of this is debatable),
 \code{standard_name} (not used by \code{\link[=ctd2ncdf]{ctd2ncdf()}} as of now), \code{FillValue}
 (used by \code{\link[=ctd2ncdf]{ctd2ncdf()}} for missing values) and, if \code{oce} is provided
 and it can be determined, \code{unit} (a character string specifying
@@ -37,7 +37,7 @@ the unit).
 }
 \description{
 This is used by e.g. \code{\link[=ctd2ncdf]{ctd2ncdf()}} to determine how to describe the variable in a
-particular flavour of netcdf file, as specified by \code{\link[=read.varTable]{read.varTable()}}.
+particular flavour of NetCDF file, as specified by \code{\link[=read.varTable]{read.varTable()}}.
 }
 \examples{
 library(ocencdf)

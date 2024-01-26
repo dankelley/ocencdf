@@ -2,13 +2,13 @@
 % Please edit documentation in R/vartable.R
 \name{ncdfNames2oceNames}
 \alias{ncdfNames2oceNames}
-\title{Translate netcdf names to oce  names}
+\title{Translate NetCDF names to oce  names}
 \usage{
 ncdfNames2oceNames(names, varTable = NULL, debug = 0)
 }
 \arguments{
 \item{names}{vector of character values in oce convention (e.g. "TEMP"
-for temperature, if varTable is "argo").}
+for temperature, if \code{varTable} equals \code{"argo"}).}
 
 \item{varTable}{character value indicating the variable-naming
 scheme to be used, which is passed to \code{\link[=read.varTable]{read.varTable()}} to set
@@ -19,7 +19,7 @@ from messages and warnings, or any larger value to see more
 output that describes the processing steps.}
 }
 \description{
-Translate netcdf names to oce  names
+Translate NetCDF names to oce  names
 }
 \author{
 Dan Kelley

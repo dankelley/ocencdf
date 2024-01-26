@@ -2,7 +2,7 @@
 % Please edit documentation in R/adv.R
 \name{adv2ncdf}
 \alias{adv2ncdf}
-\title{Save an adv object to a netcdf file}
+\title{Save an adv object to a NetCDF file}
 \usage{
 adv2ncdf(x, varTable = NULL, ncfile = NULL, force_v4 = TRUE, debug = 0)
 }
@@ -17,10 +17,10 @@ up variable names, units, etc.}
 for a file name to be created automatically (e.g. \code{ctd.nc} for
 a CTD object).}
 
-\item{force_v4}{logical value which controls the netCDF file version during
+\item{force_v4}{logical value which controls the NetCDF file version during
 the \link[ncdf4]{nc_create} step. The default here is TRUE, whereas the
-\link[ncdf4]{ncdf4-package} defaults to FALSE (ensuring that the netCDF
-file is compatible with netCDF v3). Some features, including large data
+\link[ncdf4]{ncdf4-package} defaults to FALSE (ensuring that the NetCDF
+file is compatible with NetCDF v3). Some features, including large data
 sizes, may require v4.}
 
 \item{debug}{integer, 0 (the default) for quiet action apart
@@ -29,7 +29,7 @@ output that describes the processing steps.}
 }
 \description{
 Given an \code{adv} object created by the \code{oce} package, this function
-creates a netcdf file that can later by read by \code{\link[=ncdf2adv]{ncdf2adv()}} to approximately
+creates a NetCDF file that can later by read by \code{\link[=ncdf2adv]{ncdf2adv()}} to approximately
 reproduce the original contents.
 }
 \details{
@@ -44,17 +44,17 @@ The entire contents of the metadata slot are saved in the global attribute named
 library(ocencdf)
 
 # Example with an adv file from oce package
-data(adv, package="oce")
+data(adv, package = "oce")
 summary(adv)
 plot(adv)
-# Transfer to netcdf and back to see if results make sense
-oce2ncdf(adv, ncfile="adv.nc")
-ADV <- ncdf2adv("adv.nc")
+# Transfer to NetCDF and back to see if results make sense
+# Use a temporary nc file to let package pass CRAN checks.
+ncfile <- tempfile(pattern = "adv", fileext = ".nc")
+oce2ncdf(adv, ncfile = ncfile)
+ADV <- ncdf2adv(ncfile)
 summary(ADV)
 plot(ADV)
-
-# Remove temporary file
-file.remove("adv.nc")
+file.remove(ncfile)
 
 }
 \seealso{

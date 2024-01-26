@@ -2,7 +2,7 @@
 % Please edit documentation in R/ctd.R
 \name{ctd2ncdf}
 \alias{ctd2ncdf}
-\title{Save a ctd object to a netcdf file}
+\title{Save a ctd object to a NetCDF file}
 \usage{
 ctd2ncdf(x, varTable = NULL, ncfile = NULL, force_v4 = TRUE, debug = 0)
 }
@@ -18,10 +18,10 @@ up variable names, units, etc.}
 for a file name to be created automatically (e.g. \code{ctd.nc} for
 a CTD object).}
 
-\item{force_v4}{logical value which controls the netCDF file version during
+\item{force_v4}{logical value which controls the NetCDF file version during
 the \link[ncdf4]{nc_create} step. The default here is TRUE, whereas the
-\link[ncdf4]{ncdf4-package} defaults to FALSE (ensuring that the netCDF
-file is compatible with netCDF v3). Some features, including large data
+\link[ncdf4]{ncdf4-package} defaults to FALSE (ensuring that the NetCDF
+file is compatible with NetCDF v3). Some features, including large data
 sizes, may require v4.}
 
 \item{debug}{integer, 0 (the default) for quiet action apart
@@ -29,17 +29,17 @@ from messages and warnings, or any larger value to see more
 output that describes the processing steps.}
 }
 \description{
-This creates a netcdf file in a convention that permits later reading by
+This creates a NetCDF file in a convention that permits later reading by
 \code{\link[=ncdf2ctd]{ncdf2ctd()}}, and that may be convenient for other purposes as well.
 }
 \details{
 Note that \code{\link[=ctd2ncdf]{ctd2ncdf()}} defaults \code{varTable} to \code{"argo"}.
 
-The contents of the \code{data} slot of the oce object \code{x} are as netcdf
+The contents of the \code{data} slot of the oce object \code{x} are as NetCDF
 data items.  If flags are present in the \code{metadata} slot, they are
 also saved as data, with names ending in \verb{_QC}.
 
-In addition to storage in the netcdf data section, several attributes
+In addition to storage in the NetCDF data section, several attributes
 are saved as well. These include units for the data, which are tied
 to the corresponding variables.  The entire \code{metadata} slot is stored
 as a global attribute named \code{metadata}, so that a later call to
@@ -53,23 +53,25 @@ individual global attributes: \code{"latitude"}, \code{"longitude"},
 library(ocencdf)
 
 # example 1: a ctd file without per-variable QC flags
-data(ctd, package="oce")
-oce2ncdf(ctd, ncfile="ctd.nc")
-CTD <- as.ctd(ncdf2oce("ctd.nc"))
+data(ctd, package = "oce")
+# Use a temporary nc file to let package pass CRAN checks.
+ncfile <- tempfile(pattern = "ctd", fileext = ".nc")
+oce2ncdf(ctd, ncfile = ncfile)
+CTD <- as.ctd(ncdf2oce(ncfile))
+file.remove(ncfile)
 summary(CTD)
 plot(CTD)
 
 # example 2: a ctd file with per-variable QC flags
-data(section, package="oce")
+data(section, package = "oce")
 stn <- section[["station", 100]]
-oce2ncdf(stn, ncfile="stn.nc")
-STN <- as.ctd(ncdf2oce("stn.nc"))
+# Use a temporary nc file to let package pass CRAN checks.
+ncfile <- tempfile(pattern = "ctd", fileext = ".nc")
+oce2ncdf(stn, ncfile = ncfile)
+STN <- as.ctd(ncdf2oce(ncfile))
+file.remove(ncfile)
 summary(STN)
 plot(STN)
-
-# Remove temporary files
-file.remove("ctd.nc")
-file.remove("stn.nc")
 
 }
 \seealso{

@@ -1,15 +1,15 @@
-#' Save a ctd object to a netcdf file
+#' Save a ctd object to a NetCDF file
 #'
-#' This creates a netcdf file in a convention that permits later reading by
+#' This creates a NetCDF file in a convention that permits later reading by
 #' [ncdf2ctd()], and that may be convenient for other purposes as well.
 #'
 #' Note that [ctd2ncdf()] defaults `varTable` to `"argo"`.
 #'
-#' The contents of the `data` slot of the oce object `x` are as netcdf
+#' The contents of the `data` slot of the oce object `x` are as NetCDF
 #' data items.  If flags are present in the `metadata` slot, they are
 #' also saved as data, with names ending in `_QC`.
 #'
-#' In addition to storage in the netcdf data section, several attributes
+#' In addition to storage in the NetCDF data section, several attributes
 #' are saved as well. These include units for the data, which are tied
 #' to the corresponding variables.  The entire `metadata` slot is stored
 #' as a global attribute named `metadata`, so that a later call to
@@ -29,84 +29,89 @@
 #' library(ocencdf)
 #'
 #' # example 1: a ctd file without per-variable QC flags
-#' data(ctd, package="oce")
-#' oce2ncdf(ctd, ncfile="ctd.nc")
-#' CTD <- as.ctd(ncdf2oce("ctd.nc"))
+#' data(ctd, package = "oce")
+#' # Use a temporary nc file to let package pass CRAN checks.
+#' ncfile <- tempfile(pattern = "ctd", fileext = ".nc")
+#' oce2ncdf(ctd, ncfile = ncfile)
+#' CTD <- as.ctd(ncdf2oce(ncfile))
+#' file.remove(ncfile)
 #' summary(CTD)
 #' plot(CTD)
 #'
 #' # example 2: a ctd file with per-variable QC flags
-#' data(section, package="oce")
+#' data(section, package = "oce")
 #' stn <- section[["station", 100]]
-#' oce2ncdf(stn, ncfile="stn.nc")
-#' STN <- as.ctd(ncdf2oce("stn.nc"))
+#' # Use a temporary nc file to let package pass CRAN checks.
+#' ncfile <- tempfile(pattern = "ctd", fileext = ".nc")
+#' oce2ncdf(stn, ncfile = ncfile)
+#' STN <- as.ctd(ncdf2oce(ncfile))
+#' file.remove(ncfile)
 #' summary(STN)
 #' plot(STN)
-#'
-#' # Remove temporary files
-#' file.remove("ctd.nc")
-#' file.remove("stn.nc")
 #'
 #' @family things related to CTD data
 #'
 #' @author Dan Kelley and Clark Richards
 #'
 #' @export
-ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, force_v4=TRUE, debug=0)
-{
+ctd2ncdf <- function(x, varTable = NULL, ncfile = NULL, force_v4 = TRUE, debug = 0) {
     dmsg(debug, "ctd2ncdf(..., ncfile=\"", ncfile, "\") {\n")
-    if (!inherits(x, "ctd"))
+    if (!inherits(x, "ctd")) {
         stop("'x' must be a ctd object")
+    }
     if (is.null(varTable)) {
         varTable <- "argo"
-        #message("Defaulting varTable to \"", varTable, "\".")
+        # message("Defaulting varTable to \"", varTable, "\".")
     }
     if (is.null(ncfile)) {
         ncfile <- "ctd.nc"
-        #message("Will save ctd object to \"", ncfile, "\".")
+        # message("Will save ctd object to \"", ncfile, "\".")
     }
     varTableOrig <- varTable
     varTable <- read.varTable(varTable)
     # Set up variable dimensions etc, using an argo file
     # (~/data/argo/D4901788_045.nc) as a pattern.
     NLEVEL <- length(x@data[[1]])
-    NLEVELdim <- ncdim_def(name="N_LEVEL", units="", vals=seq_len(NLEVEL), create_dimvar=FALSE)
-    NPROFILEdim <- ncdim_def(name="N_PROFILE", units="", vals=1L, create_dimvar=FALSE)
-    STRING16dim <- ncdim_def(name="STRING16", units="", vals=seq.int(1, 16), create_dimvar=FALSE)
-    STRING32dim <- ncdim_def(name="STRING32", units="", vals=seq.int(1, 32), create_dimvar=FALSE)
+    NLEVELdim <- ncdim_def(name = "N_LEVEL", units = "", vals = seq_len(NLEVEL), create_dimvar = FALSE)
+    NPROFILEdim <- ncdim_def(name = "N_PROFILE", units = "", vals = 1L, create_dimvar = FALSE)
+    STRING16dim <- ncdim_def(name = "STRING16", units = "", vals = seq.int(1, 16), create_dimvar = FALSE)
+    STRING32dim <- ncdim_def(name = "STRING32", units = "", vals = seq.int(1, 32), create_dimvar = FALSE)
     # create vars, using varmap for known items, and using just names otherwise
     # TO DO: determine whether we ought to examine the units in the oce object
     vars <- list()
     standardNames <- list() # called STANDARD_NAME in argo files
-    dmsg(debug, "  Defining netcdf structure.\n")
+    dmsg(debug, "  Defining NetCDF structure.\n")
     dmsg(debug, "    defining variable properties\n")
     for (name in names(x@data)) {
         dmsg(debug, "      ", name, "\n")
-        varInfo <- getVarInfo(oce=x, name=name, varTable=varTable)
+        varInfo <- getVarInfo(oce = x, name = name, varTable = varTable)
         units <- varInfo$unit
         # For the "argo" case, use "psu" as a unit for salinity.
-        if (grepl("salinity", name) && varTable$type$name == "argo")
+        if (grepl("salinity", name) && varTable$type$name == "argo") {
             units <- "psu"
+        }
         vars[[name]] <- ncvar_def(
-            name=varInfo$name,
-            units=units,
-            longname=varInfo$long_name,
-            dim=NLEVELdim,
-            prec="float")
+            name = varInfo$name,
+            units = units,
+            longname = varInfo$long_name,
+            dim = NLEVELdim,
+            prec = "float"
+        )
         standardNames[[name]] <- varInfo$standard_name
     }
     dmsg(debug, "    defining flag (QC) properties (if any exist)\n")
     flagnames <- names(x@metadata$flags)
     for (flagname in flagnames) {
-        varInfo <- getVarInfo(oce=x, name=flagname, varTable=varTable)
+        varInfo <- getVarInfo(oce = x, name = flagname, varTable = varTable)
         flagnameNCDF <- paste0(varInfo$name, "_QC")
         dmsg(debug, "      ", flagname, " -> ", flagnameNCDF, "\n")
         vars[[flagnameNCDF]] <- ncvar_def(
-            name=flagnameNCDF,
-            units="",
-            longname=paste("QC for ", flagname),
-            dim=NLEVELdim,
-            prec="float")
+            name = flagnameNCDF,
+            units = "",
+            longname = paste("QC for ", flagname),
+            dim = NLEVELdim,
+            prec = "float"
+        )
     }
     dmsg(debug, "    defining variables for selected @metadata items\n")
     # location may be in data or metadata.  If the former, store in
@@ -115,82 +120,87 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, force_v4=TRUE, debug=0)
     locationInMetadata <- !is.null(x@metadata$longitude) && !is.null(x@metadata$latitude)
     if (locationInData) { # assume one value per profile
         vars[["longitude"]] <- ncvar_def(
-            name=getVarInfo(name="longitude", varTable=varTable)$name,
-            units="degree_east",
-            longname="Longitude of the station, best estimate",
-            dim=NPROFILEdim,
-            prec="float")
+            name = getVarInfo(name = "longitude", varTable = varTable)$name,
+            units = "degree_east",
+            longname = "Longitude of the station, best estimate",
+            dim = NPROFILEdim,
+            prec = "float"
+        )
         standardNames[["longitude"]] <- "longitude"
         dmsg(debug, "      longitude\n")
         vars[["latitude"]] <- ncvar_def(
-            name=getVarInfo(name="latitude", varTable=varTable)$name,
-            units="degree_north",
-            longname="Latitude of the station, best estimate",
-            dim=NPROFILEdim,
-            prec="float")
+            name = getVarInfo(name = "latitude", varTable = varTable)$name,
+            units = "degree_north",
+            longname = "Latitude of the station, best estimate",
+            dim = NPROFILEdim,
+            prec = "float"
+        )
         standardNames[["latitude"]] <- "latitude"
         dmsg(debug, "      latitude\n")
     }
-    nc <- nc_create(ncfile, vars, force_v4=force_v4)
+    nc <- nc_create(ncfile, vars, force_v4 = force_v4)
     dmsg(debug, "  Storing data.\n")
     for (name in names(x@data)) {
         dmsg(debug, "    ", name, " (", NLEVEL, " values)\n")
         vals <- x@data[[name]]
-        #vals[is.na(vals)] <- varTable$values$missing_value
-        if (grepl("temperature", name, ignore.case=TRUE)) {
+        # vals[is.na(vals)] <- varTable$values$missing_value
+        if (grepl("temperature", name, ignore.case = TRUE)) {
             scale <- x[[paste0(name, "Unit")]]$scale
-            if (grepl("IPTS-68", scale, ignore.case=TRUE)) {
+            if (grepl("IPTS-68", scale, ignore.case = TRUE)) {
                 message("Converting temperature from IPTS-68 scale to ITS-90 scale.")
                 vals <- oce::T90fromT68(vals)
-            } else if (grepl("ITS-48", scale, ignore.case=TRUE)) {
+            } else if (grepl("ITS-48", scale, ignore.case = TRUE)) {
                 message("Converting temperature from IPTS-48 scale to ITS-90 scale.")
                 vals <- oce::T90fromT48(vals)
             }
-        } else if (grepl("salinity", name, ignore.case=TRUE)) {
+        } else if (grepl("salinity", name, ignore.case = TRUE)) {
             scale <- x[[paste0(name, "Unit")]]$scale
-            if (grepl("PSS-68", scale, ignore.case=TRUE)) {
+            if (grepl("PSS-68", scale, ignore.case = TRUE)) {
                 warning("cannot convert from PSS-68, so saving it unaltered")
             }
         }
-        ncvar_put(nc=nc, varid=vars[[name]], vals=vals)
+        ncvar_put(nc = nc, varid = vars[[name]], vals = vals)
         sn <- standardNames[[name]]
-        if (!is.null(sn))
-            ncatt_put(nc=nc, varid=vars[[name]], attname="standard_name", attval=sn)
+        if (!is.null(sn)) {
+            ncatt_put(nc = nc, varid = vars[[name]], attname = "standard_name", attval = sn)
+        }
     }
     dmsg(debug, "  Storing QC values.\n")
     for (flagname in names(x@metadata$flags)) {
-        varInfo <- getVarInfo(oce=x, name=flagname, varTable=varTable)
+        varInfo <- getVarInfo(oce = x, name = flagname, varTable = varTable)
         vals <- x@metadata$flags[[flagname]]
         flagnameNCDF <- paste0(varInfo$name, "_QC")
         dmsg(debug, "      ", flagname, "Flag -> ", flagnameNCDF, "\n")
-        ncvar_put(nc=nc, varid=vars[[flagnameNCDF]], vals=vals)
+        ncvar_put(nc = nc, varid = vars[[flagnameNCDF]], vals = vals)
     }
     dmsg(debug, "  Storing global attributes.\n")
     dmsg(debug, "    metadata_explanation\n")
     explanation <- paste("This file was created with ctd2ncdf from the ocencdf R package,\n",
         "available at www.github.com/dankelley/ocencdf.\n",
-        readLines(system.file("extdata", "ncdf_explanation.md", package="ocencdf")), collapse="\n")
+        readLines(system.file("extdata", "ncdf_explanation.md", package = "ocencdf")),
+        collapse = "\n"
+    )
     ncatt_put(nc, 0, "metadata_explanation", explanation)
     dmsg(debug, "    metadata\n")
     ncatt_put(nc, 0, "metadata", metadata2json(x@metadata))
     # Store some individual metadata items, for simple access
     for (item in c("station", "latitude", "longitude")) {
         dmsg(debug, "    ", item, "\n")
-        storeNetcdfAttribute(x, item, nc, item)
+        storeNetCDFAttribute(x, item, nc, item)
     }
     dmsg(debug, "    varTable\n")
-    ncatt_put(nc=nc, varid=0, attname="varTable", attval=varTableOrig)
+    ncatt_put(nc = nc, varid = 0, attname = "varTable", attval = varTableOrig)
     dmsg(debug, "    class\n")
-    ncatt_put(nc=nc, varid=0, attname="class", attval=as.character(class(x)))
+    ncatt_put(nc = nc, varid = 0, attname = "class", attval = as.character(class(x)))
     dmsg(debug, "    creator\n")
-    ncatt_put(nc=nc, varid=0, attname="creator", attval=paste0("ocencdf version ", packageVersion("ocencdf")))
-    dmsg(debug, "  Closing netcdf file.\n")
+    ncatt_put(nc = nc, varid = 0, attname = "creator", attval = paste0("ocencdf version ", packageVersion("ocencdf")))
+    dmsg(debug, "  Closing NetCDF file.\n")
     nc_close(nc)
     dmsg(debug, paste0("} # ctd2ncdf created file \"", ncfile, "\"\n"))
 }
 
 
-#' Read a netcdf file and create a ctd object
+#' Read a NetCDF file and create a ctd object
 #'
 #' @inheritParams ncdf2oce
 #'
@@ -204,7 +214,6 @@ ctd2ncdf <- function(x, varTable=NULL, ncfile=NULL, force_v4=TRUE, debug=0)
 #' @author Dan Kelley
 #'
 #' @export
-ncdf2ctd <- function(ncfile=NULL, varTable=NULL, debug=0)
-{
-    as.ctd(ncdf2oce(ncfile=ncfile, varTable=varTable, debug=debug))
+ncdf2ctd <- function(ncfile = NULL, varTable = NULL, debug = 0) {
+    as.ctd(ncdf2oce(ncfile = ncfile, varTable = varTable, debug = debug))
 }

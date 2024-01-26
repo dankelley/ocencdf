@@ -2,7 +2,7 @@
 % Please edit documentation in R/ncdf2oce.R
 \name{ncdf2oce}
 \alias{ncdf2oce}
-\title{Read a netcdf file and create a general oce object}
+\title{Read a NetCDF file and create a general \code{oce} object}
 \usage{
 ncdf2oce(ncfile = NULL, varTable = NULL, debug = 0)
 }
@@ -21,14 +21,14 @@ output that describes the processing steps.}
 \code{\link[=ncdf2oce]{ncdf2oce()}} returns an \linkS4class{oce} object.
 }
 \description{
-Read a netcdf file such as are created with e.g. \code{\link[=oce2ncdf]{oce2ncdf()}},
+Read a NetCDF file such as are created with e.g. \code{\link[=oce2ncdf]{oce2ncdf()}},
 interpreting variable names according to \code{varTable} (if provided).
-This is intended to work with netcdf files created by
-\code{\link[=oce2ncdf]{oce2ncdf()}}, but it may also handle some other netcdf files.
+This is intended to work with NetCDF files created by
+\code{\link[=oce2ncdf]{oce2ncdf()}}, but it may also handle some other NetCDF files.
 (Try \code{\link[oce:read.netcdf]{oce::read.netcdf()}} if this fails.  If that also fails,
 you will need to work with the \code{ncdf4} library directly.)
-Note that the returned object does \emph{not} get a specialized oce class,
-because this is not known within netcdf files.  For ctd data,
+Note that the returned object does \emph{not} get a specialized \code{oce} class,
+because this is not known within NetCDF files.  For ctd data,
 try \code{\link[=ncdf2ctd]{ncdf2ctd()}} instead of \code{\link[=ncdf2oce]{ncdf2oce()}}, or wrap the result
 of calling the latter in \code{\link[oce:as.ctd]{oce::as.ctd()}}.
 }

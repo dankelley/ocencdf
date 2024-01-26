@@ -2,7 +2,7 @@
 % Please edit documentation in R/adp.R
 \name{ncdf2adp}
 \alias{ncdf2adp}
-\title{Read a netcdf file and create an adp object}
+\title{Read a NetCDF file and create an ADP object}
 \usage{
 ncdf2adp(ncfile = NULL, varTable = NULL, debug = 0)
 }
@@ -23,7 +23,7 @@ output that describes the processing steps.}
 \description{
 This works by calling \code{\link[=ncdf2oce]{ncdf2oce()}} and then using \code{\link[=class]{class()}} on
 the result to make it be of subclass \code{"adp"}.  This is intended
-to work with Netcdf files created with \code{\link[=adp2ncdf]{adp2ncdf()}}, which embeds
+to work with NetCDF files created with \code{\link[=adp2ncdf]{adp2ncdf()}}, which embeds
 sufficient information in the file to permit \code{\link[=ncdf2adp]{ncdf2adp()}} to
 reconstruct the original adp object. See the documentation
 for \code{\link[=adp2ncdf]{adp2ncdf()}} to learn more about what it stores, and therefore
@@ -32,21 +32,24 @@ what \code{\link[=ncdf2adp]{ncdf2adp()}} attempts to read.
 \examples{
 library(ocencdf)
 
-# Example with an adp file from oce package
-data(adp, package="oce")
+# Example with an ADP file from `oce` package
+data(adp, package = "oce")
 summary(adp)
 plot(adp)
-# Transfer to netcdf and back to see if results make sense
-oce2ncdf(adp, ncfile="adp.nc")
-ADP <- ncdf2adp("adp.nc")
+# Transfer to NetCDF and back to see if results make sense
+# Use a temporary nc file to let package pass CRAN checks.
+ncfile <- tempfile(pattern = "adp", fileext = ".nc")
+oce2ncdf(adp, ncfile = ncfile)
+ADP <- ncdf2adp(ncfile)
 summary(ADP)
 plot(ADP)
-
-# Remove temporary file
-file.remove("adp.nc")
+file.remove(ncfile)
 
 }
 \seealso{
+Other things related to adp data: 
+\code{\link{adp2ncdf}()}
+
 Other things related to adp data: 
 \code{\link{adp2ncdf}()}
 }

@@ -1,6 +1,1 @@
-articles:
-  - title: Articles
-    navbar: ~
-    contents:
-    - introduction
-    - built_in_vartables
+destination: docs

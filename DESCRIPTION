@@ -1,19 +1,22 @@
 Package: ocencdf
-Title: Provide Netcdf Interface for Oce
-Version: 0.0.3
+Title: NetCDF Interface for Oce Objects
+Version: 0.0.4
 Authors@R: c(
-    person(given="Dan", family="Kelley", email="Dan.Kelley@Dal.Ca", role=c("aut", "cre"), comment=c(ORCID="https://orcid.org/0000-0001-7808-5911")))
-Description: This provides a way to export `oce` objects to `netcdf` format, perhaps for data archiving, or perhaps for secondary analysis outside R.
+    person(given="Dan", family="Kelley", email="Dan.Kelley@Dal.Ca", role=c("aut", "cre"), comment=c(ORCID="https://orcid.org/0000-0001-7808-5911")),
+    person(given="Clark", family="Richards", email="clark.richards@gmail.com", role=c("ctb"), comment=c(ORCID="https://orcid.org/0000-0002-7833-206X")))
+Description: This provides a way to export `oce` objects to `NetCDF` format, perhaps for data archiving, or perhaps for secondary analysis outside R.
 Depends: R (>= 4.00), oce (>= 1.8.0)
 Imports: jsonlite, ncdf4, methods, yaml
 License: GPL (>= 2)
 Encoding: UTF-8
+URL: https://dankelley.github.io/ocencdf/
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
+BugReports: https://github.com/dankelley/ocencdf/issues
 Config/testthat/edition: 3
 BuildVignettes: true
 VignetteBuilder: knitr

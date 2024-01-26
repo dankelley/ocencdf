@@ -2,7 +2,7 @@
 % Please edit documentation in R/adv.R
 \name{ncdf2adv}
 \alias{ncdf2adv}
-\title{Read a netcdf file and create an adv object}
+\title{Read a NetCDF file and create an adv object}
 \usage{
 ncdf2adv(ncfile = NULL, varTable = NULL, debug = 0)
 }
@@ -23,7 +23,7 @@ output that describes the processing steps.}
 \description{
 This works by calling \code{\link[=ncdf2oce]{ncdf2oce()}} and then using \code{\link[=class]{class()}} on
 the result to make it be of subclass \code{"adv"}.  This is intended
-to work with Netcdf files created with \code{\link[=adv2ncdf]{adv2ncdf()}}, which embeds
+to work with NetCDF files created with \code{\link[=adv2ncdf]{adv2ncdf()}}, which embeds
 sufficient information in the file to permit \code{\link[=ncdf2adv]{ncdf2adv()}} to
 reconstruct the original adv object. See the documentation
 for \code{\link[=adv2ncdf]{adv2ncdf()}} to learn more about what it stores, and therefore
@@ -33,20 +33,23 @@ what \code{\link[=ncdf2adv]{ncdf2adv()}} attempts to read.
 library(ocencdf)
 
 # Example with an adv file from oce package
-data(adv, package="oce")
+data(adv, package = "oce")
 summary(adv)
 plot(adv)
-# Transfer to netcdf and back to see if results make sense
-oce2ncdf(adv, ncfile="adv.nc")
-ADV <- ncdf2adv("adv.nc")
+# Transfer to NetCDF and back to see if results make sense
+# Use a temporary nc file to let package pass CRAN checks.
+ncfile <- tempfile(pattern = "adv", fileext = ".nc")
+oce2ncdf(adv, ncfile = ncfile)
+ADV <- ncdf2adv(ncfile)
 summary(ADV)
 plot(ADV)
-
-# Remove temporary file
-file.remove("adv.nc")
+file.remove(ncfile)
 
 }
 \seealso{
+Other things related to adv data: 
+\code{\link{adv2ncdf}()}
+
 Other things related to adv data: 
 \code{\link{adv2ncdf}()}
 }

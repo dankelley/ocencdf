@@ -81,12 +81,12 @@ for (line in lines)
     cat(line, "\n")
 ```
 
-## `yhp`
+## `whp`
 
 This table, patterned on naming conventions in the World Hydrographic Program,
 is stored in a file that may be accessed with
 ```{r eval=FALSE}
-system.file("extdata", "yhp.yml", package="ocencdf")
+system.file("extdata", "whp.yml", package="ocencdf")
 ```
 and the contents are as follows.
 ```{r, echo=FALSE}

@@ -4,7 +4,9 @@ CTD
 Hydrographic
 JSON
 NetCDF
+NetCDF
 ORCID
+Oce
 Oce
 Oce
 POSIXct
@@ -14,6 +16,7 @@ YAML
 adp
 ctd
 flavour
+oce
 oce
 oce
 varTable
